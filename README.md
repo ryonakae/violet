@@ -1,2 +1,1 @@
-# violet
-Violet for Tumblr
+# Violet for Tumblr
