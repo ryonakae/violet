@@ -10,6 +10,14 @@ Edit `env.js`
       TUMBLR_SECRET_KEY: 'xxxxxxxxxx'
     }
 
+Install MongoDB
+
+    $ brew install mongodb
+
+Start DB (with other process)
+
+    $ npm dbstart
+
 Run
 
     $ npm start

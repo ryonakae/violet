@@ -6,6 +6,8 @@ block content
 
   - if(!user)
     p please login
+    .login
+      a(href="/auth/tumblr") login
   - else
     p
       | hello,
@@ -14,13 +16,8 @@ block content
     p
       | user_token:
       = user.token
-    p
+      br
       | user_token_secret:
       = user.tokenSecret
-
-
-  .login
-    a(href="/auth/tumblr") login with tumblr
-
-  .logout
-    a(href="/logout") logout
+    .logout
+      a(href="/logout") logout

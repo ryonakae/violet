@@ -48,6 +48,7 @@ var auth = require('./routes/auth');
 var logout = require('./routes/logout');
 
 var app = express();
+var MongoStore = require('connect-mongo')(session);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -59,7 +60,18 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session({ secret: 'keyboard cat' }));
+app.use(session({
+  secret: 'secret',
+  store: new MongoStore({
+    db: 'session',
+    host: 'localhost',
+    clear_interval: 60 * 60 // 60 * 60 = 1 hour
+  }),
+  cookie: {
+    httpOnly: false,
+    maxAge: new Date(Date.now() + 60 * 60 * 1000) // 60 * 60 * 1000 = 3600000 msec = 1 hour
+  }
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
