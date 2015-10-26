@@ -5,8 +5,47 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var session = require('express-session');
+var passport = require('passport');
+var util = require('util');
+var TumblrStrategy = require('passport-tumblr').Strategy;
+
+var env = require('./env');
+var TUMBLR_CONSUMER_KEY = env.TUMBLR_CONSUMER_KEY;
+var TUMBLR_SECRET_KEY = env.TUMBLR_SECRET_KEY;
+
+// Passport session setup
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+// Use the TumblrStrategy within Passport
+passport.use(new TumblrStrategy({
+    consumerKey: TUMBLR_CONSUMER_KEY,
+    consumerSecret: TUMBLR_SECRET_KEY,
+    callbackURL: "http://localhost:3000/auth/tumblr/callback"
+  },
+  function(token, tokenSecret, profile, done) {
+    // console.log(token, tokenSecret, profile);
+
+    // tokenなどを格納
+    profile.token = token;
+    profile.tokenSecret = tokenSecret;
+
+    process.nextTick(function () {
+      return done(null, profile);
+    });
+  }
+));
+
+// routes
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var auth = require('./routes/auth');
+var logout = require('./routes/logout');
 
 var app = express();
 
@@ -20,10 +59,15 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({ secret: 'keyboard cat' }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/auth', auth);
+app.use('/logout', logout);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
