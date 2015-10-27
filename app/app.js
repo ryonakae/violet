@@ -76,23 +76,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/', routes);
-// app.use('/users', users);
-// app.use('/auth', auth);
-// app.use('/logout', logout);
-
-var React = require('react');
-var Router = require('react-router');
-app.use(function(req, res, next) {
-  var router = Router.create({location: req.url, routes: routes})
-  router.run(function(Handler, state) {
-    var markup = React.renderToString(React.createElement(Handler));
-    return res.render('index', {
-      title: 'Violet for Tumblr',
-      markup: markup
-    })
-  })
-});
+app.use('/', routes);
+app.use('/users', users);
+app.use('/auth', auth);
+app.use('/logout', logout);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
