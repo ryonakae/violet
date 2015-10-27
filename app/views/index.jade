@@ -1,25 +1,9 @@
-extends layout
-
-block content
-  h1= title
-
-  - if(!user)
-    p Please login.
-
-    a(href="/auth/tumblr") Login
-
-  - else
-    h3
-      | Hello,
-      = user.username
-      | .
-
-    ul
-      li
-        | user_token:
-        = user.token
-      li
-        | user_token_secret:
-        = user.tokenSecret
-
-    a(href="/logout") Logout
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    #app!= html
+    script#initial-data(type='text/plain' data-json='#{initialData}')
+    script(src='/javascripts/main.js')

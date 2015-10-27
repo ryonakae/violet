@@ -18,6 +18,10 @@ Start DB (with other process)
 
     $ npm run db
 
+Compile `main.jsx` to `main.js` with Browserify
+
+    $ npm run browserify
+
 Run
 
     $ npm start
