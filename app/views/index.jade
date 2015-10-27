@@ -2,22 +2,24 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
 
   - if(!user)
-    p please login
-    .login
-      a(href="/auth/tumblr") login
+    p Please login.
+
+    a(href="/auth/tumblr") Login
+
   - else
-    p
-      | hello,
+    h3
+      | Hello,
       = user.username
       | .
-    p
-      | user_token:
-      = user.token
-      br
-      | user_token_secret:
-      = user.tokenSecret
-    .logout
-      a(href="/logout") logout
+
+    ul
+      li
+        | user_token:
+        = user.token
+      li
+        | user_token_secret:
+        = user.tokenSecret
+
+    a(href="/logout") Logout
