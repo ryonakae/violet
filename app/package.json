@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "babel-node ./server",
     "db": "mkdir -p db && mongod --nojournal --noprealloc --dbpath db",
-    "browserify": "browserify public/javascripts/client.jsx -t babelify -o public/javascripts/main.js"
+    "browserify": "browserify public/javascripts/client.jsx -t babelify -o public/javascripts/main.js",
+    "start": "npm run browserify && babel-node ./server"
   },
   "dependencies": {
     "babel": "^5.8.29",

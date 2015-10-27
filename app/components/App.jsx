@@ -7,7 +7,7 @@ module.exports = React.createClass({
   render: function(){
     return (
       <div className='app'>
-        <RouteHandler {...this.props} />
+        <RouteHandler data={this.props.params.data} />
       </div>
     );
   }

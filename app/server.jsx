@@ -11,6 +11,11 @@ app.set('view engine', 'jade');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+var env = require('./env');
+var TUMBLR_CONSUMER_KEY = env.TUMBLR_CONSUMER_KEY;
+var TUMBLR_SECRET_KEY = env.TUMBLR_SECRET_KEY;
+var TUMBLR_API_KEY = env.TUMBLR_API_KEY;
+
 // data sample
 var superagent = require('superagent');
 var jsonp = require('superagent-jsonp');
@@ -19,7 +24,7 @@ superagent
   .get('http://api.tumblr.com/v2/blog/dncngrl.com/posts')
   .use(jsonp)
   .query({
-    api_key: 'hFUsxjtEHcCB9dylsCfDnVWQRpQrD5Bq1nWMRZJaz2LmHZU3tU',
+    api_key: TUMBLR_API_KEY,
     reblog_info: false,
     notes_info: false,
     format: 'html',
@@ -27,7 +32,7 @@ superagent
   })
   .end(function(err, res){
     data = res.body.response;
-    console.log(data);
+    // console.log(data);
   });
 
 // routing
@@ -35,7 +40,7 @@ app.use(function(req, res, next) {
   var router = Router.create({location: req.url, routes: routes});
   router.run(function(Handler, state) {
     console.log('Router:run');
-    console.log(Handler);
+    // console.log(Handler);
     return res.render('index', {
       title: 'Violet for Tumblr',
       initialData: JSON.stringify(data),

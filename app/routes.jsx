@@ -9,7 +9,7 @@ var About = require('./components/About.jsx');
 
 module.exports = (
   <Route name="App" path="/" handler={App}>
-    <DefaultRoute handler={Index} />
+    <DefaultRoute name="Index" handler={Index} />
     <Route name="About" path="/about" handler={About} />
   </Route>
 );
