@@ -16,7 +16,7 @@ Install MongoDB
 
 Start DB (with other process)
 
-    $ npm dbstart
+    $ npm run db
 
 Run
 
