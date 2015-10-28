@@ -3,7 +3,10 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(type='text/javascript').
+      window.DEFAULT_SETTINGS = {
+        loggedIn: #{loggedIn}
+      };
   body
-    #app!= html
-    script#initial-data(type='text/plain' data-json='#{initialData}')
-    script(src='/javascripts/main.js')
+    #app!= content
+    script(src='/javascripts/bundle.js')

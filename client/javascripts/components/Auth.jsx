@@ -6,8 +6,7 @@ module.exports = React.createClass({
   render: function(){
     return (
       <div>
-        <h2>About</h2>
-        <Link to={'/'}>Top</Link>
+        <h2>Auth</h2>
       </div>
     );
   }

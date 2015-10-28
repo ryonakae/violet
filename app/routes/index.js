@@ -1,30 +1,35 @@
 var express = require('express');
 var router = express.Router();
 var tumblr = require('tumblr.js');
-var env = require('../env');
+
+var React = require('react');
+var Router = require('react-router');
+var react_routes = require('../../client/javascripts/routes.jsx');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  var User;
+  console.log('now index');
 
-  if (req.user) {
-    User = req.user;
+  // routing
+  var router = Router.create({location: req.url, routes: react_routes});
+  var content = "";
+  router.run(function(Handler, state) {
+    console.log('react-router:run');
+    content = React.renderToString(React.createElement(Handler));
+  });
 
-    var client = new tumblr.Client({
-      consumer_key: env.TUMBLR_CONSUMER_KEY,
-      consumer_secret: env.TUMBLR_SECRET_KEY,
-      token: User.token,
-      token_secret: User.tokenSecret
-    });
-
-    client.likes({ limit: 1, offset: 100 }, function(err, response){
-      console.log(response);
-    });
+  // login check
+  var loggedIn = false;
+  if (req.user){
+    loggedIn = true;
   }
 
+  // render
   res.render('index', {
     title: 'Violet for Tumblr',
-    user: User
+    user: req.user,
+    content: content,
+    loggedIn: loggedIn
   });
 });
 

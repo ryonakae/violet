@@ -29,5 +29,5 @@ node_modules
 .DS_Store
 
 env.js
-app/db
-app/public/javascripts/main.js
+db
+app/assets/javascripts/bundle.js

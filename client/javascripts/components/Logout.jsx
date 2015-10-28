@@ -1,13 +1,12 @@
 var React = require('react');
 var Router = require('react-router');
-var RouteHandler = Router.RouteHandler;
-
+var Link = Router.Link;
 
 module.exports = React.createClass({
   render: function(){
     return (
-      <div className='app'>
-        <RouteHandler data={this.props.params.data} />
+      <div>
+        <h2>Logout</h2>
       </div>
     );
   }

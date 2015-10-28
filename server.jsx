@@ -12,10 +12,6 @@ var TumblrStrategy = require('passport-tumblr').Strategy;
 var app = express();
 var MongoStore = require('connect-mongo')(session);
 
-var React = require('react');
-var Router = require('react-router');
-var routes = require('./routes.jsx');
-
 var env = require('./env');
 var TUMBLR_CONSUMER_KEY = env.TUMBLR_CONSUMER_KEY;
 var TUMBLR_SECRET_KEY = env.TUMBLR_SECRET_KEY;
@@ -28,12 +24,11 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
-
 // Use the TumblrStrategy within Passport
 passport.use(new TumblrStrategy({
     consumerKey: TUMBLR_CONSUMER_KEY,
     consumerSecret: TUMBLR_SECRET_KEY,
-    callbackURL: "http://localhost:3000/auth/tumblr/callback"
+    callbackURL: "http://localhost:3000/auth/callback"
   },
   function(token, tokenSecret, profile, done) {
     // console.log(token, tokenSecret, profile);
@@ -41,6 +36,7 @@ passport.use(new TumblrStrategy({
     // tokenなどを格納
     profile.token = token;
     profile.tokenSecret = tokenSecret;
+    console.log('token get');
 
     process.nextTick(function () {
       return done(null, profile);
@@ -48,28 +44,9 @@ passport.use(new TumblrStrategy({
   }
 ));
 
-// data sample
-var superagent = require('superagent');
-var jsonp = require('superagent-jsonp');
-var data = [];
-superagent
-  .get('http://api.tumblr.com/v2/blog/dncngrl.com/posts')
-  .use(jsonp)
-  .query({
-    api_key: TUMBLR_API_KEY,
-    reblog_info: false,
-    notes_info: false,
-    format: 'html',
-    type: 'text'
-  })
-  .end(function(err, res){
-    data = res.body.response;
-    // console.log(data);
-  });
-
 // settings
 app.set('view engine', 'jade');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'app/views'));
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -91,21 +68,15 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'app/assets')));
 
 // routing
-app.use(function(req, res, next) {
-  var router = Router.create({location: req.url, routes: routes});
-  router.run(function(Handler, state) {
-    console.log('Router:run');
-    // console.log(Handler);
-    return res.render('index', {
-      title: 'Violet for Tumblr',
-      initialData: JSON.stringify(data),
-      html: React.renderToString(React.createElement(Handler, {params: {data: data}}))
-    });
-  });
-});
+var routes = require('./app/routes/index');
+var auth = require('./app/routes/auth');
+var logout = require('./app/routes/logout');
+app.use('/', routes);
+app.use('/auth', auth);
+app.use('/logout', logout);
 
 // server
 var port = process.env.PORT || '3000';
