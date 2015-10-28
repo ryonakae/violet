@@ -53,7 +53,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
-  secret: 'secret',
+  secret: 'violet_for_tumblr_secret',
   store: new MongoStore({
     db: 'session',
     host: 'localhost',
@@ -63,8 +63,8 @@ app.use(session({
     httpOnly: false,
     maxAge: new Date(Date.now() + 60 * 60 * 1000) // 60 * 60 * 1000 = 3600000 msec = 1 hour
   },
-  resave: false,
-  saveUninitialized: false
+  resave: true,
+  saveUninitialized: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());
