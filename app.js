@@ -123,6 +123,8 @@ io.sockets.on('connection', function(socket){
   console.log('接続した');
 
   // console.log(socket);
+  var sid = socket.id;
+  console.log('sid: '+sid);
 
   var user = socket.request.user; //これでユーザーを参照できる
   if(user){
@@ -132,6 +134,6 @@ io.sockets.on('connection', function(socket){
   socket.on('clickEvent', function(data){
     console.log('クライアントでボタンがクリックされた(のでサーバでなんか処理する)');
 
-    io.sockets.emit('testEvent', 'サーバでデータをなんか処理した(のでクライアントにデータ送る)');
+    io.sockets.to(sid).emit('testEvent', 'サーバでデータをなんか処理した(のでクライアントにデータ送る)');
   });
 });
