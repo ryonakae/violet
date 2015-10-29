@@ -5,6 +5,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
 var session = require('express-session');
 var passport = require('passport');
 var util = require('util');
@@ -43,6 +44,12 @@ passport.use(new TumblrStrategy({
   }
 ));
 
+var sessionStore = new MongoStore({
+  db: 'session',
+  host: 'localhost',
+  clear_interval: 60 * 60 // 60 * 60 = 1 hour
+});
+
 // settings
 app.set('view engine', 'jade');
 app.set('views', path.join(__dirname, 'app/views'));
@@ -50,14 +57,12 @@ app.set('views', path.join(__dirname, 'app/views'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(methodOverride());
 app.use(cookieParser());
 app.use(session({
-  secret: 'violet_for_tumblr_secret',
-  store: new MongoStore({
-    db: 'session',
-    host: 'localhost',
-    clear_interval: 60 * 60 // 60 * 60 = 1 hour
-  }),
+  key: 'express.sid', //socket.io から参照する際にキーとして使ってるっぽい
+  secret: 'session_secret',
+  store: sessionStore,
   cookie: {
     httpOnly: false,
     maxAge: new Date(Date.now() + 60 * 60 * 1000) // 60 * 60 * 1000 = 3600000 msec = 1 hour
@@ -85,13 +90,48 @@ server.listen(port, function(){
   console.log('Express server listening on port ' + port);
 });
 
+
 // socket.io
 var io = require('socket.io').listen(server);
+// var io = require('socket.io')(server);
+var passportSocketIo = require('passport.socketio');
+
+io.set('authorization', passportSocketIo.authorize({
+  cookieParser: cookieParser,
+  key:          'express.sid',
+  secret:       'session_secret',
+  store:        sessionStore,
+  success:      onAuthorizeSuccess,
+  fail:         onAuthorizeFail
+}));
+
+// セッションのAuthorize 成功
+function onAuthorizeSuccess(data, accept){
+  console.log('successful connection to socket.io');
+  accept(null, true);
+}
+//セッションのAuthorizeしっぱいしっぱい
+function onAuthorizeFail(data, message, error, accept){
+  if(error) {
+    throw new Error(message);
+  }
+  console.log('failed connection to socket.io:', message);
+  accept(null, false);
+}
+
 io.sockets.on('connection', function(socket){
   console.log('接続した');
 
+  // console.log(socket);
+
+  var user = socket.request.user; //これでユーザーを参照できる
+  if(user){
+    console.log("session data : ", user);
+  }
+
   socket.on('clickEvent', function(data){
-    console.log(data);
-    io.sockets.emit('testEvent', 'クライアントから送ったイベントをトリガーにして、サーバから送ったイベント');
+    console.log('クライアントでボタンがクリックされた(のでサーバでなんか処理する)');
+
+    io.sockets.emit('testEvent', 'サーバでデータをなんか処理した(のでクライアントにデータ送る)');
   });
 });

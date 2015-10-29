@@ -48,8 +48,8 @@ router.get('/', function(req, res, next) {
   var loggedIn = false;
   if (req.user){
     loggedIn = true;
-    getDashboard();
-    console.log('you are loggedin.');
+    // getDashboard();
+    console.log('ログインしてる…はず！');
   }
 
   // render
