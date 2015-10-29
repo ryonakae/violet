@@ -88,10 +88,10 @@ server.listen(port, function(){
 // socket.io
 var io = require('socket.io').listen(server);
 io.sockets.on('connection', function(socket){
-  console.log('接続したぞ');
+  console.log('接続した');
 
-  socket.on('testEvent', function(data){
-    console.log('testEventが起こったぞ');
+  socket.on('clickEvent', function(data){
     console.log(data);
+    io.sockets.emit('testEvent', 'クライアントから送ったイベントをトリガーにして、サーバから送ったイベント');
   });
 });
