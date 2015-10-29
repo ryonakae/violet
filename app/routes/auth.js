@@ -7,14 +7,17 @@ router.get('/',
   passport.authenticate('tumblr'),
   function(req, res, next) {
     // console.dir(req, res, next);
-    console.log('now /auth');
+    console.log('now: /auth');
   });
 
 // /auth/callback
 router.get('/callback',
-  passport.authenticate('tumblr', { failureRedirect: '/login' }),
+  passport.authenticate('tumblr', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+  }),
   function(req, res) {
-    console.log('now /auth/callback');
+    console.log('now: /auth/callback');
     res.redirect('/');
   });
 

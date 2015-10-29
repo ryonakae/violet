@@ -9,13 +9,11 @@ var session = require('express-session');
 var passport = require('passport');
 var util = require('util');
 var TumblrStrategy = require('passport-tumblr').Strategy;
-var app = express();
 var MongoStore = require('connect-mongo')(session);
-
 var env = require('./env');
-var TUMBLR_CONSUMER_KEY = env.TUMBLR_CONSUMER_KEY;
-var TUMBLR_SECRET_KEY = env.TUMBLR_SECRET_KEY;
-var TUMBLR_API_KEY = env.TUMBLR_API_KEY;
+
+var app = express();
+var app = module.exports = express();
 
 // Passport session setup
 passport.serializeUser(function(user, done) {
@@ -26,16 +24,17 @@ passport.deserializeUser(function(obj, done) {
 });
 // Use the TumblrStrategy within Passport
 passport.use(new TumblrStrategy({
-    consumerKey: TUMBLR_CONSUMER_KEY,
-    consumerSecret: TUMBLR_SECRET_KEY,
+    consumerKey: env.TUMBLR_CONSUMER_KEY,
+    consumerSecret: env.TUMBLR_SECRET_KEY,
     callbackURL: "http://localhost:3000/auth/callback"
   },
   function(token, tokenSecret, profile, done) {
     // console.log(token, tokenSecret, profile);
 
     // tokenなどを格納
-    profile.token = token;
-    profile.tokenSecret = tokenSecret;
+    // routes.jsで使用するために格納しておく
+    app.set('token', token);
+    app.set('tokenSecret', tokenSecret);
     console.log('token get');
 
     process.nextTick(function () {
