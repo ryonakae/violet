@@ -31,3 +31,4 @@ node_modules
 env.js
 db
 app/assets/javascripts/bundle.js
+bower_components

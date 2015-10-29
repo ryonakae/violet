@@ -84,3 +84,14 @@ var server = http.createServer(app);
 server.listen(port, function(){
   console.log('Express server listening on port ' + port);
 });
+
+// socket.io
+var io = require('socket.io').listen(server);
+io.sockets.on('connection', function(socket){
+  console.log('接続したぞ');
+
+  socket.on('testEvent', function(data){
+    console.log('testEventが起こったぞ');
+    console.log(data);
+  });
+});

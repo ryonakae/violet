@@ -3,10 +3,6 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-    script(type='text/javascript').
-      window.DEFAULT_SETTINGS = {
-        loggedIn: #{loggedIn}
-      };
   body
     #app!= content
     script(src='/javascripts/bundle.js')

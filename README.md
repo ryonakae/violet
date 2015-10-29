@@ -1,6 +1,7 @@
 # Violet for Tumblr
 
-    $ cd app
+Create `env.js`
+
     $ touch env.js
 
 Edit `env.js`
