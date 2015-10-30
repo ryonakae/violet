@@ -16,6 +16,9 @@ var env = require('./env');
 var app = express();
 var app = module.exports = express();
 
+var model = require('./app/models/model.js');
+var User = model.User;
+
 // Passport session setup
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -36,7 +39,20 @@ passport.use(new TumblrStrategy({
     // routes.jsで使用するために格納しておく
     app.set('token', token);
     app.set('tokenSecret', tokenSecret);
-    console.log('token get');
+    console.log('tokenゲットしたぞ');
+
+    // ユーザ情報が MongoDB に保存されていなければモデルを作成して保存
+    User.findOne({username:profile.username}, function(err, user){
+      if(!user) {
+        user = new User();
+        user.username = profile.username;
+        user.save(function(err){
+          console.log('MongoDBにユーザー名保存したぞ');
+          done(err, user);
+        });
+      }
+      console.log(user);
+    });
 
     process.nextTick(function () {
       return done(null, profile);
@@ -47,7 +63,7 @@ passport.use(new TumblrStrategy({
 var sessionStore = new MongoStore({
   db: 'session',
   host: 'localhost',
-  clear_interval: 60 * 60 // 60 * 60 = 1 hour
+  clear_interval: 60 * 60 // 60 * 60 = 3600s = 1 hour
 });
 
 // settings
@@ -65,7 +81,7 @@ app.use(session({
   store: sessionStore,
   cookie: {
     httpOnly: false,
-    maxAge: new Date(Date.now() + 60 * 60 * 1000) // 60 * 60 * 1000 = 3600000 msec = 1 hour
+    maxAge: 60 * 60 * 1000 // 60 * 60 * 1000 = 3600000ms = 1 hour
   },
   resave: false,
   saveUninitialized: true
@@ -93,16 +109,15 @@ server.listen(port, function(){
 
 // socket.io
 var io = require('socket.io').listen(server);
-// var io = require('socket.io')(server);
 var passportSocketIo = require('passport.socketio');
 
 io.set('authorization', passportSocketIo.authorize({
   cookieParser: cookieParser,
-  key:          'express.sid',
-  secret:       'session_secret',
-  store:        sessionStore,
-  success:      onAuthorizeSuccess,
-  fail:         onAuthorizeFail
+  key: 'express.sid',
+  secret: 'session_secret',
+  store: sessionStore,
+  success: onAuthorizeSuccess,
+  fail: onAuthorizeFail
 }));
 
 // セッションのAuthorize 成功
@@ -110,7 +125,7 @@ function onAuthorizeSuccess(data, accept){
   console.log('successful connection to socket.io');
   accept(null, true);
 }
-//セッションのAuthorizeしっぱいしっぱい
+//セッションのAuthorize 失敗
 function onAuthorizeFail(data, message, error, accept){
   if(error) {
     throw new Error(message);
@@ -128,7 +143,8 @@ io.sockets.on('connection', function(socket){
 
   var user = socket.request.user; //これでユーザーを参照できる
   if(user){
-    console.log("session data : ", user);
+    // console.log("session data : ", user);
+    console.log('username: ', user.username);
   }
 
   socket.on('clickEvent', function(data){
