@@ -67,7 +67,7 @@ app.use(session({
     httpOnly: false,
     maxAge: new Date(Date.now() + 60 * 60 * 1000) // 60 * 60 * 1000 = 3600000 msec = 1 hour
   },
-  resave: true,
+  resave: false,
   saveUninitialized: true
 }));
 app.use(passport.initialize());

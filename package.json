@@ -5,7 +5,7 @@
   "scripts": {
     "db": "mkdir -p db && mongod --nojournal --noprealloc --dbpath db",
     "browserify": "mkdir -p app/assets/javascripts && browserify client/javascripts/app.jsx -t babelify -o app/assets/javascripts/bundle.js",
-    "start": "npm run browserify && babel-node ./app"
+    "start": "npm run browserify && nodemon ./app.js --exec babel-node"
   },
   "dependencies": {
     "babel": "^5.8.29",
@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "babelify": "^6.4.0",
-    "browserify": "^12.0.0"
+    "browserify": "^12.0.0",
+    "nodemon": "^1.8.0"
   }
 }
