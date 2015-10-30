@@ -134,22 +134,25 @@ function onAuthorizeFail(data, message, error, accept){
   accept(null, false);
 }
 
-io.sockets.on('connection', function(socket){
-  console.log('接続した');
+// 認証してtokenあるときだけSocket.ioで接続
+if(app.set('token')){
+  io.sockets.on('connection', function(socket){
+    console.log('接続した');
 
-  // console.log(socket);
-  var sid = socket.id;
-  console.log('sid: '+sid);
+    // console.log(socket);
+    var sid = socket.id;
+    console.log('sid: '+sid);
 
-  var user = socket.request.user; //これでユーザーを参照できる
-  if(user){
-    // console.log("session data : ", user);
-    console.log('username: ', user.username);
-  }
+    var user = socket.request.user; //これでユーザーを参照できる
+    if(user){
+      // console.log("session data : ", user);
+      console.log('username: ', user.username);
+    }
 
-  socket.on('clickEvent', function(data){
-    console.log('クライアントでボタンがクリックされた(のでサーバでなんか処理する)');
+    socket.on('clickEvent', function(data){
+      console.log('クライアントでボタンがクリックされた(のでサーバでなんか処理する)');
 
-    io.sockets.to(sid).emit('testEvent', 'サーバでデータをなんか処理した(のでクライアントにデータ送る)');
+      io.sockets.to(sid).emit('testEvent', 'サーバでデータをなんか処理した(のでクライアントにデータ送る)');
+    });
   });
-});
+}

@@ -11,16 +11,13 @@ var app = module.parent.exports;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log('now index');
+  console.log('indexを表示した');
   var data = '';
-
-  // routing
-  var router = Router.create({location: req.url, routes: react_routes});
-  var content = "";
-  router.run(function(Handler, state) {
-    console.log('react-router:run');
-    content = React.renderToString(React.createElement(Handler));
-  });
+  // data = [
+  //   { id: 1, name: 'backbone' },
+  //   { id: 2, name: 'react' },
+  //   { id: 3, name: 'angular' },
+  // ];
 
   // get dashboard function
   var getDashboard = function(){
@@ -33,24 +30,28 @@ router.get('/', function(req, res, next) {
 
     console.log(client);
 
-    console.log('consumer_key: ' + client.credentials.consumer_key);
-    console.log('consumer_secret: ' + client.credentials.consumer_secret);
-    console.log('token: ' + client.credentials.token);
-    console.log('token_secret: ' + client.credentials.token_secret);
-
-    client.dashboard(function(err, response){
-      console.log(response);
-      data = response;
+    client.dashboard({limit:2}, function(err, response){
+      console.log(response.posts);
+      console.log('ダッシュボードの情報取得できた');
+      data = response.posts;
     });
   }
 
   // login check
   var loggedIn = false;
-  if (req.user){
+  if (app.set('token')){
     loggedIn = true;
-    // getDashboard();
-    console.log('ログインしてる…はず！');
+    getDashboard();
+    console.log('ログインしてる(tokenがある)');
   }
+
+  // react router run
+  var router = Router.create({location: req.url, routes: react_routes});
+  var content = "";
+  router.run(function(Handler, state) {
+    console.log('react-router:run');
+    content = React.renderToString(React.createElement(Handler));
+  });
 
   // render
   res.render('index', {
@@ -58,7 +59,7 @@ router.get('/', function(req, res, next) {
     user: req.user,
     content: content,
     loggedIn: loggedIn,
-    data: data
+    initialData: JSON.stringify(data)
   });
 });
 

@@ -5,4 +5,5 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     #app!= content
+    script#initial-data(type='text/plain' data-json='#{initialData}')
     script(src='/javascripts/bundle.js')
