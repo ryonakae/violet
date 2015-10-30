@@ -16,7 +16,7 @@ var env = require('./env');
 var app = express();
 var app = module.exports = express();
 
-var model = require('./app/models/model.js');
+var model = require('./models/model.js');
 var User = model.User;
 
 // Passport session setup
@@ -68,7 +68,7 @@ var sessionStore = new MongoStore({
 
 // settings
 app.set('view engine', 'jade');
-app.set('views', path.join(__dirname, 'app/views'));
+app.set('views', path.join(__dirname, 'views'));
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -88,15 +88,13 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(path.join(__dirname, 'app/assets')));
+app.use(express.static(path.join(__dirname, 'assets')));
 
 // routing
-var routes = require('./app/routes/index');
-var auth = require('./app/routes/auth');
-var logout = require('./app/routes/logout');
-app.use('/', routes);
-app.use('/auth', auth);
-app.use('/logout', logout);
+var routes = require('./routes/index.js');
+app.use('/', routes.home);
+app.use('/auth', routes.auth);
+app.use('/logout', routes.logout);
 
 // server
 var port = process.env.PORT || '3000';

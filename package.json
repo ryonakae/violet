@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "db": "mkdir -p db && mongod --nojournal --noprealloc --dbpath db",
-    "browserify": "mkdir -p app/assets/javascripts && browserify client/javascripts/app.jsx -t babelify -o app/assets/javascripts/bundle.js",
+    "browserify": "mkdir -p assets/javascripts && browserify client/javascripts/app.jsx -t babelify -o assets/javascripts/bundle.js",
     "start": "npm run browserify && nodemon ./app.js --exec babel-node"
   },
   "dependencies": {
