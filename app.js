@@ -21,7 +21,8 @@ var User = model.User;
 
 // Passport session setup
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  console.log('user:', user.username);
+  done(null, user.username);
 });
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
@@ -35,11 +36,11 @@ passport.use(new TumblrStrategy({
   function(token, tokenSecret, profile, done) {
     // console.log(token, tokenSecret, profile);
 
-    // tokenなどを格納
-    // routes.jsで使用するために格納しておく
-    app.set('token', token);
-    app.set('tokenSecret', tokenSecret);
+    // tokenなどをセッションに格納
+    passport.session.token = token;
+    passport.session.tokenSecret = tokenSecret;
     console.log('tokenゲットしたぞ');
+    console.log(passport.session);
 
     // ユーザ情報が MongoDB に保存されていなければモデルを作成して保存
     User.findOne({username:profile.username}, function(err, user){
@@ -47,8 +48,11 @@ passport.use(new TumblrStrategy({
         user = new User();
         user.username = profile.username;
         user.save(function(err){
+          if (err) {
+            return done(err);
+          }
           console.log('MongoDBにユーザー名保存したぞ');
-          done(err, user);
+          done(null, user);
         });
       }
       console.log(user);
@@ -120,7 +124,7 @@ io.set('authorization', passportSocketIo.authorize({
 
 // セッションのAuthorize 成功
 function onAuthorizeSuccess(data, accept){
-  console.log('successful connection to socket.io');
+  console.log('socket.ioのセッション認証が成功');
   accept(null, true);
 }
 //セッションのAuthorize 失敗
@@ -128,29 +132,22 @@ function onAuthorizeFail(data, message, error, accept){
   if(error) {
     throw new Error(message);
   }
-  console.log('failed connection to socket.io:', message);
+  console.log('socket.ioのセッション認証が失敗:', message);
   accept(null, false);
 }
 
-// 認証してtokenあるときだけSocket.ioで接続
-if(app.set('token')){
-  io.sockets.on('connection', function(socket){
-    console.log('接続した');
+io.sockets.on('connection', function(socket){
+  console.log('Socket.ioで接続完了');
 
-    // console.log(socket);
-    var sid = socket.id;
-    console.log('sid: '+sid);
+  // console.log(socket);
+  var sid = socket.id;
+  console.log('sid: '+sid);
 
-    var user = socket.request.user; //これでユーザーを参照できる
-    if(user){
-      // console.log("session data : ", user);
-      console.log('username: ', user.username);
-    }
+  // var user = socket.request.user; //これでユーザーを参照できる
 
-    socket.on('clickEvent', function(data){
-      console.log('クライアントでボタンがクリックされた(のでサーバでなんか処理する)');
+  socket.on('clickEvent', function(data){
+    console.log('クライアントでボタンがクリックされた(のでサーバでなんか処理する)');
 
-      io.sockets.to(sid).emit('testEvent', 'サーバでデータをなんか処理した(のでクライアントにデータ送る)');
-    });
+    io.sockets.to(sid).emit('testEvent', 'サーバでデータをなんか処理した(のでクライアントにデータ送る)');
   });
-}
+});
