@@ -1,6 +1,6 @@
 var passport = require('passport');
 
-var TumblrController = function(app){
+module.exports = function(app){
   return {
     start: function(req, res, next){
       passport.authenticate('tumblr');
@@ -14,5 +14,3 @@ var TumblrController = function(app){
     }
   }
 };
-
-module.exports = TumblrController;

@@ -69,6 +69,7 @@ var sessionStore = new MongoStore({
   host: 'localhost',
   clear_interval: 60 * 60 // 60 * 60 = 3600s = 1 hour
 });
+app.set('sessionStore', sessionStore);
 
 // settings
 app.set('view engine', 'jade');
@@ -82,7 +83,7 @@ app.use(cookieParser());
 app.use(session({
   key: 'express.sid', //socket.io から参照する際にキーとして使ってるっぽい
   secret: 'session_secret',
-  store: sessionStore,
+  store: app.get('sessionStore'),
   cookie: {
     httpOnly: false,
     maxAge: 60 * 60 * 1000 // 60 * 60 * 1000 = 3600000ms = 1 hour
@@ -95,10 +96,11 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'assets')));
 
 // routing
-var routes = require('./routes/index.js');
-app.use('/', routes.home);
-app.use('/auth', routes.auth);
-app.use('/logout', routes.logout);
+// var routes = require('./routes/index.js');
+// app.use('/', routes.home);
+// app.use('/auth', routes.auth);
+// app.use('/logout', routes.logout);
+require('./routes.js')(app);
 
 // server
 var port = process.env.PORT || '3000';
@@ -117,7 +119,7 @@ io.set('authorization', passportSocketIo.authorize({
   cookieParser: cookieParser,
   key: 'express.sid',
   secret: 'session_secret',
-  store: sessionStore,
+  store: app.get('sessionStore'),
   success: onAuthorizeSuccess,
   fail: onAuthorizeFail
 }));

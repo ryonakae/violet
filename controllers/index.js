@@ -1,14 +1,12 @@
 var React = require('react');
 var Router = require('react-router');
 var routes = require('../client/javascripts/routes.jsx');
-
 var tumblr = require('tumblr.js');
 var env = require('../env.js');
+var passport = require('passport');
 
-var session = require('express-session');
 
-
-var IndexController = function(app){
+module.exports = function(app){
   return {
     index: function(req, res, next){
       var content = '';
@@ -27,22 +25,22 @@ var IndexController = function(app){
         var client = new tumblr.Client({
           consumer_key: env.TUMBLR_CONSUMER_KEY,
           consumer_secret: env.TUMBLR_SECRET_KEY,
-          token: session.passport.token,
-          token_secret: session.passport.tokenSecret
+          token: passport.session.token,
+          token_secret: passport.session.tokenSecret
         });
 
-        console.log(client);
+        console.log('client: ', client);
 
         client.dashboard({limit:2}, function(err, response){
           console.log('ダッシュボードの情報取得できた');
-          console.log(response);
+          console.log('response: ', response);
           data.push(response);
         });
       }
 
-      // usernameがある時(ログインしてる時)の処理
+      // usernameとtokenの両方がある時(ログインしてる時)の処理
       var loggedIn = false;
-      if (req.session.passport.user){
+      if (req.session.passport.user && passport.session.token){
         loggedIn = true;
         console.log('ログインしてる(セッションに認証情報保存されてる)');
         getDashboard();
@@ -58,5 +56,3 @@ var IndexController = function(app){
     }
   }
 };
-
-module.exports = IndexController;
