@@ -16,21 +16,31 @@ module.exports = {
   // logout
   logout: function(req, res) {
     req.logout();
+    req.session.destroy();
     res.redirect('/');
   },
 
   // tumblr
-  twitter: function(req, res) {
+  tumblr: function(req, res) {
     passport.authenticate('tumblr', { failureRedirect: '/login' }, function(err, user) {
+      // エラー出た時
+      if (err) {
+        return res.serverError(err);
+      }
+
+      // ユーザーが存在しない時
+      if (!user) {
+        return res.redirect('/');
+      }
+
+      // 成功→ログインする
       req.logIn(user, function(err) {
+        // エラー出た時
         if (err) {
-          console.log(err);
-          res.view('500');
-          return;
+          return res.serverError(err);
         }
 
-        res.redirect('/');
-        return;
+        return res.redirect('/');
       });
     })(req, res);
   }

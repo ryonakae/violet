@@ -33,7 +33,8 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/' : {
-    controller : 'home'
+    controller : 'home',
+    action     : 'index'
   },
 
   '/login' : {

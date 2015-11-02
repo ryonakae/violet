@@ -9,7 +9,6 @@ module.exports = {
   adapter: 'mongo',
 
   attributes: {
-    id: 'STRING',
     username: {
       type: 'STRING',
       unique: true
