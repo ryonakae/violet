@@ -5,6 +5,9 @@ var env = require('../env.js');
 
 var validation = function(token, tokenSecret, profile, done){
   process.nextTick(function(){
+    console.log(profile);
+
+    // ユーザー名をDBから探して、見つかったら処理
     User.findOne({username:profile.username}, function(err, user){
       // ユーザーがDBに存在する場合
       if(user){
@@ -26,8 +29,10 @@ var validation = function(token, tokenSecret, profile, done){
   });
 };
 
+
 passport.serializeUser(function(user, done) {
   done(null, user.username);
+  // usernameがreq.session.passport.userに入る。他の場所から参照できる
 });
 
 passport.deserializeUser(function(obj, done) {

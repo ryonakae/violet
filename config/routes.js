@@ -32,20 +32,11 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/' : {
-    controller : 'home',
-    action     : 'index'
-  },
+  '/': 'HomeController.index',
 
-  '/login' : {
-    controller : 'auth',
-    action     : 'index'
-  },
+  '/login': 'AuthController.index',
 
-  '/logout' : {
-    controller : 'auth',
-    action     : 'logout'
-  }
+  '/logout': 'AuthController.logout'
 
   /***************************************************************************
   *                                                                          *

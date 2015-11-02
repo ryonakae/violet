@@ -25,22 +25,33 @@ module.exports = {
     passport.authenticate('tumblr', { failureRedirect: '/login' }, function(err, user) {
       // エラー出た時
       if (err) {
-        return res.serverError(err);
+        return sails.log.error(err);
       }
 
       // ユーザーが存在しない時
-      if (!user) {
+      else if (!user) {
         return res.redirect('/');
       }
 
       // 成功→ログインする
-      req.logIn(user, function(err) {
-        // エラー出た時
+      // その前にセッション再生成
+      req.session.regenerate(function(err){
+        req.session.passport = {};
+        req._passport.session = req.session.passport;
+
         if (err) {
-          return res.serverError(err);
+          return sails.log.error(err);
         }
 
-        return res.redirect('/');
+        req.logIn(user, function(err) {
+          if (err) {
+            return sails.log.error(err);
+          }
+
+          req.session.authenticated = true; // for sessionAuth.js
+          console.log(user);
+          return res.redirect('/');
+        });
       });
     })(req, res);
   }
