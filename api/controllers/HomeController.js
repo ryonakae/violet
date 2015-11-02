@@ -12,6 +12,7 @@ module.exports = {
       user: req.user
     });
     console.log('req.user: ', req.user);
+    console.log('req.session: ', req.session);
   }
 };
 

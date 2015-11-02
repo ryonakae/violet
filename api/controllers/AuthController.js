@@ -49,7 +49,7 @@ module.exports = {
           }
 
           req.session.authenticated = true; // for sessionAuth.js
-          console.log(user);
+          console.log('req.session: ', req.session);
           return res.redirect('/');
         });
       });
