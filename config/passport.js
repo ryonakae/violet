@@ -1,6 +1,5 @@
 var passport = require('passport');
 var TumblrStrategy = require('passport-tumblr').Strategy;
-var env = require('../env.js');
 
 
 var validation = function(token, tokenSecret, profile, done){
@@ -44,8 +43,8 @@ passport.deserializeUser(function(obj, done) {
 module.exports.http = {
   customMiddleware: function(app){
     passport.use(new TumblrStrategy({
-      consumerKey: env.TUMBLR_CONSUMER_KEY,
-      consumerSecret: env.TUMBLR_SECRET_KEY,
+      consumerKey: sails.config.TUMBLR_CONSUMER_KEY,
+      consumerSecret: sails.config.TUMBLR_SECRET_KEY,
       callbackURL: "http://localhost:1337/auth/tumblr/callback"
     }, validation));
 

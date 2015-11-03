@@ -6,7 +6,6 @@
  */
 
 var tumblr = require('tumblr.js');
-var data = [];
 
 
 function loadItems(req, res, callback) {
@@ -21,23 +20,23 @@ function loadItems(req, res, callback) {
     data = data.concat(response.posts);
     callback(data);
     return data;
-    // console.log('data: ', data);
-    // console.log('ダッシュボードを取得してdataに格納');
+    console.log('ダッシュボードを取得してdataに格納');
   });
 };
 
 
 module.exports = {
   index: function(req, res) {
-    // ブラウザリロードの度に配列の中身増えていくので、書き方変える
-    loadItems(req, res, function(data){
-      res.view({
-        title: 'Violet for Tumblr',
-        user: req.user,
-        data: JSON.stringify(data)
-      });
-      console.log('req.user: ', req.user);
-      console.log('data: ', data);
+    res.view({
+      title: 'Violet for Tumblr',
+      user: req.user,
+      // data: JSON.stringify(data)
     });
+    console.log('req.user: ', req.user);
+  },
+
+  hello: function(req, res){
+    sails.sockets.join(req.socket, 'fromServer');
+    res.json({message:'fromSwerver message'});
   }
 };
