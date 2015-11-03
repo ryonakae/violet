@@ -22,7 +22,7 @@ module.exports = {
 
   // tumblr
   tumblr: function(req, res) {
-    passport.authenticate('tumblr', { failureRedirect: '/login' }, function(err, user) {
+    passport.authenticate('tumblr', { failureRedirect: '/' }, function(err, user) {
       // エラー出た時
       if (err) {
         return sails.log.error(err);
@@ -49,8 +49,7 @@ module.exports = {
           }
 
           req.session.authenticated = true; // for sessionAuth.js
-          console.log('req.session: ', req.session);
-          return res.redirect('/');
+          return res.redirect('/dashboard');
         });
       });
     })(req, res);

@@ -1,16 +1,6 @@
-<h3>Index</h3>
+<h3><%= title %></h3>
 
-<% if(user){ %>
-  <p>
-    You are loggedin.<br>
-    Your username is <%= user.username %>.
-  </p>
-  <ul>
-    <li><a href="/logout">Logout</a></li>
-  </ul>
-<% }else{ %>
-  <p>You are not loggedin.</p>
-  <ul>
-    <li><a href="/auth/tumblr/">Login</a></li>
-  </ul>
-<% } %>
+<p>You are not loggedin.</p>
+<ul>
+  <li><a href="/auth/tumblr/">Login</a></li>
+</ul>

@@ -7,12 +7,16 @@
 
 module.exports = {
   index: function(req, res) {
-    res.view({
-      title: 'Violet for Tumblr',
-      user: req.user
-    });
-    console.log('req.user: ', req.user);
-    console.log('req.session: ', req.session);
+    // ログインしてたらdashboardにリダイレクト
+    if(req.session.authenticated){
+      res.redirect('/dashboard');
+    }
+    // ログインしてなかったら普通にindex表示
+    else {
+      res.view({
+        title: 'Violet for Tumblr'
+      });
+    }
   }
 };
 

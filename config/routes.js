@@ -34,7 +34,9 @@ module.exports.routes = {
 
   '/': 'HomeController.index',
 
-  '/login': 'AuthController.index',
+  '/dashboard': 'DashboardController.index',
+
+  '/login': 'AuthController.tumblr',
 
   '/logout': 'AuthController.logout'
 

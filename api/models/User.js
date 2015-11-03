@@ -11,9 +11,20 @@ module.exports = {
   attributes: {
     username: {
       type: 'STRING',
-      unique: true
+      unique: true,
+      required: true
     },
-    provider: 'STRING'
+    provider: 'STRING',
+    token: {
+      type: 'STRING',
+      unique: true,
+      required: true
+    },
+    tokenSecret: {
+      type: 'STRING',
+      unique: true,
+      required: true
+    }
   }
 };
 

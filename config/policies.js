@@ -28,10 +28,23 @@ module.exports.policies = {
 
   // '*': true,
 
-  // '*': 'sessionAuth',
-  // AuthController: {
-  //   '*': true
-  // }
+  // すべてのページ表示前にsessionAuthを実行
+  // /dashboard以下はログインしないとアクセスできない
+  '*': 'sessionAuth',
+
+  // トップページは誰でもアクセスできる
+  HomeController: {
+    '*': true
+  },
+
+  // /auth以下は誰でもアクセスできる
+  AuthController: {
+    '*': true
+  },
+
+  // /user以下は外部に非公開
+  // ユーザー情報が入ってるので
+  'UserController': false
 
   /***************************************************************************
   *                                                                          *
