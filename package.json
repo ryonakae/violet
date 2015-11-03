@@ -5,10 +5,10 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
-    "db": "mkdir -p db && mongod --nojournal --noprealloc --dbpath db",
-    "browserify": "mkdir -p assets/javascripts && browserify client/javascripts/app.jsx -t babelify -o assets/javascripts/bundle.js"
+    "db": "mkdir -p db && mongod --nojournal --noprealloc --dbpath db"
   },
   "dependencies": {
+    "babel-runtime": "^5.8.29",
     "browserify-shim": "^3.8.11",
     "connect-mongo": "^0.8.2",
     "ejs": "~0.8.4",
@@ -36,7 +36,10 @@
     "tumblr.js": "0.0.5",
     "velocity-animate": "^1.2.3",
     "vue": "^1.0.4",
-    "vue-router": "^0.7.5"
+    "vue-hot-reload-api": "^1.2.1",
+    "vue-router": "^0.7.5",
+    "vueify": "^5.0.2",
+    "vueify-insert-css": "^1.0.0"
   },
   "browserify": {
     "transform": [

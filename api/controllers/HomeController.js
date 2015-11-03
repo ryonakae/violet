@@ -13,7 +13,9 @@ module.exports = {
     }
     // ログインしてなかったら普通にindex表示
     else {
-      res.view();
+      res.view('./index', {
+        authenticated: false
+      });
     }
   }
 };

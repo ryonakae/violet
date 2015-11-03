@@ -34,13 +34,13 @@ module.exports.routes = {
 
   '/': 'HomeController.index',
 
+  '/about': 'AboutController.index',
+
   '/dashboard': 'DashboardController.index',
   'get /dashboard/get': 'DashboardController.get',
 
   '/login': 'AuthController.tumblr',
-  '/logout': 'AuthController.logout',
-
-  '/about': 'AboutController.index'
+  '/logout': 'AuthController.logout'
 
   /***************************************************************************
   *                                                                          *

@@ -18,6 +18,9 @@ module.exports = function(grunt) {
     js: {
       src : require('../pipeline').browserifyMainFile,
       dest: '.tmp/public/browserify/debug.' + version + '.js'
+    },
+    options: {
+      transform: ['vueify']
     }
   });
 

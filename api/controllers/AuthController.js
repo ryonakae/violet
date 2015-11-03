@@ -8,11 +8,6 @@
 var passport = require('passport');
 
 module.exports = {
-  // login
-  index: function(req, res) {
-    res.view();
-  },
-
   // logout
   logout: function(req, res) {
     req.logout();

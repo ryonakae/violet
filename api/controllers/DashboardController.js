@@ -30,8 +30,14 @@ function loadItems(pageNum) {
 
 module.exports = {
   index: function(req, res) {
-    res.view({
-      user: req.user
+    // ログインしてなかったらindexにリダイレクト
+    if(!req.session.authenticated){
+      return res.redirect('/');
+    }
+
+    res.view('./index', {
+      user: req.user,
+      authenticated: true
     });
     console.log('req.user: ', req.user);
 
