@@ -37,6 +37,11 @@ module.exports.policies = {
     '*': true
   },
 
+  // /about以下は誰でもアクセスできる
+  AboutController: {
+    '*': true
+  },
+
   // /auth以下は誰でもアクセスできる
   AuthController: {
     '*': true

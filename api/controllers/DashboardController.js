@@ -31,9 +31,7 @@ function loadItems(pageNum) {
 module.exports = {
   index: function(req, res) {
     res.view({
-      title: 'Violet for Tumblr',
-      user: req.user,
-      // data: JSON.stringify(data)
+      user: req.user
     });
     console.log('req.user: ', req.user);
 

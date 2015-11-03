@@ -13,9 +13,7 @@ module.exports = {
     }
     // ログインしてなかったら普通にindex表示
     else {
-      res.view({
-        title: 'Violet for Tumblr'
-      });
+      res.view();
     }
   }
 };
