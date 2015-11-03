@@ -13,8 +13,10 @@ module.exports = {
     }
     // ログインしてなかったら普通にindex表示
     else {
+      var data = [{authenticated: false}];
+
       res.view('./index', {
-        authenticated: false
+        initialData: JSON.stringify(data)
       });
     }
   }

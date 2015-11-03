@@ -42,3 +42,7 @@ router.map({
 
 var App = Vue.extend(require('./app.vue'));
 router.start(App, '#app');
+
+
+var data = JSON.parse(document.getElementById('initial-data').getAttribute('data-json'));
+console.log('data:authenticated ', data[0]);

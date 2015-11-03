@@ -8,7 +8,8 @@
 module.exports = {
   index: function(req, res) {
     res.view('./index', {
-      title: 'About'
+      title: 'About',
+      initialData: null
     });
   }
 };

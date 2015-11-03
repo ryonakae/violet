@@ -34,16 +34,20 @@ module.exports = {
     if(!req.session.authenticated){
       return res.redirect('/');
     }
+    // ログインしてたらdashboard表示
+    else {
+      var data = [{authenticated: true}];
 
-    res.view('./index', {
-      user: req.user,
-      authenticated: true
-    });
-    console.log('req.user: ', req.user);
+      res.view('./index', {
+        user: req.user,
+        initialData: JSON.stringify(data)
+      });
+      console.log('req.user: ', req.user);
 
-    // /dashboard読み込みの度にpageNumを1にリセットする
-    this.state.pageNum = 1;
-    console.log('pageNum: ', this.state.pageNum);
+      // /dashboard読み込みの度にpageNumを1にリセットする
+      this.state.pageNum = 1;
+      console.log('pageNum: ', this.state.pageNum);
+    }
   },
 
   state: {
