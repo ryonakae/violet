@@ -35,7 +35,8 @@ module.exports.routes = {
   '/': 'HomeController.index',
 
   '/dashboard': 'DashboardController.index',
-  'get /dashboard/hello': 'DashboardController.hello',
+
+  'get /dashboard/get': 'DashboardController.get',
 
   '/login': 'AuthController.tumblr',
 

@@ -8,7 +8,7 @@
 var tumblr = require('tumblr.js');
 
 
-function loadItems(req, res, callback) {
+function loadItems(pageNum) {
   var client = new tumblr.Client({
     consumer_key: sails.config.TUMBLR_CONSUMER_KEY,
     consumer_secret: sails.config.TUMBLR_SECRET_KEY,
@@ -16,11 +16,14 @@ function loadItems(req, res, callback) {
     token_secret: req.user.tokenSecret
   });
 
-  client.dashboard({limit:2}, function(err, response){
+  var option = {
+    limit: 2,
+    offset: 99
+  };
+
+  client.dashboard(option, function(err, response){
     data = data.concat(response.posts);
-    callback(data);
     return data;
-    console.log('ダッシュボードを取得してdataに格納');
   });
 };
 
@@ -33,10 +36,25 @@ module.exports = {
       // data: JSON.stringify(data)
     });
     console.log('req.user: ', req.user);
+
+    // /dashboard読み込みの度にpageNumを1にリセットする
+    this.state.pageNum = 1;
+    console.log('pageNum: ', this.state.pageNum);
   },
 
-  hello: function(req, res){
-    sails.sockets.join(req.socket, 'fromServer');
-    res.json({message:'fromSwerver message'});
+  state: {
+    pageNum: 1,
+    data: []
+  },
+
+  // dashboard get
+  get: function(req, res){
+    // pageNumを1つ増やす
+    this.state.pageNum += 1;
+    console.log('pageNum: ', this.state.pageNum);
+
+    // 1つ増えたpageNumを使って、Tumblrのダッシュボードを取得する
+    // 取得したデータを、res.send()とかres.json()でクライアントに送る
+    // res.json();
   }
 };
