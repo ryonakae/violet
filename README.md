@@ -1,10 +1,10 @@
 # Violet for Tumblr
 
-Create `env.js`
+Create `config/local.js`
 
-    $ touch env.js
+    $ touch config/local.js
 
-Edit `env.js`
+Edit `config/local.js`
 
     module.exports = {
       TUMBLR_CONSUMER_KEY: 'xxxxxxxxxx',
@@ -19,10 +19,6 @@ Start DB (with other process)
 
     $ npm run db
 
-Compile `main.jsx` to `main.js` with Browserify
-
-    $ npm run browserify
-
 Run
 
-    $ npm start
+    $ sails lift
