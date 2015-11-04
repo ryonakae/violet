@@ -9,46 +9,42 @@ var tumblr = require('tumblr.js');
 var async = require('async');
 
 module.exports = {
-  state: {
-    data: [],
-    pageNum: 0,
-    limit: 2,
-    articleCount: 0,
-    articleTotal: 0,
-    token: null,
-    tokenSecret: null,
-    isInitial: true
-  },
+  state: {},
 
   index: function(req, res) {
+    // /dashboard読み込みの度にstateに初期値を保存
+    this.state.data = [];
+    this.state.pageNum = 1;
+    this.state.limit = 3;
+    this.state.articleCount = 0;
+    this.state.articleTotal = 0;
+    this.state.token = null;
+    this.state.tokenSecret = null;
+    this.state.isInitial = true;
+
     // ログインしてなかったらindexにリダイレクト
     if(!req.session.authenticated){
       return res.redirect('/');
     }
     // ログインしてたらdashboard表示
     else {
+      // view表示
       res.view('./index');
+      console.log('req.user: ', req.user);
 
       // stateにtokenとtokenSecretを格納
       this.state.token = req.user.token;
       this.state.tokenSecret = req.user.tokenSecret;
-
-      // /dashboard読み込みの度に値をリセットする
-      this.state.data = [];
-      this.state.pageNum = 0;
-      this.state.articleCount = 0;
-      this.state.isInitial = true;
     }
   },
 
   // dashboard get request from client
   get: function(req, res){
-    // // ブラウザリロード時になぜか2回呼ばれてしまうので…
-    // // 1回目だけ処理をスキップ
-    // if(this.state.isInitial){
-    //   console.log('1回目なので何もしないよ');
-    //   return this.state.isInitial = false;
-    // }
+    // tokenがなかったら処理を中止
+    if(!this.state.token) {
+      console.log('token or tokenSecretがないので処理中止したよ');
+      return;
+    }
 
     // async.waterfallで順番に処理を実行
     var self = this;
@@ -68,7 +64,14 @@ module.exports = {
 
   // ダッシュボード取得用関数
   loadDb: function(callback){
-    console.log('loadDb()を実行');
+    // ブラウザリロード時になぜか2回呼ばれてしまうので…
+    // 1回目だけ処理をスキップ
+    if(this.state.isInitial){
+      console.log('1回目なので何もしないよ');
+      return this.state.isInitial = false;
+    }
+
+    console.log('2回目以降なのでloadDb()を実行');
 
     var self = this;
 
@@ -83,7 +86,7 @@ module.exports = {
     // オプション
     var option = {
       limit: self.state.limit,
-      offset: self.state.pageNum * self.state.limit - self.state.limit,
+      offset: self.state.pageNum * self.state.limit - self.state.limit, // ページ番号 * 取得件数 - 取得件数
       format: 'html'
     };
 
@@ -94,28 +97,19 @@ module.exports = {
       var newData = oldData.concat(response.posts);
 
       // 結合したデータをstate.dataに格納
-      // 初回のみ重複分を削除
-      if(self.state.isInitial){
-        self.state.data = newData.splice(-self.state.limit, self.state.limit);
-      } else {
-        self.state.data = newData;
-      }
-
+      self.state.data = newData;
       console.log('data: ', self.state.data);
 
       // 合計記事数をstate.articleTotalに入れる
       self.state.articleTotal = response.total_posts;
 
       // 値をアップデート
-      // 初回のみアップデートしない(2回目以降はする)
-      if(!self.state.isInitial){
-        self.state.pageNum += 1;
-        self.state.articleCount += self.state.limit;
-      }
+      self.state.pageNum += 1; //ページ番号を1つ増やす
+      self.state.articleCount += self.state.limit; //取得記事合計をlimit(取得件数)分増やす
       console.log('pageNum after loadDb(): ', self.state.pageNum);
       console.log('articleCount after loadDb(): ', self.state.articleCount);
 
-      callback(null);
+      return callback(null);
     });
   }
 };
