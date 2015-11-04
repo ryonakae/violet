@@ -23,8 +23,10 @@ var io = require('./dependencies/sails.io.js')(socketIO);
 // Vue.js
 var Vue = require('vue');
 var VueRouter = require('vue-router');
-
 Vue.use(VueRouter);
+
+// グローバルで使うcomponentの登録
+Vue.component('component-header', require('./components/header.vue'));
 
 // routerの作成
 var router = new VueRouter({

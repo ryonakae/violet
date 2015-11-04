@@ -6,7 +6,7 @@
 
     <nav class="header__navi">
       <div class="header__naviToggle">Menu</div>
-      <ul class="header__naviList" style="display:none;">
+      <ul class="header__naviList">
         <li class="header__naviListItem">
           <a v-link="{path:'/'}">Home</a>
         </li>
