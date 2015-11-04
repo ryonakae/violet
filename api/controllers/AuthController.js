@@ -48,6 +48,13 @@ module.exports = {
         });
       });
     })(req, res);
+  },
+
+  // is authenticated
+  isAuth: function(req, res){
+    res.json({
+      isAuth: req.session.authenticated
+    });
   }
 };
 

@@ -1,8 +1,9 @@
 <template>
-  <div id="app">
+  <div>
+    {{title}}
     <header class="header">
       <h1 class="header__logo">
-        <a v-link="{path:'/'}">Violet for Tumblr</a>
+        <a v-link="{path:'/'}">{{title}}</a>
       </h1>
 
       <nav class="header__navi">
@@ -18,6 +19,17 @@
       </nav>
     </header>
 
-    <router-view></router-view>
+    <router-view class="view"></router-view>
   </div>
 <template>
+
+<script>
+  module.exports = {
+    data: function(){
+      return {
+        title: 'Violet for Tumblr',
+        loading: false
+      }
+    }
+  };
+</script>
