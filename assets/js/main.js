@@ -1,26 +1,3 @@
-var socketIO = require('./dependencies/socket.io.js');
-var io = require('./dependencies/sails.io.js')(socketIO);
-
-// require('jquery');
-// require('velocity');
-
-// $('#button').on('click', function(){
-//   io.socket.get('/dashboard/get', function serverRespondedWith (body, jwr){
-//     console.log(body);
-//   });
-
-//   $(this).velocity({
-//     opacity: 0
-//   },{
-//     duration: 500
-//   });
-// });
-
-// var data = JSON.parse(document.getElementById('initial-data').getAttribute('data-json'));
-// console.log('data:authenticated ', data[0]);
-
-
-// Vue.js
 var Vue = require('vue');
 var VueRouter = require('vue-router');
 Vue.use(VueRouter);
