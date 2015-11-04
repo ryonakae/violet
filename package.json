@@ -5,6 +5,8 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
+    "watch": "pm2 start config/pm2/development.json",
+    "stop": "pm2 kill",
     "db": "mkdir -p db && mongod --nojournal --noprealloc --dbpath db"
   },
   "dependencies": {
