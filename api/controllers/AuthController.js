@@ -52,8 +52,16 @@ module.exports = {
 
   // is authenticated
   isAuth: function(req, res){
+    var isAuth;
+
+    if(req.session.authenticated){
+      isAuth = true;
+    } else {
+      isAuth = false;
+    }
+
     res.json({
-      isAuth: req.session.authenticated
+      isAuth: isAuth
     });
   }
 };

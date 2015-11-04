@@ -2,10 +2,6 @@
   <div>
     <h2>{{title}}</h2>
     <p>{{description}}</p>
-    <ul>
-      <li><a v-link="{path:'/about'}">About</a></li>
-      <li><a href="/auth/tumblr/">Login</a></li>
-    </ul>
   </div>
 </template>
 

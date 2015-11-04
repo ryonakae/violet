@@ -47,16 +47,6 @@ router.map({
   }
 });
 
-// // routerのtransition開始前に呼ばれる
-// router.beforeEach(function(transition){
-//   // socket.ioでログイン状態を取得
-//   io.socket.get('/auth/isAuth', function serverRespondedWith (body, jwr){
-//     console.log(body);
-//   });
-
-//   transition.next()
-// });
-
 // routerが使用可能なアプリケーションを開始
 var App = Vue.extend(require('./app.vue'));
 router.start(App, '#app');
