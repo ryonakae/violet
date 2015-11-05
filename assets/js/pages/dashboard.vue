@@ -24,7 +24,7 @@
     data: function(){
       return {
         data: [],
-        lock: false
+        scrollLock: false
       }
     },
 
@@ -57,8 +57,8 @@
           self.$set('data', body);
           console.log(self.$get('data'));
 
-          self.$set('lock', false); //ロック解除
-          console.log('lock: ', self.$get('lock'));
+          self.$set('scrollLock', false); //ロック解除
+          console.log('scrollLock: ', self.$get('scrollLock'));
         });
       },
 
@@ -75,9 +75,10 @@
           offset = $('.scroll').offset().top;
 
           if(scroll+winHeight > offset*0.85){
-            if(self.$get('lock')) return; //多重読み込み防止
-            self.$set('lock', true); //ロックする
-            console.log('lock: ', self.$get('lock'));
+            if(self.$get('scrollLock')) return; //多重読み込み防止
+
+            self.$set('scrollLock', true); //ロックする
+            console.log('scrollLock: ', self.$get('scrollLock'));
             self.loadDb();
           }
         });

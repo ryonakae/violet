@@ -5,6 +5,9 @@ var Vue = require('vue');
 var VueRouter = require('vue-router');
 Vue.use(VueRouter);
 
+// デバッグモードを有効
+// Vue.config.debug = true;
+
 // グローバルで使うcomponentの登録
 Vue.component('component-header', require('./components/header.vue'));
 
@@ -35,9 +38,6 @@ router.afterEach(function (transition) {
 // routerが使用可能なアプリケーションを開始
 var App = Vue.extend(require('./app.vue'));
 router.start(App, '#app');
-
-// デバッグモードを有効
-Vue.config.debug = true;
 
 
 })();
