@@ -3,11 +3,13 @@
     <h2>Dashboard</h2>
 
     <h3>Posts</h3>
+    <p v-on:click="like(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Like Test</p>
+
     <ul>
       <li v-for="item in data">
         <h4>{{item.date}}</h4>
         <img v-if="item.photos[0].original_size.url" v-bind:src="item.photos[0].original_size.url" alt="" width="150"><br>
-        <small>id: {{item.id}} / {{item.note_count}} Notes</small>
+        <small>id: {{item.id}} / {{item.note_count}} Notes / Liked: {{item.liked}}</small>
       </li>
 
       <li class="scroll">scroll line</li>
@@ -46,10 +48,10 @@
     },
 
     methods: {
+      // ダッシュボード取得リクエストを送る
       loadDb: function(){
         var self = this;
 
-        // ダッシュボード取得リクエストを送る
         console.log('サーバにリクエスト送信');
         io.socket.get('/dashboard/get', function serverRespondedWith (body, jwr){
           console.log('ダッシュボード取得完了');
@@ -62,6 +64,28 @@
         });
       },
 
+      // Like
+      like: function(n){
+        var self = this;
+
+        var sendData = {
+          id: this.$get('data')[n].id,
+          reblogKey: this.$get('data')[n].reblog_key,
+          liked: this.$get('data')[n].liked
+        }
+
+        // Like済みだったらスキップ
+        if(sendData.liked){
+          return console.log('Like済みなのでスキップ');
+        }
+
+        io.socket.post('/dashboard/like', sendData, function(data, jwres){
+          console.log(data);
+          self.$get('data')[n].liked = true;
+        })
+      },
+
+      // infinite scroll
       scroll: function(){
         var self = this;
 

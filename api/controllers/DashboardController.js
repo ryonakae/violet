@@ -66,6 +66,36 @@ module.exports = {
   },
 
 
+  // like
+  like: function(req, res){
+    console.log('Likeリクエスト受信');
+
+    var option = {
+      id: req.param('id'),
+      reblogKey: req.param('reblogKey'),
+      liked: req.param('liked')
+    };
+
+    // すでにlikeされてたらスキップ
+    if(option.liked){
+      return console.log('Like済みなのでスキップ');
+    }
+
+    // インスタンス作成
+    var client = new tumblr.Client({
+      consumer_key: sails.config.TUMBLR_CONSUMER_KEY,
+      consumer_secret: sails.config.TUMBLR_SECRET_KEY,
+      token: this.state.token,
+      token_secret: this.state.tokenSecret
+    });
+
+    client.like(option.id, option.reblogKey, function(err, response){
+      console.log('Likeした');
+      res.json({ successLike:true });
+    });
+  },
+
+
   // ダッシュボード取得用関数
   loadDb: function(callback){
     var self = this;
