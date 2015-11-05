@@ -11,6 +11,7 @@ var async = require('async');
 module.exports = {
   state: {},
 
+
   index: function(req, res) {
     // /dashboard読み込みの度にstateに初期値を保存
     this.state.data = [];
@@ -21,6 +22,7 @@ module.exports = {
     this.state.token = null;
     this.state.tokenSecret = null;
     this.state.isInitial = true;
+    this.state.sinceId = 0;
 
     // ログインしてなかったらindexにリダイレクト
     if(!req.session.authenticated){
@@ -37,6 +39,7 @@ module.exports = {
       this.state.tokenSecret = req.user.tokenSecret;
     }
   },
+
 
   // dashboard get request from client
   get: function(req, res){
@@ -62,18 +65,20 @@ module.exports = {
     ]);
   },
 
+
   // ダッシュボード取得用関数
   loadDb: function(callback){
+    var self = this;
+
     // ブラウザリロード時になぜか2回呼ばれてしまうので…
     // 1回目だけ処理をスキップ
-    if(this.state.isInitial){
+    if(self.state.isInitial){
       console.log('1回目なので何もしないよ');
-      return this.state.isInitial = false;
+      return self.state.isInitial = false;
     }
 
     console.log('2回目以降なのでloadDb()を実行');
-
-    var self = this;
+    console.log('今のpageNum: ', self.state.pageNum);
 
     // インスタンス作成
     var client = new tumblr.Client({
@@ -90,26 +95,54 @@ module.exports = {
       format: 'html'
     };
 
+    // since_idを取得
+    // dataが空かどうか調べる
+    if(self.state.data.length > 0){
+      // dataがある→最新の投稿のidをセット
+      self.state.sinceId = self.state.data[0].id;
+    }
+
     // ダッシュボードを取得
-    client.dashboard(option, function(err, response){
-      // 取得したデータを結合
-      var oldData = self.state.data;
-      var newData = oldData.concat(response.posts);
+    // since_idがセットされてる→新しい記事取得後、ダッシュボードを取得
+    if(self.state.sinceId > 0){
+      client.dashboard({since_id:self.state.sinceId}, function(err, response){
+        // 取得した中で最新の投稿の数をセット
+        var newerItem = response.posts.length;
+        console.log('あたらしい記事が', newerItem, '件ある');
 
-      // 結合したデータをstate.dataに格納
-      self.state.data = newData;
-      // console.log('data: ', self.state.data);
+        // offsetをoffset+newerItemにする
+        option.offset = option.offset + newerItem;
 
-      // 合計記事数をstate.articleTotalに入れる
-      self.state.articleTotal = response.total_posts;
+        getDb();
+      });
+    }
+    // since_idがセットされてない→普通にダッシュボードを取得
+    else {
+      getDb();
+    }
 
-      // 値をアップデート
-      self.state.pageNum += 1; //ページ番号を1つ増やす
-      self.state.articleCount += self.state.limit; //取得記事合計をlimit(取得件数)分増やす
-      console.log('loadDb()終了後のpageNum: ', self.state.pageNum);
-      console.log('loadDb()終了後のarticleCount: ', self.state.articleCount);
+    function getDb(){
+      client.dashboard(option, function(err, response){
+        console.log('offset: ', option.offset);
 
-      return callback(null);
-    });
+        // 取得したデータを結合
+        var oldData = self.state.data;
+        var newData = oldData.concat(response.posts);
+
+        // 結合したデータをstate.dataに格納
+        self.state.data = newData;
+        // console.log('data: ', self.state.data);
+
+        // 合計記事数をstate.articleTotalに入れる
+        self.state.articleTotal = response.total_posts;
+
+        // 値をアップデート
+        self.state.pageNum += 1; //ページ番号を1つ増やす
+        self.state.articleCount += self.state.limit; //取得記事合計をlimit(取得件数)分増やす
+        console.log('loadDb()終了後のarticleCount: ', self.state.articleCount);
+
+        return callback(null);
+      });
+    };
   }
 };

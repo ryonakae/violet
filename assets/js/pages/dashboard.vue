@@ -6,7 +6,8 @@
     <ul>
       <li v-for="item in data">
         <h4>{{item.date}}</h4>
-        <p>id: {{item.id}} / {{item.note_count}} Notes</p>
+        <img v-if="item.photos[0].original_size.url" v-bind:src="item.photos[0].original_size.url" alt="" width="150"><br>
+        <small>id: {{item.id}} / {{item.note_count}} Notes</small>
       </li>
     </ul>
 
