@@ -26,19 +26,13 @@
     },
 
     ready: function(){
-      var self = this;
+      console.log('ダッシュボード表示');
 
       // socket.io接続時の処理
-      io.socket.on('connect', function(){
-        console.log('ダッシュボードを表示');
-        self.loadDb();
-      });
+      io.socket.on('connect', this.loadDb);
 
       // socket.io切断時の処理
-      io.socket.on('disconnect', function(){
-        console.log('Socket.ioを切断');
-        io.socket.disconnect();
-      });
+      io.socket.on('disconnect', io.socket.disconnect);
     },
 
     methods: {

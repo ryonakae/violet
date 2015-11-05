@@ -98,7 +98,7 @@ module.exports = {
 
       // 結合したデータをstate.dataに格納
       self.state.data = newData;
-      console.log('data: ', self.state.data);
+      // console.log('data: ', self.state.data);
 
       // 合計記事数をstate.articleTotalに入れる
       self.state.articleTotal = response.total_posts;
@@ -106,8 +106,8 @@ module.exports = {
       // 値をアップデート
       self.state.pageNum += 1; //ページ番号を1つ増やす
       self.state.articleCount += self.state.limit; //取得記事合計をlimit(取得件数)分増やす
-      console.log('pageNum after loadDb(): ', self.state.pageNum);
-      console.log('articleCount after loadDb(): ', self.state.articleCount);
+      console.log('loadDb()終了後のpageNum: ', self.state.pageNum);
+      console.log('loadDb()終了後のarticleCount: ', self.state.articleCount);
 
       return callback(null);
     });

@@ -36,14 +36,20 @@
       }
     },
 
-    created: function(){
+    ready: function(){
       var self = this;
 
-      // socket.ioでログイン状態を取得
-      io.socket.get('/auth/isAuth', function serverRespondedWith (body, jwr){
-        self.isAuth = body.isAuth;
-        console.log('isAuth', self.isAuth);
+      // socket.io切断時の処理
+      io.socket.on('connect', function(){
+        // socket.ioでログイン状態を取得
+        io.socket.get('/auth/isAuth', function serverRespondedWith (body, jwr){
+          self.isAuth = body.isAuth;
+          console.log('isAuth', self.isAuth);
+        });
       });
+
+      // socket.io切断時の処理
+      io.socket.on('disconnect', io.socket.disconnect);
     }
   };
 </script>

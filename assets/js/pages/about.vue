@@ -6,3 +6,11 @@
     </ul>
   </div>
 </template>
+
+<script>
+  module.exports = {
+    ready: function(){
+      console.log('About表示');
+    }
+  }
+</script>

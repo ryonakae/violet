@@ -16,6 +16,10 @@
       }
     },
 
+    ready: function(){
+      console.log('Index表示');
+    }
+
     // components: {
     //   'my-modal': modal
     // }
