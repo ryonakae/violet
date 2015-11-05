@@ -36,5 +36,8 @@ router.afterEach(function (transition) {
 var App = Vue.extend(require('./app.vue'));
 router.start(App, '#app');
 
+// デバッグモードを有効
+Vue.config.debug = true;
+
 
 })();

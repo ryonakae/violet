@@ -9,28 +9,37 @@
         <img v-if="item.photos[0].original_size.url" v-bind:src="item.photos[0].original_size.url" alt="" width="150"><br>
         <small>id: {{item.id}} / {{item.note_count}} Notes</small>
       </li>
-    </ul>
 
-    <p v-on:click="loadDb" style='display:inline-block; background-color:#aaa; padding:10px;'>load dashboard</p>
+      <li class="scroll">scroll line</li>
+    </ul>
   </div>
 </template>
 
 <script>
   var socketIO = require('../dependencies/socket.io.js');
   var io = require('../dependencies/sails.io.js')(socketIO);
+  require('jquery');
 
   module.exports = {
     data: function(){
       return {
-        data: []
+        data: [],
+        lock: false
       }
     },
 
     ready: function(){
-      console.log('ダッシュボード表示');
+      var self = this;
+
+      console.log('dashboard表示');
 
       // socket.io接続時の処理
-      io.socket.on('connect', this.loadDb);
+      io.socket.on('connect', function(){
+        self.loadDb();
+
+        // infinite scroll
+        self.scroll();
+      });
 
       // socket.io切断時の処理
       io.socket.on('disconnect', io.socket.disconnect);
@@ -41,11 +50,36 @@
         var self = this;
 
         // ダッシュボード取得リクエストを送る
-        console.log('サーバにリクエスト送ったよ');
+        console.log('サーバにリクエスト送信');
         io.socket.get('/dashboard/get', function serverRespondedWith (body, jwr){
-          console.log('ダッシュボード取得したよ');
+          console.log('ダッシュボード取得完了');
+
           self.$set('data', body);
           console.log(self.$get('data'));
+
+          self.$set('lock', false); //ロック解除
+          console.log('lock: ', self.$get('lock'));
+        });
+      },
+
+      scroll: function(){
+        var self = this;
+
+        var scroll = 0;
+        var winHeight;
+        var offset;
+
+        $(window).on('scroll', function(e){
+          scroll = $(window).scrollTop();
+          winHeight = $(window).height();
+          offset = $('.scroll').offset().top;
+
+          if(scroll+winHeight > offset*0.85){
+            if(self.$get('lock')) return; //多重読み込み防止
+            self.$set('lock', true); //ロックする
+            console.log('lock: ', self.$get('lock'));
+            self.loadDb();
+          }
         });
       }
     }
