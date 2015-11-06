@@ -18,7 +18,8 @@ module.exports.models = {
   *                                                                          *
   ***************************************************************************/
   // connection: 'localDiskDb',
-  connection: 'someMongodbServer',
+  // connection: 'someMongodbServer',
+  connection: (process.env.NODE_ENV === 'production') ? 'productionMongodbServer' : 'someMongodbServer',
 
   /***************************************************************************
   *                                                                          *

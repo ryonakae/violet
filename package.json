@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node app.js",
-    "watch": "pm2 start config/pm2/development.json",
+    "start": "pm2 start app.js -x -- --prod",
+    "watch": "pm2 start config/pm2/development.json && pm2 logs",
     "stop": "pm2 kill",
     "db": "mkdir -p db && mongod --nojournal --noprealloc --dbpath db"
   },
@@ -14,6 +14,7 @@
     "babel-runtime": "^5.8.29",
     "browserify-shim": "^3.8.11",
     "connect-mongo": "^0.8.2",
+    "connect-redis": "1.4.5",
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
     "grunt-browserify": "^4.0.1",
@@ -32,9 +33,10 @@
     "jquery": "^2.1.4",
     "passport": "0.2.2",
     "passport-tumblr": "^0.1.2",
+    "pm2": "^0.15.10",
     "rc": "~0.5.0",
     "sails": "~0.11.2",
-    "sails-disk": "~0.10.0",
+    "sails-disk": "^0.10.8",
     "sails-mongo": "^0.11.4",
     "tumblr.js": "0.0.5",
     "velocity-animate": "^1.2.3",
@@ -55,5 +57,9 @@
   },
   "browserify-shim": {
     "jquery": "$"
+  },
+  "engines": {
+    "node": "0.12.x",
+    "npm": "2.11.x"
   }
 }

@@ -65,6 +65,11 @@ module.exports.connections = {
     database: 'sails-tumblr-auth'
   },
 
+  productionMongodbServer: {
+    adapter: 'sails-mongo',
+    url: process.env.MONGOLAB_URI
+  },
+
   /***************************************************************************
   *                                                                          *
   * PostgreSQL is another officially supported relational database.          *
