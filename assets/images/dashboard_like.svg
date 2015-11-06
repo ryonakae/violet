@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="25px" height="22px" viewBox="0 0 25 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.4 (15575) - http://www.bohemiancoding.com/sketch -->
+    <title>dashboard_like</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Dashboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="01-01" sketch:type="MSArtboardGroup" transform="translate(-269.000000, -787.000000)" stroke="#FFFFFF">
+            <g id="contents" sketch:type="MSLayerGroup" transform="translate(0.000000, 44.000000)">
+                <g id="button" transform="translate(0.000000, 728.000000)" sketch:type="MSShapeGroup">
+                    <path d="M292.534077,22.9446401 C292.534077,14.2886312 284.343409,14.9398537 281.380727,18.3606773 C281.292232,18.4631453 281.140647,18.4631453 281.052152,18.3606773 C278.092858,14.9398537 270,14.2890546 270,22.9446401 C270,29.1024612 278.367235,35.8810185 281.331187,35.9949189 L281.331187,36 C281.331187,36 281.319755,35.9978829 281.331187,35.9974595 C281.342196,35.9978829 281.331187,36 281.331187,36 L281.331187,35.9949189 C283.871717,35.8810185 292.534077,29.1024612 292.534077,22.9446401" id="dashboard_like"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

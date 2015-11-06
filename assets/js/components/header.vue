@@ -5,8 +5,9 @@
       <a v-else v-link="{path:'/dashboard'}">{{title}}</a>
     </h1>
 
+    <div class="header__toggle"></div>
+
     <nav class="header__navi">
-      <div class="header__naviToggle">Menu</div>
       <ul class="header__naviList">
         <li class="header__naviListItem">
           <a v-if="!isAuth" v-link="{path:'/'}">Home</a>
