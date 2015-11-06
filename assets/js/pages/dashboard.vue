@@ -7,6 +7,10 @@
     <p v-on:click="unlike(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Unike</p>
     <p v-on:click="reblog(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Reblog</p>
 
+    <p v-on:click="goPrev" style="display:inline-block; background-color:#aaa; padding:10px;">prev</p>
+    <p style="display:inline-block; background-color:#aaa; padding:10px;">Like &amp; Reblog</p>
+    <p v-on:click="goNext" style="display:inline-block; background-color:#aaa; padding:10px;">next</p>
+
     <ul>
       <li v-for="item in data">
         <h4>{{item.date}}</h4>
@@ -28,6 +32,8 @@
     data: function(){
       return {
         data: [],
+        dataLength: 0,
+        itemCount: 0,
         scrollLock: false
       }
     },
@@ -59,11 +65,45 @@
           console.log('ダッシュボード取得完了');
 
           self.$set('data', body);
+          self.$set('dataLength', self.$get('data').length); //取得した配列のlengthをdataLengthに入れる
           console.log(self.$get('data'));
+          console.log('dataLength: ', self.$get('dataLength'));
 
           self.$set('scrollLock', false); //ロック解除
           console.log('scrollLock: ', self.$get('scrollLock'));
         });
+      },
+
+      // 前のitemに移動
+      goPrev: function(){
+        console.log('前のitemに移動');
+        // ここにjQueryとか使って遷移の処理
+
+        // itemCountを1つ増やす
+        var count = this.$get('itemCount') -1;
+
+        if(count < 0){
+          return console.log('itemCountが0以下なので何もしないよ');
+        }
+
+        this.$set('itemCount', count);
+        console.log('itemCount: ', this.$get('itemCount'));
+      },
+
+      // 次のitemに移動
+      goNext: function(){
+        console.log('次のitemに移動');
+        // ここにjQueryとか使って遷移の処理
+
+        // itemCountを1つ増やす
+        var count = this.$get('itemCount') +1;
+
+        if(count > this.$get('dataLength')*0.8){
+          this.loadDb();
+        }
+
+        this.$set('itemCount', count);
+        console.log('itemCount: ', this.$get('itemCount'));
       },
 
       // Like
