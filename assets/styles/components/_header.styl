@@ -1,0 +1,78 @@
+.header
+  position fixed
+  top 0
+  left 0
+  width 100%
+  height $height_header
+  background-color rgba($bgColor_header, 0.95)
+  clearfix()
+
+
+  // logo
+  &__logo
+    float left
+    margin 0
+    padding 12px 0 0 21px
+    width 70px
+    height $height_header
+    background-color $bgColor_logo
+
+    a
+      display block
+      hide-text()
+      width 28px
+      height 27px
+      background url('../images/header_logo.svg') no-repeat
+
+
+  // toggle
+  &__toggle
+    float right
+    position relative
+    width 26px
+    height 26px
+    margin 10px 15px 0 0
+
+    &:before,
+    &:after
+      content ''
+      position absolute
+      width 26px
+      height 1px
+      background-color $textColor_default
+
+    &:before
+      left 0
+      top 50%
+      transform translateY(-5px)
+
+    &:after
+      left 0
+      top 50%
+      transform translateY(5px)
+
+
+  // navi
+  &__navi
+    opacity 0
+    visibility hidden
+    position absolute
+    top $height_header
+    left 0
+    width 100%
+    background-color rgba($bgColor_header, 0.95)
+
+    &List
+      margin 0
+      padding 0
+      list-style-type none
+
+      &Item
+        border-top 1px solid $borderColor_default
+        padding 10px $padding_page
+
+        a
+          display block
+          width 100%
+          height 100%
+          text-decoration none
