@@ -3,7 +3,9 @@
     <h2>Dashboard</h2>
 
     <h3>Posts</h3>
-    <p v-on:click="like(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Like Test</p>
+    <p v-on:click="like(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Like</p>
+    <p v-on:click="unlike(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Unike</p>
+    <p v-on:click="reblog(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Reblog</p>
 
     <ul>
       <li v-for="item in data">
@@ -12,7 +14,7 @@
         <small>id: {{item.id}} / {{item.note_count}} Notes / Liked: {{item.liked}}</small>
       </li>
 
-      <li class="scroll">scroll line</li>
+      <li class="scroll" style="display:block; height:1px; opacity:0;">scroll line</li>
     </ul>
   </div>
 </template>
@@ -82,6 +84,41 @@
         io.socket.post('/dashboard/like', sendData, function(data, jwres){
           console.log(data);
           self.$get('data')[n].liked = true;
+        })
+      },
+
+      // Unlike
+      unlike: function(n){
+        var self = this;
+
+        var sendData = {
+          id: this.$get('data')[n].id,
+          reblogKey: this.$get('data')[n].reblog_key,
+          liked: this.$get('data')[n].liked
+        }
+
+        // unike済みだったらスキップ
+        if(!sendData.liked){
+          return console.log('Unlike済みなのでスキップ');
+        }
+
+        io.socket.post('/dashboard/unlike', sendData, function(data, jwres){
+          console.log(data);
+          self.$get('data')[n].liked = false;
+        })
+      },
+
+      // Reblog
+      reblog: function(n){
+        var self = this;
+
+        var sendData = {
+          id: this.$get('data')[n].id,
+          reblogKey: this.$get('data')[n].reblog_key
+        }
+
+        io.socket.post('/dashboard/reblog', sendData, function(data, jwres){
+          console.log(data);
         })
       },
 

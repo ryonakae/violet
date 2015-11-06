@@ -19,6 +19,7 @@ module.exports = {
     this.state.limit = 3;
     this.state.articleCount = 0;
     this.state.articleTotal = 0;
+    this.state.username = null;
     this.state.token = null;
     this.state.tokenSecret = null;
     this.state.isInitial = true;
@@ -34,7 +35,8 @@ module.exports = {
       res.view('./index');
       console.log('req.user: ', req.user);
 
-      // stateにtokenとtokenSecretを格納
+      // stateに値を格納
+      this.state.username = req.user.username;
       this.state.token = req.user.token;
       this.state.tokenSecret = req.user.tokenSecret;
     }
@@ -72,7 +74,7 @@ module.exports = {
 
     var option = {
       id: req.param('id'),
-      reblogKey: req.param('reblogKey'),
+      reblog_key: req.param('reblogKey'),
       liked: req.param('liked')
     };
 
@@ -89,9 +91,65 @@ module.exports = {
       token_secret: this.state.tokenSecret
     });
 
-    client.like(option.id, option.reblogKey, function(err, response){
+    client.like(option.id, option.reblog_key, function(err, response){
       console.log('Likeした');
       res.json({ successLike:true });
+    });
+  },
+
+
+  // unlike
+  unlike: function(req, res){
+    console.log('Likeリクエスト受信');
+
+    var option = {
+      id: req.param('id'),
+      reblog_key: req.param('reblogKey'),
+      liked: req.param('liked')
+    };
+
+    // すでにlikeされてたらスキップ
+    if(!option.liked){
+      return console.log('Like済みなのでスキップ');
+    }
+
+    // インスタンス作成
+    var client = new tumblr.Client({
+      consumer_key: sails.config.TUMBLR_CONSUMER_KEY,
+      consumer_secret: sails.config.TUMBLR_SECRET_KEY,
+      token: this.state.token,
+      token_secret: this.state.tokenSecret
+    });
+
+    client.unlike(option.id, option.reblog_key, function(err, response){
+      console.log('Unikeした');
+      res.json({ successUnlike:true });
+    });
+  },
+
+
+  // reblog
+  reblog: function(req, res){
+    console.log('Reblogリクエスト受信');
+
+    var blogHost = this.state.username + '.tumblr.com';
+
+    var option = {
+      id: req.param('id'),
+      reblog_key: req.param('reblogKey')
+    };
+
+    // インスタンス作成
+    var client = new tumblr.Client({
+      consumer_key: sails.config.TUMBLR_CONSUMER_KEY,
+      consumer_secret: sails.config.TUMBLR_SECRET_KEY,
+      token: this.state.token,
+      token_secret: this.state.tokenSecret
+    });
+
+    client.reblog(blogHost, option, function(err, response){
+      console.log('Reblogした');
+      res.json({ successReblog:true });
     });
   },
 

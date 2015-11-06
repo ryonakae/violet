@@ -39,6 +39,8 @@ module.exports.routes = {
   '/dashboard': 'DashboardController.index',
   'get /dashboard/get': 'DashboardController.get',
   'post /dashboard/like': 'DashboardController.like',
+  'post /dashboard/unlike': 'DashboardController.unlike',
+  'post /dashboard/reblog': 'DashboardController.reblog',
 
   '/auth/tumblr/': 'AuthController.tumblr',
   '/auth/logout': 'AuthController.logout',
