@@ -2,7 +2,7 @@
   "apps": [{
     "name"    : "violet",
     "script"  : "app.js",
-    "watch"   : ["api", "config", "assets"],
+    "watch"   : ["api", "config"],
     "env": {
       "NODE_ENV": "development",
       "PORT"    : 1337
