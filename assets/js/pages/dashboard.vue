@@ -1,23 +1,29 @@
 <template>
   <div class="main main--dashboard">
     <div class="dashboard">
-      <ul class="dashboard__list" v-bind:style="{width:winWidth*dataLength}">
-        <li class="dashboard__listItem" v-for="item in data" v-bind:style="{width:winWidth}">
-          <h4>{{item.date}}</h4>
-          <img v-if="item.photos[0].original_size.url" v-bind:src="item.photos[0].original_size.url" alt="" width="150"><br>
-          <small>id: {{item.id}} / {{item.note_count}} Notes / Liked: {{item.liked}}</small>
+      <ul class="dashboard__list" id="dashboardList" v-bind:style="{ width: winWidth * dataLength + 'px' }">
+        <li class="dashboard__listItem" v-for="item in data" v-bind:style="{ width: winWidth + 'px', height: winHeight - headerHeight + 'px' }">
+          <div class="dashboard__listItemImage">
+            <img v-if="item.photos[0].original_size.url" v-bind:src="item.photos[0].original_size.url" alt="" width="150">
+          </div>
+          <div class="dashboard__listItemInfo">
+            <small>id: {{item.id}} / {{item.note_count}} Notes / Liked: {{item.liked}}</small>
+          </div>
+          <div class="dashboard__listItemBody">{{{item.caption}}}</div>
         </li>
       </ul>
     </div>
 
     <div class="controller">
-      <p v-on:click="like(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Like</p>
-      <p v-on:click="unlike(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Unike</p>
-      <p v-on:click="reblog(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Reblog</p>
-
-      <p v-on:click="goPrev" style="display:inline-block; background-color:#aaa; padding:10px;">prev</p>
-      <p style="display:inline-block; background-color:#aaa; padding:10px;">Like &amp; Reblog</p>
-      <p v-on:click="goNext" style="display:inline-block; background-color:#aaa; padding:10px;">next</p>
+      <div v-on:click="goPrev" class="controller__prev">
+        <span>Prev</span>
+      </div>
+      <div v-on:click="[like(itemCount), reblog(itemCount)]" class="controller__likeReblog">
+        <span>Like & Reblog</span>
+      </div>
+      <div v-on:click="goNext" class="controller__next">
+        <span>Next</span>
+      </div>
     </div>
   </div>
 </template>
@@ -26,6 +32,7 @@
   var socketIO = require('../dependencies/socket.io.js');
   var io = require('../dependencies/sails.io.js')(socketIO);
   require('jquery');
+  var velocity = require('velocity');
 
   module.exports = {
     data: function(){
@@ -33,7 +40,10 @@
         data: [],
         dataLength: 0,
         itemCount: 0,
-        winWidth: $(window).width()
+        winWidth: $(window).width(),
+        winHeight: $(window).height(),
+        headerHeight: $('#header').height(),
+        marginLeft: 0
       }
     },
 
@@ -47,6 +57,11 @@
 
       // socket.io切断時の処理
       io.socket.on('disconnect', io.socket.disconnect);
+
+      $(window).on('load resize', function(){
+        self.$set('winWidth', $(window).width());
+        self.$set('winHeight', $(window).height());
+      });
     },
 
     methods: {
@@ -70,7 +85,7 @@
         console.log('前のitemに移動');
         // ここにjQueryとか使って遷移の処理
 
-        // itemCountを1つ増やす
+        // itemCountを1つ減らす
         var count = this.$get('itemCount') -1;
 
         if(count < 0){
@@ -79,6 +94,9 @@
 
         this.$set('itemCount', count);
         console.log('itemCount: ', this.$get('itemCount'));
+
+        // 前のアイテムにスライド
+        this.sldePrev();
       },
 
       // 次のitemに移動
@@ -89,12 +107,16 @@
         // itemCountを1つ増やす
         var count = this.$get('itemCount') +1;
 
-        if(count > this.$get('dataLength')*0.8){
+        // 最後の方まで来たらダッシュボードを更新
+        if(count > this.$get('dataLength')*0.7){
           this.loadDb();
         }
 
         this.$set('itemCount', count);
         console.log('itemCount: ', this.$get('itemCount'));
+
+        // 次のアイテムにスライド
+        this.sldeNext();
       },
 
       // Like
@@ -151,6 +173,42 @@
         io.socket.post('/dashboard/reblog', sendData, function(data, jwres){
           console.log(data);
         })
+      },
+
+      sldePrev: function(){
+        var self = this;
+
+        $('#dashboardList').velocity({
+          marginLeft: this.$get('marginLeft') + this.$get('winWidth')
+        },{
+          duration: 400,
+          easing: 'easeOutQuart',
+          begin: function(){
+            $('body, html').animate({ scrollTop: 0 }, 0);
+          },
+          complete: function(){
+            self.$set('marginLeft', self.$get('marginLeft') + self.$get('winWidth'));
+          }
+        });
+        console.log('slide prev');
+      },
+
+      sldeNext: function(){
+        var self = this;
+
+        $('#dashboardList').velocity({
+          marginLeft: this.$get('marginLeft') - this.$get('winWidth')
+        },{
+          duration: 400,
+          easing: 'easeOutQuart',
+          begin: function(){
+            $('body, html').animate({ scrollTop: 0 }, 0);
+          },
+          complete: function(){
+            self.$set('marginLeft', self.$get('marginLeft') - self.$get('winWidth'));
+          }
+        });
+        console.log('slide next');
       }
     }
   };

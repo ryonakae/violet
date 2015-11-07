@@ -16,7 +16,7 @@ module.exports = {
     // /dashboard読み込みの度にstateに初期値を保存
     this.state.data = [];
     this.state.pageNum = 1;
-    this.state.limit = 3;
+    this.state.limit = 10;
     this.state.articleCount = 0;
     this.state.articleTotal = 0;
     this.state.username = null;
