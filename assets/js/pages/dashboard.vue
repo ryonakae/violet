@@ -2,15 +2,13 @@
   <div class="main main--dashboard">
     <div class="dashboard">
       <ul class="dashboard__list" id="dashboardList" v-bind:style="{ width: winWidth * dataLength + 'px' }">
-        <li class="dashboard__listItem" v-for="item in data" v-bind:style="{ width: winWidth + 'px', height: winHeight - headerHeight + 'px' }">
-          <div class="dashboard__listItemImage">
-            <img v-if="item.photos[0].original_size.url" v-bind:src="item.photos[0].original_size.url" alt="" width="150">
-          </div>
-          <div class="dashboard__listItemInfo">
-            <small>id: {{item.id}} / {{item.note_count}} Notes / Liked: {{item.liked}}</small>
-          </div>
-          <div class="dashboard__listItemBody">{{{item.caption}}}</div>
-        </li>
+        <component-entry
+          v-for="item in data"
+          :item="item"
+          :win-width="winWidth"
+          :win-height="winHeight"
+          :header-height="headerHeight">
+        </component-entry>
       </ul>
     </div>
 
