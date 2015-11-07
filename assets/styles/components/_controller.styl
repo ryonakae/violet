@@ -1,0 +1,46 @@
+.controller
+  position fixed
+  left 0
+  bottom 0
+  width 100%
+  height $height_controller
+  overflow hidden
+  clearfix()
+
+  &__prev,
+  &__likeReblog,
+  &__next
+    float left
+    width 33.334%
+    height 100%
+    text-align center
+
+  &__prev,
+  &__next
+    background-color rgba($bgColor_controller, 0.95)
+
+    span
+      width 29px
+      height 32px
+      display inline-block
+      hide-text()
+      margin-top 24px
+
+  &__prev
+    span
+      background url('../images/controller_prev.svg') no-repeat
+
+  &__likeReblog
+    background-color rgba($bgColor_likeReblog, 0.95)
+
+    span
+      width 60px
+      height 60px
+      display inline-block
+      hide-text()
+      background url('../images/controller_likeReblog.svg') no-repeat
+      margin-top 10px
+
+  &__next
+    span
+      background url('../images/controller_next.svg') no-repeat
