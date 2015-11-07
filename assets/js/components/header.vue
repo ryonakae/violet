@@ -1,5 +1,5 @@
 <template>
-  <header class="header">
+  <header class="header" id="header">
     <h1 class="header__logo">
       <a v-if="!isAuth" v-link="{path:'/'}">{{title}}</a>
       <a v-else v-link="{path:'/dashboard'}">{{title}}</a>

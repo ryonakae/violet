@@ -1,25 +1,24 @@
 <template>
-  <div>
-    <h2>Dashboard</h2>
+  <div class="main main--dashboard">
+    <div class="dashboard">
+      <ul class="dashboard__list" v-bind:style="{width:winWidth*dataLength}">
+        <li class="dashboard__listItem" v-for="item in data" v-bind:style="{width:winWidth}">
+          <h4>{{item.date}}</h4>
+          <img v-if="item.photos[0].original_size.url" v-bind:src="item.photos[0].original_size.url" alt="" width="150"><br>
+          <small>id: {{item.id}} / {{item.note_count}} Notes / Liked: {{item.liked}}</small>
+        </li>
+      </ul>
+    </div>
 
-    <h3>Posts</h3>
-    <p v-on:click="like(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Like</p>
-    <p v-on:click="unlike(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Unike</p>
-    <p v-on:click="reblog(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Reblog</p>
+    <div class="controller">
+      <p v-on:click="like(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Like</p>
+      <p v-on:click="unlike(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Unike</p>
+      <p v-on:click="reblog(0)" style="display:inline-block; background-color:#aaa; padding:10px;">Reblog</p>
 
-    <p v-on:click="goPrev" style="display:inline-block; background-color:#aaa; padding:10px;">prev</p>
-    <p style="display:inline-block; background-color:#aaa; padding:10px;">Like &amp; Reblog</p>
-    <p v-on:click="goNext" style="display:inline-block; background-color:#aaa; padding:10px;">next</p>
-
-    <ul>
-      <li v-for="item in data">
-        <h4>{{item.date}}</h4>
-        <img v-if="item.photos[0].original_size.url" v-bind:src="item.photos[0].original_size.url" alt="" width="150"><br>
-        <small>id: {{item.id}} / {{item.note_count}} Notes / Liked: {{item.liked}}</small>
-      </li>
-
-      <li class="scroll" style="display:block; height:1px; opacity:0;">scroll line</li>
-    </ul>
+      <p v-on:click="goPrev" style="display:inline-block; background-color:#aaa; padding:10px;">prev</p>
+      <p style="display:inline-block; background-color:#aaa; padding:10px;">Like &amp; Reblog</p>
+      <p v-on:click="goNext" style="display:inline-block; background-color:#aaa; padding:10px;">next</p>
+    </div>
   </div>
 </template>
 
@@ -34,7 +33,7 @@
         data: [],
         dataLength: 0,
         itemCount: 0,
-        scrollLock: false
+        winWidth: $(window).width()
       }
     },
 
@@ -44,12 +43,7 @@
       console.log('dashboard表示');
 
       // socket.io接続時の処理
-      io.socket.on('connect', function(){
-        self.loadDb();
-
-        // infinite scroll
-        self.scroll();
-      });
+      io.socket.on('connect', this.loadDb);
 
       // socket.io切断時の処理
       io.socket.on('disconnect', io.socket.disconnect);
@@ -68,9 +62,6 @@
           self.$set('dataLength', self.$get('data').length); //取得した配列のlengthをdataLengthに入れる
           console.log(self.$get('data'));
           console.log('dataLength: ', self.$get('dataLength'));
-
-          self.$set('scrollLock', false); //ロック解除
-          console.log('scrollLock: ', self.$get('scrollLock'));
         });
       },
 
@@ -160,29 +151,6 @@
         io.socket.post('/dashboard/reblog', sendData, function(data, jwres){
           console.log(data);
         })
-      },
-
-      // infinite scroll
-      scroll: function(){
-        var self = this;
-
-        var scroll = 0;
-        var winHeight;
-        var offset;
-
-        $(window).on('scroll', function(e){
-          scroll = $(window).scrollTop();
-          winHeight = $(window).height();
-          offset = $('.scroll').offset().top;
-
-          if(scroll+winHeight > offset*0.85){
-            if(self.$get('scrollLock')) return; //多重読み込み防止
-
-            self.$set('scrollLock', true); //ロックする
-            console.log('scrollLock: ', self.$get('scrollLock'));
-            self.loadDb();
-          }
-        });
       }
     }
   };
