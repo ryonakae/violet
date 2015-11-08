@@ -1,18 +1,4 @@
 .entry
-  &__image
-    line-height 0
-
-    img
-      width 100%
-      height auto
-
-  &__text
-    padding 20px $padding_page
-    border-bottom 1px solid $borderColor_default
-
-    *
-      color $textColor_default !important
-
   &__info
     padding 15px $padding_page
     border-bottom 1px solid $borderColor_default
@@ -20,3 +6,55 @@
   &__caption
     padding 20px $padding_page
     border-bottom 1px solid $borderColor_default
+
+    > *:first-child
+      margin-top 0
+
+    > *:last-child
+      margin-bottom 0
+
+    blockquote
+      border-left 3px solid $borderColor_default
+      margin-left 0
+      padding-left 10px
+
+      p:first-child
+        margin-top 0
+      p:last-child
+        margin-bottom 0
+
+
+  // entry content
+  &__content
+    // photo
+    &--photo
+      .entry__image
+        line-height 0
+
+        img
+          width 100%
+          height auto
+          display block
+          margin-top 1px
+
+          &:first-child
+            margin-top 0
+
+
+    // quote, text, other
+    &--quote,
+    &--text,
+    &--other
+      .entry__text
+        padding 20px $padding_page
+        border-bottom 1px solid $borderColor_default
+
+        *
+          color $textColor_default !important
+
+        &Title
+          margin 0 0 20px 0
+
+        img
+          width 100%
+          height auto

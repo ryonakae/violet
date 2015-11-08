@@ -2,6 +2,7 @@
   <div>
     <h2>{{title}}</h2>
     <p>{{description}}</p>
+    <p><a href="/auth/tumblr">Login with Tumblr</a></p>
   </div>
 </template>
 

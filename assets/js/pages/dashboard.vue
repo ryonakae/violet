@@ -5,9 +5,13 @@
         <component-entry
           v-for="item in data"
           :item="item"
+          :item-count="itemCount"
           :win-width="winWidth"
           :win-height="winHeight"
-          :header-height="headerHeight">
+          :header-height="headerHeight"
+          :like="like"
+          :unlike="unlike"
+          :reblog="reblog">
         </component-entry>
       </ul>
     </div>
@@ -181,9 +185,6 @@
         },{
           duration: 400,
           easing: 'easeOutQuart',
-          begin: function(){
-            $('body, html').animate({ scrollTop: 0 }, 0);
-          },
           complete: function(){
             self.$set('marginLeft', self.$get('marginLeft') + self.$get('winWidth'));
           }
@@ -199,9 +200,6 @@
         },{
           duration: 400,
           easing: 'easeOutQuart',
-          begin: function(){
-            $('body, html').animate({ scrollTop: 0 }, 0);
-          },
           complete: function(){
             self.$set('marginLeft', self.$get('marginLeft') - self.$get('winWidth'));
           }
