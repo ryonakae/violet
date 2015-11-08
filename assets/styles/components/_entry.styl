@@ -1,10 +1,74 @@
 .entry
+  // entry content
+  &__content
+    // photo
+    &--photo
+      .entry__image
+        line-height 0
+
+        img
+          width 100%
+          height auto
+          display block
+          margin-top 1px
+
+          &:first-child
+            margin-top 0
+
+    // quote, text, other
+    &--quote,
+    &--text,
+    &--other
+      .entry__text
+        padding 20px $padding_page
+        border-bottom 1px solid $borderColor_default
+
+        *
+          color $textColor_default !important
+
+        &Title
+          margin 0 0 20px 0
+
+        img
+          width 100%
+          height auto
+
+        > *:first-child
+          margin-top 0
+
+        &Source
+          margin-top 15px
+
+
+  // info
   &__info
     padding 15px $padding_page
     border-bottom 1px solid $borderColor_default
+    clearfix()
 
+    &From
+      float left
+      display inline-block
+      text-decoration none
+
+    &Notes
+      float right
+      display inline-block
+      text-decoration none
+
+      &Icon
+        hide-text()
+        display inline-block
+        width 14px
+        height 14px
+        background url('../images/dashboard_link.svg') no-repeat
+        vertical-align middle
+        margin-left 3px
+
+
+  // caption
   &__caption
-    padding 20px $padding_page
+    padding 15px $padding_page 20px
     border-bottom 1px solid $borderColor_default
 
     > *:first-child
@@ -24,37 +88,42 @@
         margin-bottom 0
 
 
-  // entry content
-  &__content
-    // photo
-    &--photo
-      .entry__image
-        line-height 0
+  // button
+  &__button
+    clearfix()
 
-        img
-          width 100%
-          height auto
-          display block
-          margin-top 1px
+    &Item
+      width 50%
+      height 60px
+      line-height 60px
+      float left
+      text-align center
 
-          &:first-child
-            margin-top 0
+      &:first-child
+        padding-left 9%
+      &:last-child
+        padding-right 9%
 
+      span:before
+        content ''
+        display inline-block
+        vertical-align middle
+        margin-right 12px
 
-    // quote, text, other
-    &--quote,
-    &--text,
-    &--other
-      .entry__text
-        padding 20px $padding_page
-        border-bottom 1px solid $borderColor_default
+      &--like
+        span:before
+          width 24px
+          height 22px
+          background url('../images/dashboard_like.svg') no-repeat
 
-        *
-          color $textColor_default !important
+      &--unlike
+        span:before
+          width 24px
+          height 22px
+          background url('../images/dashboard_like_done.svg') no-repeat
 
-        &Title
-          margin 0 0 20px 0
-
-        img
-          width 100%
-          height auto
+      &--reblog
+        span:before
+          width 27px
+          height 26px
+          background url('../images/dashboard_reblog.svg') no-repeat

@@ -31,15 +31,26 @@
 
       <!-- info -->
       <div class="entry__info">
-        <small>id: {{item.id}} / {{item.note_count}} Notes / Liked: {{item.liked}}</small>
+        <a class="entry__infoFrom" v-bind:href="'http://' + item.reblogged_from_name + '.tumblr.com'" target="_blank">{{item.reblogged_from_name}}</a>
+
+        <a class="entry__infoNotes" v-bind:href="item.reblogged_from_url" target="_blank">
+          <span class="entry__infoNotesCount">{{item.note_count}} Notes</span>
+          <span class="entry__infoNotesIcon">Url</span>
+        </a>
       </div>
       <!-- caption -->
       <div class="entry__caption" v-if="item.caption">{{{item.caption}}}</div>
       <!-- button -->
       <div class="entry__button">
-        <div class="entry__buttonItem entry__buttonItem--like" v-if="!item.liked" v-on:click="like(itemCount)">Like</div>
-        <div class="entry__buttonItem entry__buttonItem--unlike" v-else v-on:click="unlike(itemCount)">Unike</div>
-        <div class="entry__buttonItem entry__buttonItem--reblog" v-on:click="reblog(itemCount)">Reblog</div>
+        <div class="entry__buttonItem entry__buttonItem--like" v-if="!item.liked" v-on:click="like(itemCount)">
+          <span>Like</span>
+        </div>
+        <div class="entry__buttonItem entry__buttonItem--unlike" v-else v-on:click="unlike(itemCount)">
+          <span>Unike</span>
+        </div>
+        <div class="entry__buttonItem entry__buttonItem--reblog" v-on:click="reblog(itemCount)">
+          <span>Reblog</span>
+        </div>
       </div>
     </div>
   </li>

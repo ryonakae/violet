@@ -180,7 +180,7 @@ module.exports = {
     var option = {
       limit: self.state.limit,
       offset: self.state.pageNum * self.state.limit - self.state.limit, // ページ番号 * 取得件数 - 取得件数
-      format: 'html'
+      reblog_info: true
     };
 
     // since_idを取得

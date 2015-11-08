@@ -20,7 +20,10 @@
       <div v-on:click="goPrev" class="controller__prev">
         <span>Prev</span>
       </div>
-      <div v-on:click="[like(itemCount), reblog(itemCount)]" class="controller__likeReblog">
+      <div v-if="data[itemCount].liked" v-on:click="[like(itemCount), reblog(itemCount)]" class="controller__likeReblog controller__likeReblog--liked">
+        <span>Like & Reblog</span>
+      </div>
+      <div v-else v-on:click="[like(itemCount), reblog(itemCount)]" class="controller__likeReblog">
         <span>Like & Reblog</span>
       </div>
       <div v-on:click="goNext" class="controller__next">
@@ -36,7 +39,13 @@
   require('jquery');
   var velocity = require('velocity');
 
+  var entry = require('../components/entry.vue');
+
   module.exports = {
+    components: {
+      'component-entry': entry
+    },
+
     data: function(){
       return {
         data: [],
@@ -63,6 +72,7 @@
       $(window).on('load resize', function(){
         self.$set('winWidth', $(window).width());
         self.$set('winHeight', $(window).height());
+        self.$set('headerHeight', $('#header').height());
       });
     },
 

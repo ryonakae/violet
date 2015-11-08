@@ -10,7 +10,6 @@ Vue.use(VueRouter);
 
 // グローバルで使うcomponentの登録
 Vue.component('component-header', require('./components/header.vue'));
-Vue.component('component-entry', require('./components/entry.vue'));
 
 // routerの作成
 var router = new VueRouter({
