@@ -1,9 +1,11 @@
 .header
   position fixed
   top 0
-  left 0
+  left 50%
   width 100%
+  max-width $width_max
   height $height_header
+  transform translateX(-50%)
   background-color rgba($bgColor_header, 0.95)
   clearfix()
   z-index 1

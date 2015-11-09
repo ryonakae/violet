@@ -70,7 +70,7 @@
           }).velocity({
             opacity: 1
           }, {
-            duration: 300,
+            duration: 200,
             complete: function(){
               self.$set('isNaviOpen', true);
             }
@@ -81,7 +81,7 @@
           $('#headerNavi').velocity({
             opacity: 0
           }, {
-            duration: 300,
+            duration: 200,
             complete: function(){
               self.$set('isNaviOpen', false);
               $('#headerNavi').css({ 'visibility': 'hidden' });

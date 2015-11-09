@@ -50,7 +50,7 @@
         data: [],
         dataLength: 0,
         itemCount: 0,
-        winWidth: $(window).width(),
+        winWidth: $('#app').width(),
         winHeight: $(window).height(),
         headerHeight: $('#header').height(),
         marginLeft: 0
@@ -69,7 +69,7 @@
       io.socket.on('disconnect', io.socket.disconnect);
 
       $(window).on('load resize', function(){
-        self.$set('winWidth', $(window).width());
+        self.$set('winWidth', $('#app').width());
         self.$set('winHeight', $(window).height());
         self.$set('headerHeight', $('#header').height());
       });
@@ -227,7 +227,7 @@
         $('#dashboardList').velocity({
           translateX: this.$get('marginLeft') + this.$get('winWidth')
         },{
-          duration: 400,
+          duration: 350,
           easing: 'easeOutQuart',
           complete: function(){
             self.$set('marginLeft', self.$get('marginLeft') + self.$get('winWidth'));
@@ -242,7 +242,7 @@
         $('#dashboardList').velocity({
           translateX: this.$get('marginLeft') - this.$get('winWidth')
         },{
-          duration: 400,
+          duration: 350,
           easing: 'easeOutQuart',
           complete: function(){
             self.$set('marginLeft', self.$get('marginLeft') - self.$get('winWidth'));
