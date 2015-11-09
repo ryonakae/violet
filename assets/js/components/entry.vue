@@ -42,14 +42,14 @@
       <div class="entry__caption" v-if="item.caption">{{{item.caption}}}</div>
       <!-- button -->
       <div class="entry__button">
+        <div class="entry__buttonItem entry__buttonItem--reblog" v-on:click="reblog(itemCount)">
+          <span>Reblog</span>
+        </div>
         <div class="entry__buttonItem entry__buttonItem--like" v-if="!item.liked" v-on:click="like(itemCount)">
           <span>Like</span>
         </div>
         <div class="entry__buttonItem entry__buttonItem--unlike" v-else v-on:click="unlike(itemCount)">
           <span>Unike</span>
-        </div>
-        <div class="entry__buttonItem entry__buttonItem--reblog" v-on:click="reblog(itemCount)">
-          <span>Reblog</span>
         </div>
       </div>
     </div>
