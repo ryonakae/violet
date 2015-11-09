@@ -17,14 +17,14 @@
     </div>
 
     <div class="controller">
-      <div v-on:click="goPrev" class="controller__prev">
+      <div class="controller__prev" v-on:click="goPrev">
         <span>Prev</span>
       </div>
       <div v-on:click="[like(itemCount), reblog(itemCount)]" class="controller__likeReblog">
         <span v-if="!data[itemCount].liked" class="controller__likeReblogIcon">Like & Reblog</span>
         <span v-if="data[itemCount].liked" class="controller__likeReblogIcon controller__likeReblogIcon--liked">Like & Reblog</span>
       </div>
-      <div v-on:click="goNext" class="controller__next">
+      <div class="controller__next" v-on:click="goNext">
         <span>Next</span>
       </div>
     </div>
@@ -35,7 +35,8 @@
   var socketIO = require('../dependencies/socket.io.js');
   var io = require('../dependencies/sails.io.js')(socketIO);
   require('jquery');
-  var velocity = require('velocity');
+  require('jquery-easing');
+  require('velocity');
 
   var entry = require('../components/entry.vue');
 
@@ -71,6 +72,41 @@
         self.$set('winWidth', $(window).width());
         self.$set('winHeight', $(window).height());
         self.$set('headerHeight', $('#header').height());
+      });
+
+      // キーボード操作
+      $(window).on('keyup', function(e){
+        // k or left ...戻る
+        if( e.keyCode === 75 || e.keyCode === 37 ) {
+          self.goPrev();
+        }
+        // j or right ...進む
+        if( e.keyCode === 74 || e.keyCode === 39 ) {
+          self.goNext();
+        }
+        // space ...スクロール
+        if( e.keyCode === 32 ) {
+          self.scroll(self.$get('itemCount'));
+        }
+        // l ...Like / unlike
+        if( e.keyCode === 76 ) {
+          // like済みならunlike、そうでなければ普通にlike
+          if( self.$get('data')[self.$get('itemCount')].liked ){
+            self.unlike(self.$get('itemCount'));
+          }
+          else {
+            self.like(self.$get('itemCount'));
+          }
+        }
+        // r ...Reblog
+        if( e.keyCode === 82 ) {
+          self.reblog(self.$get('itemCount'));
+        }
+        // v ...like & Reblog
+        if( e.keyCode === 86 ) {
+          self.like(self.$get('itemCount'));
+          self.reblog(self.$get('itemCount'));
+        }
       });
     },
 
@@ -118,7 +154,7 @@
         var count = this.$get('itemCount') +1;
 
         // 最後の方まで来たらダッシュボードを更新
-        if(count > this.$get('dataLength')*0.7){
+        if(count > this.$get('dataLength')-5){
           this.loadDb();
         }
 
@@ -213,6 +249,17 @@
           }
         });
         console.log('slide next');
+      },
+
+      scroll: function(itemCount){
+        var element = $('#dashboardList').children().eq(itemCount);
+
+        // itemCountと同じ番目のliのスクロール位置を取得
+        var scroll = element.scrollTop();
+
+        // スクロールする
+        // element.scrollTop(scroll + $(window).height() * 0.7);
+        element.animate({scrollTop: scroll + $(window).height() * 0.65}, 350, 'easeOutQuart');
       }
     }
   };
