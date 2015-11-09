@@ -20,11 +20,11 @@
     background-color rgba($bgColor_controller, 0.95)
 
     span
-      width 29px
-      height 32px
+      width 25px
+      height 28px
       display inline-block
       hide-text()
-      margin-top 19px
+      margin-top 21px
 
   &__prev
     span
@@ -33,7 +33,7 @@
   &__likeReblog
     background-color rgba($bgColor_likeReblog, 0.95)
 
-    span
+    &Icon
       width 50px
       height 50px
       display inline-block
@@ -41,8 +41,7 @@
       background url('../images/controller_likeReblog.svg') no-repeat
       margin-top 10px
 
-    &--liked
-      span
+      &--liked
         background url('../images/controller_likeReblog_done.svg') no-repeat
 
   &__next

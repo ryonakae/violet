@@ -20,11 +20,9 @@
       <div v-on:click="goPrev" class="controller__prev">
         <span>Prev</span>
       </div>
-      <div v-if="data[itemCount].liked" v-on:click="[like(itemCount), reblog(itemCount)]" class="controller__likeReblog controller__likeReblog--liked">
-        <span>Like & Reblog</span>
-      </div>
-      <div v-else v-on:click="[like(itemCount), reblog(itemCount)]" class="controller__likeReblog">
-        <span>Like & Reblog</span>
+      <div v-on:click="[like(itemCount), reblog(itemCount)]" class="controller__likeReblog">
+        <span v-if="!data[itemCount].liked" class="controller__likeReblogIcon">Like & Reblog</span>
+        <span v-if="data[itemCount].liked" class="controller__likeReblogIcon controller__likeReblogIcon--liked">Like & Reblog</span>
       </div>
       <div v-on:click="goNext" class="controller__next">
         <span>Next</span>
