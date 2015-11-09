@@ -9,9 +9,9 @@
       </a>
     </h1>
 
-    <div class="header__toggle"></div>
+    <div class="header__toggle" id="headerToggle" v-on:click="naviToggle"></div>
 
-    <nav class="header__navi">
+    <nav class="header__navi" id="headerNavi">
       <ul class="header__naviList">
         <li class="header__naviListItem">
           <a v-if="!isAuth" v-link="{path:'/'}">Home</a>
@@ -32,12 +32,15 @@
 <script>
   var socketIO = require('../dependencies/socket.io.js');
   var io = require('../dependencies/sails.io.js')(socketIO);
+  require('jquery');
+  var velocity = require('velocity');
 
   module.exports = {
     data: function(){
       return {
         title: 'Violet for Tumblr',
-        isAuth: null
+        isAuth: null,
+        isNaviOpen: false
       }
     },
 
@@ -55,6 +58,46 @@
 
       // socket.io切断時の処理
       io.socket.on('disconnect', io.socket.disconnect);
+    },
+
+    methods: {
+      naviToggle: function(){
+        var self = this;
+
+        function naviOpen(){
+          $('#headerNavi').css({
+            'visibility': 'visible'
+          }).velocity({
+            opacity: 1
+          }, {
+            duration: 300,
+            complete: function(){
+              self.$set('isNaviOpen', true);
+            }
+          });
+        };
+
+        function naviClose(){
+          $('#headerNavi').velocity({
+            opacity: 0
+          }, {
+            duration: 300,
+            complete: function(){
+              self.$set('isNaviOpen', false);
+              $('#headerNavi').css({ 'visibility': 'hidden' });
+            }
+          });
+        };
+
+        // isNaviOpenがfalse→navi開く
+        if(!self.$get('isNaviOpen')) naviOpen();
+
+        // isNaviOpenがtrue→navi閉じる
+        else naviClose();
+
+        // ヘッダー内のリンククリック→閉じる
+        $('#header a').on('click', naviClose);
+      }
     }
   };
 </script>
