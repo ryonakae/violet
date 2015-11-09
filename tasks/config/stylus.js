@@ -1,3 +1,5 @@
+var autoprefixer = require('autoprefixer-stylus');
+
 module.exports = function(grunt) {
 
   grunt.config.set('stylus', {
@@ -8,7 +10,12 @@ module.exports = function(grunt) {
         src: ['importer.styl'],
         dest: '.tmp/public/styles/',
         ext: '.css'
-      }]
+      }],
+      options: {
+        use: [function(){
+          return autoprefixer('last 2 versions');
+        }]
+      }
     }
   });
 

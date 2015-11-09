@@ -189,7 +189,7 @@
         var self = this;
 
         $('#dashboardList').velocity({
-          marginLeft: this.$get('marginLeft') + this.$get('winWidth')
+          translateX: this.$get('marginLeft') + this.$get('winWidth')
         },{
           duration: 400,
           easing: 'easeOutQuart',
@@ -204,7 +204,7 @@
         var self = this;
 
         $('#dashboardList').velocity({
-          marginLeft: this.$get('marginLeft') - this.$get('winWidth')
+          translateX: this.$get('marginLeft') - this.$get('winWidth')
         },{
           duration: 400,
           easing: 'easeOutQuart',
