@@ -1,5 +1,5 @@
 <template>
-  <li class="dashboard__listItem" v-bind:style="{ width: winWidth + 'px', height: winHeight - headerHeight + 'px' }">
+  <li class="dashboard__listItem" v-bind:style="{ width: winWidth + 'px', height: winHeight + 'px' }">
     <div class="entry">
       <div class="entry__content entry__content--photo" v-if="isTypePhoto()">
         <div class="entry__image">
