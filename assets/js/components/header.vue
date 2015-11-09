@@ -52,7 +52,7 @@
         // socket.ioでログイン状態を取得
         io.socket.get('/auth/isAuth', function serverRespondedWith (body, jwr){
           self.isAuth = body.isAuth;
-          console.log('isAuth', self.isAuth);
+          // console.log('isAuth', self.isAuth);
         });
       });
 

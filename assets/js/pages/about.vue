@@ -10,7 +10,7 @@
 <script>
   module.exports = {
     ready: function(){
-      console.log('About表示');
+      // console.log('About表示');
     }
   }
 </script>

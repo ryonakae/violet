@@ -23,21 +23,15 @@
         padding 20px $padding_page
         border-bottom 1px solid $borderColor_default
 
-        *
-          color $textColor_default !important
+      .entry__title
+        margin 0 0 20px 0
 
-        &Title
-          margin 0 0 20px 0
+      .entry__source
+        margin-top 15px
+        color $textColor_sub
 
-        img
-          width 100%
-          height auto
-
-        > *:first-child
-          margin-top 0
-
-        &Source
-          margin-top 15px
+        a
+          color inherit
 
 
   // info
@@ -71,22 +65,8 @@
     padding 15px $padding_page 20px
     border-bottom 1px solid $borderColor_default
 
-    > *:first-child
-      margin-top 0
-
-    > *:last-child
-      margin-bottom 0
-
-    blockquote
-      border-left 3px solid $borderColor_default
-      margin-left 0
-      margin-right 0
-      padding-left 13px
-
-      p:first-child
-        margin-top 0
-      p:last-child
-        margin-bottom 0
+    .tumblr_blog
+      color $textColor_sub !important
 
 
   // button
@@ -130,3 +110,46 @@
           width 21px
           height 20px
           background url('../images/dashboard_reblog.svg') no-repeat
+
+
+  // entry body
+  &__body
+    font-size $fontSize_entryBody
+
+    &--incompatible,
+    &--caption
+      font-size $fontSize_default
+
+    *
+      color $textColor_default !important
+
+    > *:first-child
+      margin-top 0
+
+    > *:last-child
+      margin-bottom 0
+
+    img
+      width 100%
+      height auto
+
+    ul, ol
+      padding-left 1.5em
+
+    blockquote
+      border-left 3px solid $borderColor_default
+      margin-left 0
+      margin-right 0
+      padding-left 13px
+
+      p:first-child
+        margin-top 0
+      p:last-child
+        margin-bottom 0
+
+    hr
+      width 17%
+      height 2px
+      background-color $borderColor_default
+      border none
+      margin 1.7em auto

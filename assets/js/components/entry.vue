@@ -9,23 +9,24 @@
 
       <div class="entry__content entry__content--quote" v-if="isTypeQuote()">
         <div class="entry__text">
-          {{{item.text}}}
-          <div class="entry__textSource">{{{item.source}}}</div>
+          <div class="entry__body">{{{item.text}}}</div>
+          <div class="entry__source">{{{item.source}}}</div>
         </div>
       </div>
 
       <div class="entry__content entry__content--text" v-if="isTypeText()">
         <div class="entry__text">
-          <h2 class="entry__textTitle">{{item.title}}</h2>
-          {{{item.body}}}
-          <div class="entry__textSource">{{{item.source}}}</div>
+          <h2 class="entry__title">{{item.title}}</h2>
+          <div class="entry__body">{{{item.body}}}</div>
+          <div class="entry__source">{{{item.source}}}</div>
         </div>
       </div>
 
       <div class="entry__content entry__content--other" v-if="isTypeOther()">
         <div class="entry__text">
-          {{item.type}}<br>
-          対応していない投稿タイプです
+          <div class="entry__body entry__body--incompatible">
+            対応していない投稿タイプです({{item.type}})
+          </div>
         </div>
       </div>
 
@@ -39,7 +40,9 @@
         </a>
       </div>
       <!-- caption -->
-      <div class="entry__caption" v-if="item.caption">{{{item.caption}}}</div>
+      <div class="entry__caption" v-if="item.caption">
+        <div class="entry__body entry__body--caption">{{{item.caption}}}</div>
+      </div>
       <!-- button -->
       <div class="entry__button">
         <div class="entry__buttonItem entry__buttonItem--reblog" v-on:click="reblog(itemCount)">

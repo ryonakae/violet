@@ -60,7 +60,7 @@
     ready: function(){
       var self = this;
 
-      console.log('dashboard表示');
+      // console.log('dashboard表示');
 
       // socket.io接続時の処理
       io.socket.on('connect', this.loadDb);
@@ -115,31 +115,32 @@
       loadDb: function(){
         var self = this;
 
-        console.log('サーバにリクエスト送信');
+        // console.log('サーバにリクエスト送信');
         io.socket.get('/dashboard/get', function serverRespondedWith (body, jwr){
-          console.log('ダッシュボード取得完了');
+          // console.log('ダッシュボード取得完了');
 
           self.$set('data', body);
           self.$set('dataLength', self.$get('data').length); //取得した配列のlengthをdataLengthに入れる
-          console.log(self.$get('data'));
-          console.log('dataLength: ', self.$get('dataLength'));
+          // console.log(self.$get('data'));
+          // console.log('dataLength: ', self.$get('dataLength'));
         });
       },
 
       // 前のitemに移動
       goPrev: function(){
-        console.log('前のitemに移動');
+        // console.log('前のitemに移動');
         // ここにjQueryとか使って遷移の処理
 
         // itemCountを1つ減らす
         var count = this.$get('itemCount') -1;
 
         if(count < 0){
-          return console.log('itemCountが0以下なので何もしないよ');
+          // console.log('itemCountが0以下なので何もしないよ');
+          return;
         }
 
         this.$set('itemCount', count);
-        console.log('itemCount: ', this.$get('itemCount'));
+        // console.log('itemCount: ', this.$get('itemCount'));
 
         // 前のアイテムにスライド
         this.sldePrev();
@@ -147,7 +148,7 @@
 
       // 次のitemに移動
       goNext: function(){
-        console.log('次のitemに移動');
+        // console.log('次のitemに移動');
         // ここにjQueryとか使って遷移の処理
 
         // itemCountを1つ増やす
@@ -159,7 +160,7 @@
         }
 
         this.$set('itemCount', count);
-        console.log('itemCount: ', this.$get('itemCount'));
+        // console.log('itemCount: ', this.$get('itemCount'));
 
         // 次のアイテムにスライド
         this.sldeNext();
@@ -177,11 +178,12 @@
 
         // Like済みだったらスキップ
         if(sendData.liked){
-          return console.log('Like済みなのでスキップ');
+          // console.log('Like済みなのでスキップ');
+          return;
         }
 
         io.socket.post('/dashboard/like', sendData, function(data, jwres){
-          console.log(data);
+          // console.log(data);
           self.$get('data')[n].liked = true;
         })
       },
@@ -198,11 +200,12 @@
 
         // unike済みだったらスキップ
         if(!sendData.liked){
-          return console.log('Unlike済みなのでスキップ');
+          // console.log('Unlike済みなのでスキップ');
+          return;
         }
 
         io.socket.post('/dashboard/unlike', sendData, function(data, jwres){
-          console.log(data);
+          // console.log(data);
           self.$get('data')[n].liked = false;
         })
       },
@@ -217,7 +220,7 @@
         }
 
         io.socket.post('/dashboard/reblog', sendData, function(data, jwres){
-          console.log(data);
+          // console.log(data);
         })
       },
 
@@ -227,13 +230,13 @@
         $('#dashboardList').velocity({
           translateX: this.$get('marginLeft') + this.$get('winWidth')
         },{
-          duration: 350,
+          duration: 400,
           easing: 'easeOutQuart',
           complete: function(){
             self.$set('marginLeft', self.$get('marginLeft') + self.$get('winWidth'));
           }
         });
-        console.log('slide prev');
+        // console.log('slide prev');
       },
 
       sldeNext: function(){
@@ -242,13 +245,13 @@
         $('#dashboardList').velocity({
           translateX: this.$get('marginLeft') - this.$get('winWidth')
         },{
-          duration: 350,
+          duration: 400,
           easing: 'easeOutQuart',
           complete: function(){
             self.$set('marginLeft', self.$get('marginLeft') - self.$get('winWidth'));
           }
         });
-        console.log('slide next');
+        // console.log('slide next');
       },
 
       scroll: function(itemCount){
