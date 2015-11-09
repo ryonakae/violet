@@ -1,8 +1,12 @@
 <template>
   <header class="header" id="header">
     <h1 class="header__logo">
-      <a v-if="!isAuth" v-link="{path:'/'}">{{title}}</a>
-      <a v-else v-link="{path:'/dashboard'}">{{title}}</a>
+      <a v-if="!isAuth" v-link="{path:'/'}">
+        <img src="/images/header_logo.png" v-bind:alt="title" width="34" height="32">
+      </a>
+      <a v-else v-link="{path:'/dashboard'}">
+      <img src="/images/header_logo.png" v-bind:alt="title" width="34" height="32">
+      </a>
     </h1>
 
     <div class="header__toggle"></div>
