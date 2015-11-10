@@ -16,18 +16,18 @@
       </ul>
     </div>
 
-    <div class="controller">
-      <div class="controller__prev" v-on:click="goPrev">
-        <span>Prev</span>
-      </div>
-      <div v-on:click="[like(itemCount), reblog(itemCount)]" class="controller__likeReblog">
-        <span v-if="!data[itemCount].liked" class="controller__likeReblogIcon">Like & Reblog</span>
-        <span v-if="data[itemCount].liked" class="controller__likeReblogIcon controller__likeReblogIcon--liked">Like & Reblog</span>
-      </div>
-      <div class="controller__next" v-on:click="goNext">
-        <span>Next</span>
-      </div>
-    </div>
+    <component-controller
+      :data="data"
+      :item-count="itemCount"
+      :go-prev="goPrev"
+      :go-next="goNext"
+      :like="like"
+      :reblog="reblog"
+      >
+    </component-controller>
+
+    <component-toast :toast-msg="toastMsg">
+    </component-toast>
   </div>
 </template>
 
@@ -39,10 +39,14 @@
   require('velocity');
 
   var entry = require('../components/entry.vue');
+  var controller = require('../components/controller.vue');
+  var toast = require('../components/toast.vue');
 
   module.exports = {
     components: {
-      'component-entry': entry
+      'component-entry': entry,
+      'component-controller': controller,
+      'component-toast': toast
     },
 
     data: function(){
@@ -53,7 +57,8 @@
         winWidth: $('#app').width(),
         winHeight: $(window).height(),
         headerHeight: $('#header').height(),
-        marginLeft: 0
+        marginLeft: 0,
+        toastMsg: ''
       }
     },
 
@@ -115,6 +120,8 @@
       loadDb: function(){
         var self = this;
 
+        this.toastShow('ダッシュボードを読み込んでいます…');
+
         // console.log('サーバにリクエスト送信');
         io.socket.get('/dashboard/get', function serverRespondedWith (body, jwr){
           // console.log('ダッシュボード取得完了');
@@ -123,13 +130,14 @@
           self.$set('dataLength', self.$get('data').length); //取得した配列のlengthをdataLengthに入れる
           // console.log(self.$get('data'));
           // console.log('dataLength: ', self.$get('dataLength'));
+
+          self.toastHide('ダッシュボードの読み込みが完了しました。');
         });
       },
 
       // 前のitemに移動
       goPrev: function(){
         // console.log('前のitemに移動');
-        // ここにjQueryとか使って遷移の処理
 
         // itemCountを1つ減らす
         var count = this.$get('itemCount') -1;
@@ -149,7 +157,6 @@
       // 次のitemに移動
       goNext: function(){
         // console.log('次のitemに移動');
-        // ここにjQueryとか使って遷移の処理
 
         // itemCountを1つ増やす
         var count = this.$get('itemCount') +1;
@@ -182,9 +189,13 @@
           return;
         }
 
+        this.toastShow('Likeしています…');
+
         io.socket.post('/dashboard/like', sendData, function(data, jwres){
           // console.log(data);
           self.$get('data')[n].liked = true;
+
+          self.toastHide('Likeしました。');
         })
       },
 
@@ -204,9 +215,13 @@
           return;
         }
 
+        this.toastShow('Likeを取り消しています…');
+
         io.socket.post('/dashboard/unlike', sendData, function(data, jwres){
           // console.log(data);
           self.$get('data')[n].liked = false;
+
+          self.toastHide('Likeを取り消しました。');
         })
       },
 
@@ -219,8 +234,11 @@
           reblogKey: this.$get('data')[n].reblog_key
         }
 
+        this.toastShow('Reblogしています…');
+
         io.socket.post('/dashboard/reblog', sendData, function(data, jwres){
           // console.log(data);
+          self.toastHide('Reblogしました。');
         })
       },
 
@@ -263,6 +281,37 @@
         // スクロールする
         // element.scrollTop(scroll + $(window).height() * 0.7);
         element.animate({scrollTop: scroll + $(window).height() * 0.65}, 350, 'easeOutQuart');
+      },
+
+      // toastを表示
+      toastShow: function(msg){
+        var self = this;
+
+        $('#toast').velocity({
+          opacity: 1
+        }, {
+          duration: 200,
+          begin: function(){
+            self.$set('toastMsg', msg);
+          }
+        });
+      },
+
+      // toastを非表示
+      toastHide: function(msg){
+        var self = this;
+
+        this.$set('toastMsg', msg);
+
+        $('#toast').velocity({
+          opacity: 0
+        }, {
+          duration: 200,
+          delay: 2000,
+          complete: function(){
+            self.$set('toastMsg', '');
+          }
+        });
       }
     }
   };

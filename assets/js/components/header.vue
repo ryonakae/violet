@@ -9,20 +9,23 @@
       </a>
     </h1>
 
-    <div class="header__toggle" id="headerToggle" v-on:click="naviToggle"></div>
+    <div class="header__toggle" id="headerToggle" v-on:click="naviToggle">
+      <span class="header__toggleIcon"></span>
+      <span class="header__toggleText">Menu</span>
+    </div>
 
     <nav class="header__navi" id="headerNavi">
       <ul class="header__naviList">
         <li class="header__naviListItem">
-          <a v-if="!isAuth" v-link="{path:'/'}">Home</a>
-          <a v-else v-link="{path:'/dashboard'}">Home</a>
+          <a v-if="!isAuth" v-link="{path:'/'}">トップページ</a>
+          <a v-else v-link="{path:'/dashboard'}">ダッシュボード</a>
         </li>
         <li class="header__naviListItem">
-          <a v-link="{path:'/about'}">About</a>
+          <a v-link="{path:'/about'}">Violet for Tumblrについて</a>
         </li>
         <li class="header__naviListItem">
-          <a v-if="!isAuth" href="/auth/tumblr/">Login</a>
-          <a v-else href="/auth/logout">Logout</a>
+          <a v-if="!isAuth" href="/auth/tumblr/">Tumblrアカウントではじめる</a>
+          <a v-else href="/auth/logout">ログアウト</a>
         </li>
       </ul>
     </nav>

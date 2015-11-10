@@ -30,28 +30,40 @@
   &__toggle
     float right
     position relative
-    width 26px
-    height 26px
-    margin 8px 15px 0 0
+    padding 9px 15px
     cursor pointer
 
-    &:before,
-    &:after
-      content ''
-      position absolute
-      width 26px
-      height 1px
-      background-color $textColor_default
+    &Icon
+      position relative
+      display inline-block
+      vertical-align middle
+      width 12px
+      height 12px
 
-    &:before
-      left 0
-      top 50%
-      transform translateY(-5px)
+      &:before,
+      &:after
+        content ''
+        position absolute
+        width 12px
+        height 1px
+        background-color $textColor_default
 
-    &:after
-      left 0
-      top 50%
-      transform translateY(5px)
+      &:before
+        left 0
+        top 50%
+        transform translateY(-3px)
+
+      &:after
+        left 0
+        top 50%
+        transform translateY(3px)
+
+    &Text
+      display inline-block
+      vertical-align text-top
+      color $textColor_default
+      font-size $fontSize_default
+      margin-left 3px
 
 
   // navi
