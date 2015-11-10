@@ -16,7 +16,7 @@
 
       <div class="entry__content entry__content--text" v-if="isTypeText()">
         <div class="entry__text">
-          <h2 class="entry__title">{{item.title}}</h2>
+          <h1 class="entry__title">{{item.title}}</h1>
           <div class="entry__body">{{{item.body}}}</div>
           <div class="entry__source">{{{item.source}}}</div>
         </div>
