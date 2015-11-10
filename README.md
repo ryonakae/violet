@@ -89,3 +89,47 @@ TumblrのConsumer KeyとConsumer Secretも忘れずにセット
 事前に`master`を最新にしておく
 
     $ git push heroku master
+
+    
+## OpenShift
+HerokuやめてOpenShiftに移行する予定
+
+### rhcのインストール
+
+    $ rbenv exec gem install rhc
+    
+### セットアップ
+
+    $ rhc setup
+    
+なんやかんや
+
+### SSH
+
+    $ rhc ssh -a violet
+    
+#### 環境変数確認
+
+    > env
+    > env | grep MONGODB
+    
+#### 環境変数追加・削除
+    
+    # 追加
+    $ rhc set-env TUMBLR_SECRET_KEY=xxxxx -a violet
+    
+    # 削除
+    $ rhc unset-env TUMBLR_SECRET_KEY -a violet
+    
+### git remote add
+
+    $ git remote add openshift ssh://0123456789abcdef01234567@openshiftapp-yourdomain.rhcloud.com/~/git/openshiftapp.git/
+    
+### git push
+
+    $ git push openshift master
+
+
+## その他
+* Redisちゃんと設定できてるか不安
+* アレならセッション管理もMongoDBでやる
