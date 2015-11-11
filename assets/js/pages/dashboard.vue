@@ -59,15 +59,14 @@
         toastMsg: '',
         loadLock: false,
         likeLock: false,
-        reblogLock: false,
-        moveLock: false
+        reblogLock: false
       }
     },
 
 
     computed: {
       listWidth: function(){
-        return this.winWidth * this.dataLength + 'px';
+        return this.$get('winWidth') * this.$get('dataLength') + 'px';
       }
     },
 
@@ -149,11 +148,6 @@
 
       // 前のitemに移動
       goPrev: function(){
-        // lock済みだったら以下スキップ
-        if(this.$get('moveLock')) return;
-        // lockする
-        this.$set('moveLock', true);
-
         // console.log('前のitemに移動');
 
         // itemCountを1つ減らす
@@ -173,26 +167,23 @@
 
       // 次のitemに移動
       goNext: function(){
-        // lock済みだったら以下スキップ
-        if(this.$get('moveLock')) return;
-        // lockする
-        this.$set('moveLock', true);
-
         // console.log('次のitemに移動');
+
+        // 投稿数(dataLength)が250以上、かつitemCountが250になったら
+        // toast出してダッシュボードこれ以上読み込まない
+        if( this.$get('dataLength') >= 250 && this.$get('itemCount') === 250 ){
+          this.toastShow('これ以上読み込めません。');
+          this.toastHide('これ以上読み込めません。');
+          return;
+        }
 
         // itemCountを1つ増やす
         var count = this.$get('itemCount') +1;
 
-        // lock済みだったら以下スキップ
-        if(this.$get('loadLock')) return;
         // 最後の方まで来たらダッシュボードを更新
         if(count > this.$get('dataLength')-5){
-          // lockする
-          this.$set('loadLock', true);
           // ダッシュボード読み込み
           this.loadDb();
-          // lock解除
-          this.$set('loadLock', false);
         }
 
         this.$set('itemCount', count);
@@ -304,8 +295,6 @@
           easing: 'easeOutQuart',
           complete: function(){
             self.$set('marginLeft', self.$get('marginLeft') + self.$get('winWidth'));
-            // lock解除
-            self.$set('moveLock', false);
           }
         });
         // console.log('slide prev');
@@ -321,8 +310,6 @@
           easing: 'easeOutQuart',
           complete: function(){
             self.$set('marginLeft', self.$get('marginLeft') - self.$get('winWidth'));
-            // lock解除
-            self.$set('moveLock', false);
           }
         });
         // console.log('slide next');
