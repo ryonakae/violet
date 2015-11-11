@@ -55,7 +55,11 @@
         winWidth: $(this.$parent.$els.app).width(),
         winHeight: window.innerHeight,
         marginLeft: 0,
-        toastMsg: ''
+        toastMsg: '',
+        loadLock: false,
+        likeLock: false,
+        reblogLock: false,
+        moveLock: false
       }
     },
 
@@ -122,6 +126,7 @@
       loadDb: function(){
         var self = this;
 
+        // toast出す
         this.toastShow('ダッシュボードを読み込んでいます…');
 
         // console.log('サーバにリクエスト送信');
@@ -133,12 +138,18 @@
           // console.log(self.$get('data'));
           // console.log('dataLength: ', self.$get('dataLength'));
 
+          // toast消す
           self.toastHide('ダッシュボードの読み込みが完了しました。');
         });
       },
 
       // 前のitemに移動
       goPrev: function(){
+        // lock済みだったら以下スキップ
+        if(this.$get('moveLock')) return;
+        // lockする
+        this.$set('moveLock', true);
+
         // console.log('前のitemに移動');
 
         // itemCountを1つ減らす
@@ -158,14 +169,26 @@
 
       // 次のitemに移動
       goNext: function(){
+        // lock済みだったら以下スキップ
+        if(this.$get('moveLock')) return;
+        // lockする
+        this.$set('moveLock', true);
+
         // console.log('次のitemに移動');
 
         // itemCountを1つ増やす
         var count = this.$get('itemCount') +1;
 
+        // lock済みだったら以下スキップ
+        if(this.$get('loadLock')) return;
         // 最後の方まで来たらダッシュボードを更新
         if(count > this.$get('dataLength')-5){
+          // lockする
+          this.$set('loadLock', true);
+          // ダッシュボード読み込み
           this.loadDb();
+          // lock解除
+          this.$set('loadLock', false);
         }
 
         this.$set('itemCount', count);
@@ -177,6 +200,11 @@
 
       // Like
       like: function(n){
+        // lock済みだったら以下スキップ
+        if(this.$get('likeLock')) return;
+        // lockする
+        this.$set('likeLock', true);
+
         var self = this;
 
         var sendData = {
@@ -184,25 +212,31 @@
           reblogKey: this.$get('data')[n].reblog_key,
           liked: this.$get('data')[n].liked
         }
+        // Like済みだったら以下スキップ
+        if(sendData.liked) return;
 
-        // Like済みだったらスキップ
-        if(sendData.liked){
-          // console.log('Like済みなのでスキップ');
-          return;
-        }
-
+        // toast出す
         this.toastShow('Likeしています…');
 
         io.socket.post('/dashboard/like', sendData, function(data, jwres){
           // console.log(data);
           self.$get('data')[n].liked = true;
 
+          // toast消す
           self.toastHide('Likeしました。');
+
+          // lock解除
+          self.$set('likeLock', false);
         })
       },
 
       // Unlike
       unlike: function(n){
+        // lock済みだったら以下スキップ
+        if(this.$get('likeLock')) return;
+        // lockする
+        this.$set('likeLock', true);
+
         var self = this;
 
         var sendData = {
@@ -210,25 +244,31 @@
           reblogKey: this.$get('data')[n].reblog_key,
           liked: this.$get('data')[n].liked
         }
-
         // unike済みだったらスキップ
-        if(!sendData.liked){
-          // console.log('Unlike済みなのでスキップ');
-          return;
-        }
+        if(!sendData.liked) return;
 
+        // toast出す
         this.toastShow('Likeを取り消しています…');
 
         io.socket.post('/dashboard/unlike', sendData, function(data, jwres){
           // console.log(data);
           self.$get('data')[n].liked = false;
 
+          // toast消す
           self.toastHide('Likeを取り消しました。');
+
+          // lock解除
+          self.$set('likeLock', false);
         })
       },
 
       // Reblog
       reblog: function(n){
+        // lock済みだったら以下スキップ
+        if(this.$get('reblogLock')) return;
+        // lockする
+        this.$set('reblogLock', true);
+
         var self = this;
 
         var sendData = {
@@ -236,11 +276,17 @@
           reblogKey: this.$get('data')[n].reblog_key
         }
 
+        // toast出す
         this.toastShow('Reblogしています…');
 
         io.socket.post('/dashboard/reblog', sendData, function(data, jwres){
           // console.log(data);
+
+          // toast消す
           self.toastHide('Reblogしました。');
+
+          // lock解除
+          self.$set('reblogLock', false);
         })
       },
 
@@ -254,6 +300,8 @@
           easing: 'easeOutQuart',
           complete: function(){
             self.$set('marginLeft', self.$get('marginLeft') + self.$get('winWidth'));
+            // lock解除
+            self.$set('moveLock', false);
           }
         });
         // console.log('slide prev');
@@ -269,6 +317,8 @@
           easing: 'easeOutQuart',
           complete: function(){
             self.$set('marginLeft', self.$get('marginLeft') - self.$get('winWidth'));
+            // lock解除
+            self.$set('moveLock', false);
           }
         });
         // console.log('slide next');
