@@ -2,6 +2,15 @@ var passport = require('passport');
 var TumblrStrategy = require('passport-tumblr').Strategy;
 
 
+var crypto = require('crypto');
+var secretKey = 'some_random_secret';
+var cipher = function(target){
+  var cipher = crypto.createCipher('aes-256-cbc', secretKey);
+  var crypted = cipher.update(target, 'utf-8', 'hex');
+  return crypted += cipher.final('hex');
+}
+
+
 var validation = function(token, tokenSecret, profile, done){
   process.nextTick(function(){
     // usernameをDBから探して、見つかったら処理
@@ -16,9 +25,10 @@ var validation = function(token, tokenSecret, profile, done){
         var data = {
           provider: profile.provider,
           username: profile.username,
-          token: token,
-          tokenSecret: tokenSecret
+          token: cipher(token),
+          tokenSecret: cipher(tokenSecret)
         };
+        console.log('user profile: ', data);
 
         User.create(data, function(err, user){
           return done(err, user);
@@ -30,7 +40,11 @@ var validation = function(token, tokenSecret, profile, done){
 
 
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  done(null, {
+    username: user.username,
+    token: user.token,
+    tokenSecret: user.tokenSecret
+  });
   // userがreq.session.passport.userに入る。他の場所から参照できる
   // ↑のdataのあれこれが入ってるオブジェクト
 });

@@ -8,6 +8,16 @@
 var tumblr = require('tumblr.js');
 var async = require('async');
 
+
+var crypto = require('crypto');
+var secretKey = 'some_random_secret';
+var decipher = function(target){
+  decipher = crypto.createDecipher('aes-256-cbc', secretKey);
+  var decrypted = decipher.update(target, 'hex', 'utf-8');
+  return decrypted += decipher.final('utf-8');
+}
+
+
 module.exports = {
   state: {},
 
@@ -33,7 +43,7 @@ module.exports = {
     else {
       // view表示
       res.view('./index');
-      // console.log('req.user: ', req.user);
+      console.log('req.user: ', req.user);
 
       // stateに値を格納
       this.state.username = req.user.username;
@@ -88,8 +98,8 @@ module.exports = {
     var client = new tumblr.Client({
       consumer_key: sails.config.TUMBLR_CONSUMER_KEY,
       consumer_secret: sails.config.TUMBLR_SECRET_KEY,
-      token: this.state.token,
-      token_secret: this.state.tokenSecret
+      token: decipher(this.state.token),
+      token_secret: decipher(this.state.tokenSecret)
     });
 
     client.like(option.id, option.reblog_key, function(err, response){
