@@ -5,9 +5,9 @@ var TumblrStrategy = require('passport-tumblr').Strategy;
 var crypto = require('crypto');
 var secretKey = 'some_random_secret';
 var cipher = function(target){
-  var cipher = crypto.createCipher('aes-256-cbc', secretKey);
-  var crypted = cipher.update(target, 'utf-8', 'hex');
-  return crypted += cipher.final('hex');
+  var cipher = crypto.createCipher('aes192', secretKey);
+  cipher.update(target, 'utf8', 'hex');
+  return cipher.final('hex');
 }
 
 

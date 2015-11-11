@@ -12,9 +12,9 @@ var async = require('async');
 var crypto = require('crypto');
 var secretKey = 'some_random_secret';
 var decipher = function(target){
-  decipher = crypto.createDecipher('aes-256-cbc', secretKey);
-  var decrypted = decipher.update(target, 'hex', 'utf-8');
-  return decrypted += decipher.final('utf-8');
+  var decipher = crypto.createDecipher('aes192', secretKey);
+  decipher.update(target, 'hex', 'utf8');
+  return decipher.final('utf8');
 }
 
 
