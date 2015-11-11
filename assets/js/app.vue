@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-el:app>
     <component-header></component-header>
 
     <router-view keep-alive></router-view>

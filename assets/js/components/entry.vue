@@ -32,7 +32,7 @@
 
       <!-- info -->
       <div class="entry__info">
-        <a class="entry__infoFrom" v-bind:href="'http://' + item.reblogged_from_name + '.tumblr.com'" target="_blank">{{item.reblogged_from_name}}</a>
+        <a class="entry__infoFrom" v-bind:href="fromUrl" target="_blank">{{item.reblogged_from_name}}</a>
 
         <a class="entry__infoNotes" v-bind:href="item.reblogged_from_url" target="_blank">
           <span class="entry__infoNotesCount">{{item.note_count}} Notes</span>
@@ -62,6 +62,12 @@
 <script>
   module.exports = {
     props: ['item', 'itemCount', 'winWidth', 'winHeight', 'headerHeight', 'like', 'unlike', 'reblog'],
+
+    computed: {
+      fromUrl: function(){
+        return 'http://' + this.item.reblogged_from_name + '.tumblr.com';
+      }
+    },
 
     methods: {
       isTypePhoto: function(){

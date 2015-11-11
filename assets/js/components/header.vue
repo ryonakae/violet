@@ -9,12 +9,12 @@
       </a>
     </h1>
 
-    <div class="header__toggle" id="headerToggle" v-on:click="naviToggle">
+    <div class="header__toggle" v-on:click="naviToggle">
       <span class="header__toggleIcon"></span>
       <span class="header__toggleText">Menu</span>
     </div>
 
-    <nav class="header__navi" id="headerNavi">
+    <nav class="header__navi" v-el:navi>
       <ul class="header__naviList">
         <li class="header__naviListItem">
           <a v-if="!isAuth" v-link="{path:'/'}">トップページ</a>
@@ -68,7 +68,7 @@
         var self = this;
 
         function naviOpen(){
-          $('#headerNavi').css({
+          $(self.$els.navi).css({
             'visibility': 'visible'
           }).velocity({
             opacity: 1
@@ -81,13 +81,13 @@
         };
 
         function naviClose(){
-          $('#headerNavi').velocity({
+          $(self.$els.navi).velocity({
             opacity: 0
           }, {
             duration: 200,
             complete: function(){
               self.$set('isNaviOpen', false);
-              $('#headerNavi').css({ 'visibility': 'hidden' });
+              $(self.$els.navi).css({ 'visibility': 'hidden' });
             }
           });
         };
@@ -99,7 +99,7 @@
         else naviClose();
 
         // ヘッダー内のリンククリック→閉じる
-        $('#header a').on('click', naviClose);
+        $(self.$els.navi).find('a').on('click', naviClose);
       }
     }
   };

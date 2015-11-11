@@ -1,7 +1,7 @@
 <template>
   <div class="main main--dashboard">
     <div class="dashboard">
-      <ul class="dashboard__list" id="dashboardList" v-bind:style="{ width: winWidth * dataLength + 'px' }">
+      <ul class="dashboard__list" v-el:list v-bind:style="{ width: listWidth }">
         <component-entry
           v-for="item in data"
           :item="item"
@@ -26,8 +26,7 @@
       >
     </component-controller>
 
-    <component-toast :toast-msg="toastMsg">
-    </component-toast>
+    <component-toast v-el:toast :toast-msg="toastMsg"></component-toast>
   </div>
 </template>
 
@@ -54,11 +53,17 @@
         data: [],
         dataLength: 0,
         itemCount: 0,
-        winWidth: $('#app').width(),
-        winHeight: $(window).height(),
+        winWidth: $(this.$parent.$els.app).width(),
+        winHeight: window.innerHeight,
         headerHeight: $('#header').height(),
         marginLeft: 0,
         toastMsg: ''
+      }
+    },
+
+    computed: {
+      listWidth: function(){
+        return this.winWidth * this.dataLength + 'px';
       }
     },
 
@@ -74,8 +79,8 @@
       io.socket.on('disconnect', io.socket.disconnect);
 
       $(window).on('load resize', function(){
-        self.$set('winWidth', $('#app').width());
-        self.$set('winHeight', $(window).height());
+        self.$set('winWidth', $(self.$parent.$els.app).width());
+        self.$set('winHeight', window.innerHeight);
         self.$set('headerHeight', $('#header').height());
       });
 
@@ -245,7 +250,7 @@
       sldePrev: function(){
         var self = this;
 
-        $('#dashboardList').velocity({
+        $(this.$els.list).velocity({
           translateX: this.$get('marginLeft') + this.$get('winWidth')
         },{
           duration: 400,
@@ -260,7 +265,7 @@
       sldeNext: function(){
         var self = this;
 
-        $('#dashboardList').velocity({
+        $(this.$els.list).velocity({
           translateX: this.$get('marginLeft') - this.$get('winWidth')
         },{
           duration: 400,
@@ -273,21 +278,21 @@
       },
 
       scroll: function(itemCount){
-        var element = $('#dashboardList').children().eq(itemCount);
+        var element = $(this.$els.list).children().eq(itemCount);
 
         // itemCountと同じ番目のliのスクロール位置を取得
         var scroll = element.scrollTop();
 
         // スクロールする
         // element.scrollTop(scroll + $(window).height() * 0.7);
-        element.animate({scrollTop: scroll + $(window).height() * 0.65}, 350, 'easeOutQuart');
+        element.animate({scrollTop: scroll + this.$get('winHeight') * 0.65}, 350, 'easeOutQuart');
       },
 
       // toastを表示
       toastShow: function(msg){
         var self = this;
 
-        $('#toast').velocity({
+        $(this.$els.toast).velocity({
           opacity: 1
         }, {
           duration: 200,
@@ -303,7 +308,7 @@
 
         this.$set('toastMsg', msg);
 
-        $('#toast').velocity({
+        $(this.$els.toast).velocity({
           opacity: 0
         }, {
           duration: 200,
