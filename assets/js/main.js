@@ -37,7 +37,7 @@ router.afterEach(function (transition) {
 
 // routerが使用可能なアプリケーションを開始
 var App = Vue.extend(require('./app.vue'));
-router.start(App, '#app');
+router.start(App, document.getElementById('app'));
 
 
 })();

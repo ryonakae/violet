@@ -1,5 +1,5 @@
 <template>
-  <header class="header" id="header">
+  <header class="header">
     <h1 class="header__logo">
       <a v-if="!isAuth" v-link="{path:'/'}">
         <img src="/images/header_logo.png" v-bind:alt="title" width="32" height="30">

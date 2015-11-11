@@ -8,7 +8,6 @@
           :item-count="itemCount"
           :win-width="winWidth"
           :win-height="winHeight"
-          :header-height="headerHeight"
           :like="like"
           :unlike="unlike"
           :reblog="reblog">
@@ -55,7 +54,6 @@
         itemCount: 0,
         winWidth: $(this.$parent.$els.app).width(),
         winHeight: window.innerHeight,
-        headerHeight: $('#header').height(),
         marginLeft: 0,
         toastMsg: ''
       }
@@ -81,7 +79,6 @@
       $(window).on('load resize', function(){
         self.$set('winWidth', $(self.$parent.$els.app).width());
         self.$set('winHeight', window.innerHeight);
-        self.$set('headerHeight', $('#header').height());
       });
 
       // キーボード操作

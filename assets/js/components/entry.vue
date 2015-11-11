@@ -61,7 +61,7 @@
 
 <script>
   module.exports = {
-    props: ['item', 'itemCount', 'winWidth', 'winHeight', 'headerHeight', 'like', 'unlike', 'reblog'],
+    props: ['item', 'itemCount', 'winWidth', 'winHeight', 'like', 'unlike', 'reblog'],
 
     computed: {
       fromUrl: function(){
