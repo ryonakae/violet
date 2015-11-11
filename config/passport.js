@@ -2,15 +2,6 @@ var passport = require('passport');
 var TumblrStrategy = require('passport-tumblr').Strategy;
 
 
-var crypto = require('crypto');
-var secretKey = 'some_random_secret';
-var cipher = function(target){
-  var cipher = crypto.createCipher('aes192', secretKey);
-  cipher.update(target, 'utf8', 'hex');
-  return cipher.final('hex');
-}
-
-
 var validation = function(token, tokenSecret, profile, done){
   process.nextTick(function(){
     // usernameをDBから探して、見つかったら処理
@@ -25,10 +16,10 @@ var validation = function(token, tokenSecret, profile, done){
         var data = {
           provider: profile.provider,
           username: profile.username,
-          token: cipher(token),
-          tokenSecret: cipher(tokenSecret)
+          token: sails.config.crypt.encrypt(token),
+          tokenSecret: sails.config.crypt.encrypt(tokenSecret)
         };
-        console.log('user profile: ', data);
+        // console.log('user profile: ', data);
 
         User.create(data, function(err, user){
           return done(err, user);
