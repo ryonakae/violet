@@ -47,6 +47,7 @@
       'component-toast': toast
     },
 
+
     data: function(){
       return {
         data: [],
@@ -63,11 +64,13 @@
       }
     },
 
+
     computed: {
       listWidth: function(){
         return this.winWidth * this.dataLength + 'px';
       }
     },
+
 
     ready: function(){
       var self = this;
@@ -120,6 +123,7 @@
         }
       });
     },
+
 
     methods: {
       // ダッシュボード取得リクエストを送る
