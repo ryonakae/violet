@@ -52,12 +52,12 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
+  host: process.env.OPENSHIFT_REDIS_HOST,
+  port: process.env.OPENSHIFT_REDIS_PORT,
   // ttl: <redis session TTL in seconds>,
-  db: process.env.REDIS_DB,
+  db: 1,
   pass: process.env.REDIS_PASSWORD,
-  // prefix: 'sess:',
+  prefix: 'session:',
 
 
   /***************************************************************************

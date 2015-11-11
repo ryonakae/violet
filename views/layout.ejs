@@ -1,18 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja" prefix="og: http://ogp.me/ns#">
 <head>
+  <meta charset="UTF-8">
   <% if(title){ %>
     <title><%= title %> | Violet for Tumblr</title>
   <% }else{ %>
     <title>Violet for Tumblr</title>
   <% } %>
+  <meta name="description" content="Violet for TumblrはReblogとLikeに特化したTumblrクライアントです。">
+  <meta name="keywords" content="Violet for Tumblr,Violet,Tumblr,タンブラー,クライアント">
 
-  <!-- Viewport mobile tag for sensible mobile support -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- OGP -->
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:description" content="Violet for TumblrはReblogとLikeに特化したTumblrクライアントです。">
+  <meta property="og:site_name" content="Violet for Tumblr">
+  <meta property="og:title" content="Violet for Tumblr">
+  <meta property="og:image" content="http://violet-rydg.rhcloud.com/images/ogp.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://violet-rydg.rhcloud.com/">
+  <meta meta="" name="twitter:card" value="summary">
+
+  <!-- viewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
 
   <!--STYLES-->
   <link rel="stylesheet" href="/styles/importer.css">
   <!--STYLES END-->
+
+  <!-- favicon -->
+  <link rel="shortcut icon" href="/images/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-192x192.png" sizes="192x192">
 </head>
 <body>
   <%- body %>

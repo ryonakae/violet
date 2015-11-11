@@ -1,9 +1,11 @@
 .controller
   position fixed
-  left 0
+  left 50%
   bottom 0
   width 100%
+  max-width $width_max
   height $height_controller
+  transform translateX(-50%)
   overflow hidden
   clearfix()
 
@@ -18,29 +20,51 @@
   &__prev,
   &__next
     background-color rgba($bgColor_controller, 0.95)
-
     span
-      width 29px
-      height 32px
+      width 25px
+      height 28px
       display inline-block
       hide-text()
-      margin-top 24px
+      margin-top 21px
+
+    &:active
+      animation: controllerFlash_prevNext 0.5s;
 
   &__prev
     span
       background url('../images/controller_prev.svg') no-repeat
 
+  &__next
+    span
+      background url('../images/controller_next.svg') no-repeat
+
   &__likeReblog
     background-color rgba($bgColor_likeReblog, 0.95)
 
-    span
-      width 60px
-      height 60px
+    &Icon
+      width 50px
+      height 50px
       display inline-block
       hide-text()
       background url('../images/controller_likeReblog.svg') no-repeat
       margin-top 10px
 
-  &__next
-    span
-      background url('../images/controller_next.svg') no-repeat
+      &--liked
+        background url('../images/controller_likeReblog_done.svg') no-repeat
+
+    &:active
+      animation: controllerFlash_likeReblog 0.5s;
+
+
+// keyframe animation
+@keyframes controllerFlash_prevNext
+  0%
+    background-color rgba(lighten($bgColor_controller, 10%), 0.95)
+  100%
+    background-color rgba($bgColor_controller, 0.95)
+
+@keyframes controllerFlash_likeReblog
+  0%
+    background-color rgba(lighten($bgColor_likeReblog, 13%), 0.95)
+  100%
+    background-color rgba($bgColor_likeReblog, 0.95)

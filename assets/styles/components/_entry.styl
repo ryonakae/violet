@@ -1,22 +1,173 @@
 .entry
-  &__image
-    line-height 0
+  // entry content
+  &__content
+    // photo
+    &--photo
+      .entry__image
+        line-height 0
+
+        img
+          width 100%
+          height auto
+          display block
+          margin-top 1px
+
+          &:first-child
+            margin-top 0
+
+    // quote, text, other
+    &--quote,
+    &--text,
+    &--other
+      .entry__text
+        padding 25px $padding_page
+        border-bottom 1px solid $borderColor_default
+
+      .entry__title
+        margin 0 0 20px 0
+        font-weight normal
+        font-size 1.5em
+
+      .entry__source
+        margin-top 15px
+        color $textColor_sub
+
+        a
+          color inherit
+
+
+  // info
+  &__info
+    padding 15px $padding_page
+    border-bottom 1px solid $borderColor_default
+    clearfix()
+
+    &From
+      float left
+      display inline-block
+      text-decoration none
+
+    &Notes
+      float right
+      display inline-block
+      text-decoration none
+
+      &Icon
+        hide-text()
+        display inline-block
+        width 14px
+        height 14px
+        background url('../images/dashboard_link.svg') no-repeat
+        vertical-align middle
+        margin-left 3px
+
+
+  // caption
+  &__caption
+    padding 15px $padding_page 20px
+    border-bottom 1px solid $borderColor_default
+
+    .tumblr_blog
+      color $textColor_sub !important
+
+
+  // button
+  &__button
+    padding-bottom 2px
+    clearfix()
+
+    &Item
+      width 50%
+      height 50px
+      line-height 50px
+      float left
+      text-align center
+      cursor pointer
+
+      &:first-child
+        padding-left 9%
+      &:last-child
+        padding-right 9%
+
+      span:before
+        content ''
+        display inline-block
+        vertical-align middle
+        margin-right 12px
+
+      &--like
+        span:before
+          width 21px
+          height 18px
+          background url('../images/dashboard_like.svg') no-repeat
+
+      &--unlike
+        span:before
+          width 21px
+          height 18px
+          background url('../images/dashboard_like_done.svg') no-repeat
+
+      &--reblog
+        span:before
+          width 21px
+          height 20px
+          background url('../images/dashboard_reblog.svg') no-repeat
+
+
+  // entry body
+  &__body
+    font-size $fontSize_entryBody
+
+    &--incompatible,
+    &--caption
+      font-size $fontSize_default
+
+    *
+      color $textColor_default !important
+
+    > *:first-child
+      margin-top 0
+
+    > *:last-child
+      margin-bottom 0
+
+    h1, h2, h3, h4, h5, h6
+      font-weight normal
+
+    h1
+      font-size 1.5em
+    h2
+      font-size 1.4em
+    h3
+      font-size 1.3em
+    h4
+      font-size 1.2em
+    h5
+      font-size 1.1em
+    h6
+      font-size 1em
 
     img
       width 100%
       height auto
 
-  &__text
-    padding 20px $padding_page
-    border-bottom 1px solid $borderColor_default
+    ul, ol
+      padding-left 1.5em
 
-    *
-      color $textColor_default !important
+    blockquote
+      border-left 3px solid $borderColor_default
+      margin-left 0
+      margin-right 0
+      padding-left 13px
 
-  &__info
-    padding 15px $padding_page
-    border-bottom 1px solid $borderColor_default
+      p:first-child
+        margin-top 0
+      p:last-child
+        margin-bottom 0
 
-  &__caption
-    padding 20px $padding_page
-    border-bottom 1px solid $borderColor_default
+    hr
+      width 17%
+      height 2px
+      background-color $borderColor_default
+      border none
+      margin 1.7em auto
