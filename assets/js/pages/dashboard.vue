@@ -350,7 +350,7 @@
           opacity: 0
         }, {
           duration: 200,
-          delay: 2000,
+          delay: 1500,
           complete: function(){
             self.$set('toastMsg', '');
           }

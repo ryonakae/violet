@@ -31,6 +31,8 @@
 `xxxxxxxxxx`にTumblrで取得したConsumer KeyとConsumer Secretを入れる
 
     module.exports = {
+      SECRET_KEY: 'some_random_secret',
+
       TUMBLR_CONSUMER_KEY: 'xxxxxxxxxx',
       TUMBLR_SECRET_KEY: 'xxxxxxxxxx'
       

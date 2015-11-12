@@ -8,6 +8,7 @@
 var tumblr = require('tumblr.js');
 var async = require('async');
 
+
 module.exports = {
   state: {},
 
@@ -37,8 +38,8 @@ module.exports = {
 
       // stateに値を格納
       this.state.username = req.user.username;
-      this.state.token = req.user.token;
-      this.state.tokenSecret = req.user.tokenSecret;
+      this.state.token = sails.config.crypt.decrypt(req.user.token);
+      this.state.tokenSecret = sails.config.crypt.decrypt(req.user.tokenSecret);
     }
   },
 

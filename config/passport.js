@@ -16,9 +16,10 @@ var validation = function(token, tokenSecret, profile, done){
         var data = {
           provider: profile.provider,
           username: profile.username,
-          token: token,
-          tokenSecret: tokenSecret
+          token: sails.config.crypt.encrypt(token),
+          tokenSecret: sails.config.crypt.encrypt(tokenSecret)
         };
+        // console.log('user profile: ', data);
 
         User.create(data, function(err, user){
           return done(err, user);
@@ -30,7 +31,11 @@ var validation = function(token, tokenSecret, profile, done){
 
 
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  done(null, {
+    username: user.username,
+    token: user.token,
+    tokenSecret: user.tokenSecret
+  });
   // userがreq.session.passport.userに入る。他の場所から参照できる
   // ↑のdataのあれこれが入ってるオブジェクト
 });
