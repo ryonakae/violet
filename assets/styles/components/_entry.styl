@@ -34,6 +34,7 @@
 
         a
           color inherit
+          text-decoration underline
 
 
   // info
@@ -45,12 +46,12 @@
     &From
       float left
       display inline-block
-      text-decoration none
+      color $textColor_default
 
     &Notes
       float right
       display inline-block
-      text-decoration none
+      color $textColor_default
 
       &Icon
         hide-text()
@@ -66,9 +67,6 @@
   &__caption
     padding 15px $padding_page 20px
     border-bottom 1px solid $borderColor_default
-
-    .tumblr_blog
-      color $textColor_sub !important
 
 
   // button
@@ -118,12 +116,15 @@
   &__body
     font-size $fontSize_entryBody
 
+    *
+      color $textColor_default !important
+
     &--incompatible,
     &--caption
       font-size $fontSize_default
 
-    *
-      color $textColor_default !important
+      .tumblr_blog
+        color $textColor_sub !important
 
     > *:first-child
       margin-top 0
@@ -146,6 +147,10 @@
       font-size 1.1em
     h6
       font-size 1em
+
+    a
+      color $textColor_default
+      text-decoration underline
 
     img
       width 100%
