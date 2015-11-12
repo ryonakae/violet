@@ -35,6 +35,7 @@
   require('jquery');
   require('jquery-easing');
   require('velocity');
+  var async = require('async');
 
   var entry = require('../components/entry.vue');
   var controller = require('../components/controller.vue');
@@ -126,7 +127,7 @@
 
     methods: {
       // ダッシュボード取得リクエストを送る
-      loadDb: function(){
+      loadDb: function(callback){
         var self = this;
 
         // toast出す
@@ -138,11 +139,13 @@
 
           self.$set('data', body);
           self.$set('dataLength', self.$get('data').length); //取得した配列のlengthをdataLengthに入れる
-          // console.log(self.$get('data'));
-          // console.log('dataLength: ', self.$get('dataLength'));
+          console.log(self.$get('data'));
+          console.log('dataLength: ', self.$get('dataLength'));
 
           // toast消す
           self.toastHide('ダッシュボードの読み込みが完了しました。');
+
+          if(callback) return callback(null);
         });
       },
 
@@ -159,7 +162,7 @@
         }
 
         this.$set('itemCount', count);
-        // console.log('itemCount: ', this.$get('itemCount'));
+        console.log('itemCount: ', this.$get('itemCount'));
 
         // 前のアイテムにスライド
         this.sldePrev();
@@ -177,17 +180,36 @@
           return;
         }
 
+        // lock済みだったら以下スキップ
+        if(this.$get('loadLock')) return;
+
         // itemCountを1つ増やす
         var count = this.$get('itemCount') +1;
 
         // 最後の方まで来たらダッシュボードを更新
         if(count > this.$get('dataLength')-5){
-          // ダッシュボード読み込み
-          this.loadDb();
+          var self = this;
+
+          // async.seriesで順番に実行
+          async.series([
+            function(callback){
+              // lockする
+              self.$set('loadLock', true);
+              callback(null);
+            },
+            function(callback){
+              // ダッシュボード読み込み
+              self.loadDb(callback);
+            },
+            function(callback){
+              // lock解除
+              self.$set('loadLock', false);
+            }
+          ]);
         }
 
         this.$set('itemCount', count);
-        // console.log('itemCount: ', this.$get('itemCount'));
+        console.log('itemCount: ', this.$get('itemCount'));
 
         // 次のアイテムにスライド
         this.sldeNext();
@@ -297,7 +319,7 @@
             self.$set('marginLeft', self.$get('marginLeft') + self.$get('winWidth'));
           }
         });
-        // console.log('slide prev');
+        console.log('slide prev');
       },
 
       sldeNext: function(){
@@ -312,7 +334,7 @@
             self.$set('marginLeft', self.$get('marginLeft') - self.$get('winWidth'));
           }
         });
-        // console.log('slide next');
+        console.log('slide next');
       },
 
       scroll: function(itemCount){
