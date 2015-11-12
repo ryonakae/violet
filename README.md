@@ -122,6 +122,12 @@ HerokuやめてOpenShiftに移行する予定
     
     # 削除
     $ rhc unset-env TUMBLR_SECRET_KEY -a violet
+
+#### 自分でセットする環境変数
+* `SESSION_SECRET`
+* `SECRET_KEY`
+* `TUMBLR_CONSUMER_KEY`
+* `TUMBLR_SECRET_KEY`
     
 ### git remote add
 
