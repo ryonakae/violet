@@ -31,10 +31,14 @@ router.map({
   }
 });
 
-// // route トランジション終了後
-// router.afterEach(function (transition) {
-//   console.log('Successfully navigated to: ' + transition.to.path)
-// })
+// route トランジション終了後
+router.afterEach(function (transition) {
+  // console.log('Successfully navigated to: ' + transition.to.path)
+
+  // google analytics
+  // ga('set', 'location', window.location.href);
+  ga('send', 'pageview');
+})
 
 // routerが使用可能なアプリケーションを開始
 var App = Vue.extend(require('./app.vue'));
