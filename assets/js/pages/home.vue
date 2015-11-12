@@ -15,13 +15,13 @@
         <p class="index__sectionText">Tumblrのダッシュボードに素敵な投稿が流れてきたら、思わずLikeもReblogもしちゃいますよね。Violet for Tumblrは、1タップでLikeとReblogが両方できるWebクライアントです。</p>
 
         <div class="index__featureImage">
-          <img src="http://brdr.jp/wordpress/wp-content/uploads/2013/07/re-weather-music-player-02.jpg" alt="">
+          <img src="/images/index_movie_01.gif" alt="" width="375" height="558">
         </div>
 
         <p class="index__sectionText">別に1タップで両方したくないよ、という人も大丈夫。個別にLike/Reblogができるボタンもちゃんと用意しています。</p>
 
         <div class="index__featureImage">
-          <img src="http://brdr.jp/wordpress/wp-content/uploads/2013/07/re-weather-music-player-02.jpg" alt="">
+          <img src="/images/index_screenshot_01.png" alt="" width="375" height="261">
         </div>
       </section>
 
