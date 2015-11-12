@@ -1,55 +1,69 @@
 .header
   position fixed
   top 0
-  left 0
+  left 50%
   width 100%
+  max-width $width_max
   height $height_header
+  transform translateX(-50%)
   background-color rgba($bgColor_header, 0.95)
   clearfix()
+  z-index 1
 
 
   // logo
   &__logo
     float left
     margin 0
-    padding 12px 0 0 21px
-    width 70px
+    width 65px
     height $height_header
-    background-color $bgColor_logo
+    background-color rgba($bgColor_logo, 0.8)
+    text-align center
 
     a
-      display block
-      hide-text()
-      width 28px
-      height 27px
-      background url('../images/header_logo.svg') no-repeat
+      display inline-block
+      line-height 0
+      margin-top 8px
 
 
   // toggle
   &__toggle
     float right
     position relative
-    width 26px
-    height 26px
-    margin 10px 15px 0 0
+    padding 12px 15px
+    cursor pointer
 
-    &:before,
-    &:after
-      content ''
-      position absolute
-      width 26px
-      height 1px
-      background-color $textColor_default
+    &Icon
+      position relative
+      display inline-block
+      vertical-align middle
+      width 12px
+      height 12px
 
-    &:before
-      left 0
-      top 50%
-      transform translateY(-5px)
+      &:before,
+      &:after
+        content ''
+        position absolute
+        width 12px
+        height 1px
+        background-color $textColor_default
 
-    &:after
-      left 0
-      top 50%
-      transform translateY(5px)
+      &:before
+        left 0
+        top 50%
+        transform translateY(-3px)
+
+      &:after
+        left 0
+        top 50%
+        transform translateY(3px)
+
+    &Text
+      display inline-block
+      vertical-align text-top
+      color $textColor_default
+      font-size $fontSize_default
+      margin-left 3px
 
 
   // navi
@@ -69,10 +83,10 @@
 
       &Item
         border-top 1px solid $borderColor_default
-        padding 10px $padding_page
 
         a
           display block
           width 100%
           height 100%
-          text-decoration none
+          color $textColor_default
+          padding 15px $padding_page

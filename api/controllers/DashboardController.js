@@ -8,6 +8,7 @@
 var tumblr = require('tumblr.js');
 var async = require('async');
 
+
 module.exports = {
   state: {},
 
@@ -16,7 +17,7 @@ module.exports = {
     // /dashboard読み込みの度にstateに初期値を保存
     this.state.data = [];
     this.state.pageNum = 1;
-    this.state.limit = 3;
+    this.state.limit = 20;
     this.state.articleCount = 0;
     this.state.articleTotal = 0;
     this.state.username = null;
@@ -33,12 +34,12 @@ module.exports = {
     else {
       // view表示
       res.view('./index');
-      console.log('req.user: ', req.user);
+      // console.log('req.user: ', req.user);
 
       // stateに値を格納
       this.state.username = req.user.username;
-      this.state.token = req.user.token;
-      this.state.tokenSecret = req.user.tokenSecret;
+      this.state.token = sails.config.crypt.decrypt(req.user.token);
+      this.state.tokenSecret = sails.config.crypt.decrypt(req.user.tokenSecret);
     }
   },
 
@@ -47,7 +48,7 @@ module.exports = {
   get: function(req, res){
     // tokenがなかったら処理を中止
     if(!this.state.token) {
-      console.log('token or tokenSecretがないので処理中止したよ');
+      // console.log('token or tokenSecretがないので処理中止したよ');
       return;
     }
 
@@ -61,7 +62,7 @@ module.exports = {
       // 取得したデータを、res.send()とかres.json()でクライアントに送る
       function(callback){
         res.json(self.state.data);
-        console.log('クライアントにデータ送ったよ');
+        // console.log('クライアントにデータ送ったよ');
         self.state.isInitial = false;
       }
     ]);
@@ -70,7 +71,7 @@ module.exports = {
 
   // like
   like: function(req, res){
-    console.log('Likeリクエスト受信');
+    // console.log('Likeリクエスト受信');
 
     var option = {
       id: req.param('id'),
@@ -80,7 +81,8 @@ module.exports = {
 
     // すでにlikeされてたらスキップ
     if(option.liked){
-      return console.log('Like済みなのでスキップ');
+      // console.log('Like済みなのでスキップ');
+      return;
     }
 
     // インスタンス作成
@@ -92,7 +94,7 @@ module.exports = {
     });
 
     client.like(option.id, option.reblog_key, function(err, response){
-      console.log('Likeした');
+      // console.log('Likeした');
       res.json({ successLike:true });
     });
   },
@@ -100,7 +102,7 @@ module.exports = {
 
   // unlike
   unlike: function(req, res){
-    console.log('Likeリクエスト受信');
+    // console.log('Likeリクエスト受信');
 
     var option = {
       id: req.param('id'),
@@ -110,7 +112,8 @@ module.exports = {
 
     // すでにlikeされてたらスキップ
     if(!option.liked){
-      return console.log('Like済みなのでスキップ');
+      // console.log('Like済みなのでスキップ');
+      return;
     }
 
     // インスタンス作成
@@ -122,7 +125,7 @@ module.exports = {
     });
 
     client.unlike(option.id, option.reblog_key, function(err, response){
-      console.log('Unikeした');
+      // console.log('Unikeした');
       res.json({ successUnlike:true });
     });
   },
@@ -130,7 +133,7 @@ module.exports = {
 
   // reblog
   reblog: function(req, res){
-    console.log('Reblogリクエスト受信');
+    // console.log('Reblogリクエスト受信');
 
     var blogHost = this.state.username + '.tumblr.com';
 
@@ -148,7 +151,7 @@ module.exports = {
     });
 
     client.reblog(blogHost, option, function(err, response){
-      console.log('Reblogした');
+      // console.log('Reblogした');
       res.json({ successReblog:true });
     });
   },
@@ -161,12 +164,12 @@ module.exports = {
     // ブラウザリロード時になぜか2回呼ばれてしまうので…
     // 1回目だけ処理をスキップ
     if(self.state.isInitial){
-      console.log('1回目なので何もしないよ');
+      // console.log('1回目なので何もしないよ');
       return self.state.isInitial = false;
     }
 
-    console.log('2回目以降なのでloadDb()を実行');
-    console.log('今のpageNum: ', self.state.pageNum);
+    // console.log('2回目以降なのでloadDb()を実行');
+    // console.log('今のpageNum: ', self.state.pageNum);
 
     // インスタンス作成
     var client = new tumblr.Client({
@@ -180,7 +183,7 @@ module.exports = {
     var option = {
       limit: self.state.limit,
       offset: self.state.pageNum * self.state.limit - self.state.limit, // ページ番号 * 取得件数 - 取得件数
-      format: 'html'
+      reblog_info: true
     };
 
     // since_idを取得
@@ -196,7 +199,7 @@ module.exports = {
       client.dashboard({since_id:self.state.sinceId}, function(err, response){
         // 取得した中で最新の投稿の数をセット
         var newerItem = response.posts.length;
-        console.log('あたらしい記事が', newerItem, '件ある');
+        // console.log('あたらしい記事が', newerItem, '件ある');
 
         // offsetをoffset+newerItemにする
         option.offset = option.offset + newerItem;
@@ -211,7 +214,7 @@ module.exports = {
 
     function getDb(){
       client.dashboard(option, function(err, response){
-        console.log('offset: ', option.offset);
+        // console.log('offset: ', option.offset);
 
         // 取得したデータを結合
         var oldData = self.state.data;
@@ -227,7 +230,7 @@ module.exports = {
         // 値をアップデート
         self.state.pageNum += 1; //ページ番号を1つ増やす
         self.state.articleCount += self.state.limit; //取得記事合計をlimit(取得件数)分増やす
-        console.log('loadDb()終了後のarticleCount: ', self.state.articleCount);
+        // console.log('loadDb()終了後のarticleCount: ', self.state.articleCount);
 
         return callback(null);
       });

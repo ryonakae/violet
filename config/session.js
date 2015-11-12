@@ -21,7 +21,7 @@ module.exports.session = {
   * of your users, forcing them to log in again.                             *
   *                                                                          *
   ***************************************************************************/
-  secret: 'c0b866cd4d7ad4b4790ffdf7add449a1',
+  secret: (process.env.NODE_ENV === 'production') ? process.env.SESSION_SECRET : 'hogehoge',
 
 
   /***************************************************************************
@@ -31,9 +31,9 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  // cookie: {
-  //   maxAge: 24 * 60 * 60 * 1000
-  // },
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000 * 120 // 24 hours * 120 = 120days
+  },
 
   /***************************************************************************
   *                                                                          *
@@ -52,12 +52,12 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
+  host: process.env.OPENSHIFT_REDIS_HOST,
+  port: process.env.OPENSHIFT_REDIS_PORT,
   // ttl: <redis session TTL in seconds>,
-  db: process.env.REDIS_DB,
+  db: 1,
   pass: process.env.REDIS_PASSWORD,
-  // prefix: 'sess:',
+  prefix: 'session:',
 
 
   /***************************************************************************
