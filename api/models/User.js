@@ -8,26 +8,26 @@
 module.exports = {
   adapter: 'postgres',
 
-  // autoCreatedAt: false,
-  // autoUpdatedAt: false,
+  autoCreatedAt: false,
+  autoUpdatedAt: false,
 
   tableName: 'user',
 
   attributes: {
     username: {
       type: 'string',
-      primaryKey: true,
+      // primaryKey: true,
       unique: true,
       required: true
     },
     provider: 'string',
     token: {
-      type: 'string',
+      type: 'text',
       unique: true,
       required: true
     },
     tokenSecret: {
-      type: 'string',
+      type: 'text',
       unique: true,
       required: true
     }
