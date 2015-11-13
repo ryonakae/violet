@@ -178,6 +178,7 @@ module.exports = {
       token: self.state.token,
       token_secret: self.state.tokenSecret
     });
+    // console.log('client: ', client);
 
     // オプション
     var option = {

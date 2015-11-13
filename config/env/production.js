@@ -12,14 +12,19 @@
 
 module.exports = {
 
+  SECRET_KEY: process.env.SECRET_KEY,
+  SESSION_SECRET: process.env.SESSION_SECRET,
+  TUMBLR_CONSUMER_KEY: process.env.TUMBLR_CONSUMER_KEY,
+  TUMBLR_SECRET_KEY: process.env.TUMBLR_SECRET_KEY,
+
   /***************************************************************************
    * Set the default database connection for models in the production        *
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  // models: {
-  //   connection: 'someMysqlServer'
-  // },
+  models: {
+    connection: 'productionMongodbServer'
+  },
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *

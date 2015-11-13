@@ -10,9 +10,6 @@
  */
 module.exports.globals = {
 
-  TUMBLR_CONSUMER_KEY: process.env.TUMBLR_CONSUMER_KEY,
-  TUMBLR_SECRET_KEY: process.env.TUMBLR_SECRET_KEY
-
   /****************************************************************************
   *                                                                           *
   * Expose the lodash installed in Sails core as a global variable. If this   *

@@ -67,7 +67,7 @@ module.exports.connections = {
 
   productionMongodbServer: {
     adapter: 'sails-mongo',
-    url: process.env.OPENSHIFT_MONGODB_DB_URL
+    url: process.env.MONGOLAB_URI
   },
 
   /***************************************************************************
