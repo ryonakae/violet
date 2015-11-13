@@ -173,11 +173,12 @@ module.exports = {
 
     // インスタンス作成
     var client = new tumblr.Client({
-      consumer_key: process.env.TUMBLR_CONSUMER_KEY,
-      consumer_secret: process.env.TUMBLR_SECRET_KEY,
+      consumer_key: sails.config.TUMBLR_CONSUMER_KEY,
+      consumer_secret: sails.config.TUMBLR_SECRET_KEY,
       token: self.state.token,
       token_secret: self.state.tokenSecret
     });
+    // console.log('client: ', client);
 
     // オプション
     var option = {
