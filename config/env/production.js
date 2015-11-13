@@ -23,7 +23,7 @@ module.exports = {
    ***************************************************************************/
 
   models: {
-    connection: 'productionMongodbServer'
+    connection: 'productionPostgresqlServer'
   },
 
   /***************************************************************************
