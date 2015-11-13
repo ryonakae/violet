@@ -87,14 +87,16 @@ module.exports.connections = {
     database: 'sails_tumblr_auth',
     port: 5432,
     pool: false,
-    ssl: false
+    ssl: false,
+    schema: true
   },
 
   productionPostgresqlServer: {
     adapter: 'sails-postgresql',
     url: process.env.HEROKU_POSTGRESQL_MAROON_URL,
     pool: false,
-    ssl: true
+    ssl: true,
+    schema: true
   }
 
 

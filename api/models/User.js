@@ -8,8 +8,8 @@
 module.exports = {
   adapter: 'postgres',
 
-  autoCreatedAt: false,
-  autoUpdatedAt: false,
+  // autoCreatedAt: false,
+  // autoUpdatedAt: false,
 
   tableName: 'user',
 
