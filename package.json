@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node app.js",
+    "start": "node sails lift",
     "watch": "pm2 start config/pm2/development.json && pm2 logs",
     "stop": "pm2 kill",
     "db": "mkdir -p db && mongod --nojournal --noprealloc --dbpath db"
