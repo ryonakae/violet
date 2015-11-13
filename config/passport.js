@@ -20,9 +20,9 @@ var validation = function(token, tokenSecret, profile, done){
           tokenSecret: sails.config.crypt.encrypt(tokenSecret)
         };
         // console.log('user profile: ', data);
-        console.log('New User Added!: ', data);
 
         User.create(data, function(err, user){
+          console.log('New User Added!: ', user);
           return done(err, user);
         });
       }
