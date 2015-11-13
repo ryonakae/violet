@@ -93,7 +93,7 @@ module.exports.connections = {
 
   productionPostgresqlServer: {
     adapter: 'sails-postgresql',
-    url: process.env.DATABASE_URL,
+    url: process.env.HEROKU_POSTGRESQL_MAROON_URL,
     pool: false,
     ssl: true,
     schema: true
