@@ -15,12 +15,12 @@ module.exports = {
 
   attributes: {
     username: {
-      type: 'string',
+      type: 'text',
       // primaryKey: true,
       unique: true,
       required: true
     },
-    provider: 'string',
+    provider: 'text',
     token: {
       type: 'text',
       unique: true,
