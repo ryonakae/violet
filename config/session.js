@@ -41,7 +41,7 @@ module.exports.session = {
   * session store that can be shared across multiple Sails.js servers        *
   ***************************************************************************/
 
-  // adapter: 'redis',
+  adapter: 'redis',
 
   /***************************************************************************
   *                                                                          *
@@ -52,11 +52,11 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  // host: process.env.OPENSHIFT_REDIS_HOST,
-  // port: process.env.OPENSHIFT_REDIS_PORT,
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
   // ttl: <redis session TTL in seconds>,
-  // db: 1,
-  // pass: process.env.REDIS_PASSWORD,
+  db: process.env.REDIS_DB,
+  pass: process.env.REDIS_PASSWORD,
   // prefix: 'session:',
 
 
@@ -67,12 +67,12 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  adapter: 'mongo',
+  // adapter: 'mongo',
   // host: 'localhost',
   // port: 27017,
   // db: 'sails-tumblr-auth',
-  url: process.env.OPENSHIFT_MONGODB_DB_URL,
-  collection: 'sessions',
+  // url: process.env.OPENSHIFT_MONGODB_DB_URL,
+  // collection: 'sessions',
 
   /***************************************************************************
   *                                                                          *

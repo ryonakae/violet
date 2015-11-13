@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node app.js",
+    "start": "pm2 start app.js -x -- --prod",
     "watch": "pm2 start config/pm2/development.json && pm2 logs",
     "stop": "pm2 kill",
     "db": "mkdir -p db && mongod --nojournal --noprealloc --dbpath db"
@@ -18,9 +18,8 @@
     "connect-mongo": "^0.8.2",
     "connect-redis": "1.4.5",
     "ejs": "~0.8.4",
-    "grunt": "~0.4.4",
+    "grunt": "0.4.2",
     "grunt-browserify": "^4.0.1",
-    "grunt-cli": ">= 0.1.13",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-coffee": "~0.10.1",
     "grunt-contrib-concat": "~0.3.0",
@@ -66,7 +65,6 @@
     "jquery": "$"
   },
   "engines": {
-    "node": ">= 0.12.0",
-    "npm": ">= 1.0.0"
+    "node": "0.12.x"
   }
 }

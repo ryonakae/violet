@@ -20,6 +20,7 @@ var validation = function(token, tokenSecret, profile, done){
           tokenSecret: sails.config.crypt.encrypt(tokenSecret)
         };
         // console.log('user profile: ', data);
+        console.log('New User Added!: ', data);
 
         User.create(data, function(err, user){
           return done(err, user);
@@ -51,7 +52,7 @@ module.exports.http = {
       consumerKey: sails.config.TUMBLR_CONSUMER_KEY,
       consumerSecret: sails.config.TUMBLR_SECRET_KEY,
       // callbackURL: "http://localhost:1337/auth/tumblr/callback"
-      callbackURL: (process.env.NODE_ENV === 'production') ? 'http://violet-rydg.rhcloud.com/auth/tumblr/callback' : 'http://localhost:1337/auth/tumblr/callback'
+      callbackURL: (process.env.NODE_ENV === 'production') ? 'https://violet-for-tumblr.herokuapp.com/auth/tumblr/callback' : 'http://localhost:1337/auth/tumblr/callback'
     }, validation));
 
     app.use(passport.initialize());
