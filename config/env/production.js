@@ -23,7 +23,8 @@ module.exports = {
    ***************************************************************************/
 
   models: {
-    connection: 'productionMongodbServer'
+    connection: 'productionMongodbServer',
+    migrate: 'alter'
   },
 
   /***************************************************************************
