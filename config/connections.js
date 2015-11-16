@@ -88,15 +88,15 @@ module.exports.connections = {
     port: 5432,
     pool: false,
     ssl: false,
-    schema: true
+    // schema: true
   },
 
   productionPostgresqlServer: {
     adapter: 'sails-postgresql',
     url: process.env.DATABASE_URL,
-    pool: false,
+    pool: true,
     ssl: true,
-    schema: true
+    // schema: true
   }
 
 

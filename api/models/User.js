@@ -6,6 +6,12 @@
 */
 
 module.exports = {
+  connection: (process.env.NODE_ENV === 'production') ? 'productionPostgresqlServer' : 'somePostgresqlServer',
+
+  autoCreatedAt: true,
+  autoUpdatedAt: true,
+  tableName: 'user',
+
   attributes: {
     username: {
       type: 'text',
