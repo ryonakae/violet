@@ -16,7 +16,6 @@ module.exports = {
   attributes: {
     username: {
       type: 'text',
-      // primaryKey: true,
       unique: true,
       required: true
     },
