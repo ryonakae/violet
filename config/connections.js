@@ -86,19 +86,13 @@ module.exports.connections = {
     // password: '',
     database: 'sails_tumblr_auth',
     port: 5432,
-    pool: false,
-    ssl: false,
-    // schema: true
+    ssl: true
   },
 
   productionPostgresqlServer: {
     adapter: 'sails-postgresql',
     url: process.env.DATABASE_URL,
-    // pool: true,
-    // schema: true,
-    ssl: {
-      rejectUnauthorized: false
-    }
+    ssl: true
   }
 
 
