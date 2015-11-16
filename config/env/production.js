@@ -24,7 +24,7 @@ module.exports = {
 
   models: {
     connection: 'productionPostgresqlServer',
-    migrate: 'safe'
+    migrate: 'alter'
   },
 
   /***************************************************************************
