@@ -81,10 +81,22 @@ module.exports.connections = {
   ***************************************************************************/
   somePostgresqlServer: {
     adapter: 'sails-postgresql',
-    host: 'YOUR_POSTGRES_SERVER_HOSTNAME_OR_IP_ADDRESS',
-    user: 'YOUR_POSTGRES_USER',
-    password: 'YOUR_POSTGRES_PASSWORD',
-    database: 'YOUR_POSTGRES_DB'
+    host: 'localhost',
+    // user: 'root',
+    // password: '',
+    database: 'sails_tumblr_auth',
+    port: 5432,
+    pool: false,
+    ssl: false,
+    schema: true
+  },
+
+  productionPostgresqlServer: {
+    adapter: 'sails-postgresql',
+    url: process.env.HEROKU_POSTGRESQL_MAROON_URL,
+    pool: false,
+    ssl: true,
+    schema: true
   }
 
 
