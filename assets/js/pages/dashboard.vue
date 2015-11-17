@@ -78,7 +78,7 @@
       // console.log('dashboard表示');
 
       // socket.io接続時の処理
-      io.socket.on('connect', this.loadDb);
+      io.socket.on('connect', self.loadDb);
 
       // socket.io切断時の処理
       io.socket.on('disconnect', io.socket.disconnect);
@@ -133,17 +133,24 @@
         // toast出す
         this.toastShow('ダッシュボードを読み込んでいます…');
 
-        // console.log('サーバにリクエスト送信');
+        // サーバにリクエスト送信
         io.socket.get('/dashboard/get', function serverRespondedWith (body, jwr){
-          // console.log('ダッシュボード取得完了');
-
-          self.$set('data', body);
-          self.$set('dataLength', self.$get('data').length); //取得した配列のlengthをdataLengthに入れる
-          console.log(self.$get('data'));
-          console.log('dataLength: ', self.$get('dataLength'));
-
-          // toast消す
-          self.toastHide('ダッシュボードの読み込みが完了しました。');
+          // async.seriesで順番に実行
+          async.series([
+            function(callback){
+              self.$set('data', body);
+              self.$set('dataLength', self.$get('data').length); //取得した配列のlengthをdataLengthに入れる
+              // console.log(self.$get('data'));
+              // console.log('dataLength: ', self.$get('dataLength'));
+              callback(null);
+            },
+            function(callback){
+              // toast消す
+              self.toastHide('ダッシュボードの読み込みが完了しました。');
+              // 範囲内のアイテムだけ表示
+              self.itemShow(callback);
+            }
+          ]);
 
           if(callback) return callback(null);
         });
@@ -162,7 +169,10 @@
         }
 
         this.$set('itemCount', count);
-        console.log('itemCount: ', this.$get('itemCount'));
+        // console.log('itemCount: ', this.$get('itemCount'));
+
+        // 範囲内のアイテムだけ表示
+        this.itemShow();
 
         // 前のアイテムにスライド
         this.sldePrev();
@@ -209,7 +219,10 @@
         }
 
         this.$set('itemCount', count);
-        console.log('itemCount: ', this.$get('itemCount'));
+        // console.log('itemCount: ', this.$get('itemCount'));
+
+        // 範囲内のアイテムだけ表示
+        this.itemShow();
 
         // 次のアイテムにスライド
         this.sldeNext();
@@ -319,7 +332,7 @@
             self.$set('marginLeft', self.$get('marginLeft') + self.$get('winWidth'));
           }
         });
-        console.log('slide prev');
+        // console.log('slide prev');
       },
 
       sldeNext: function(){
@@ -334,7 +347,7 @@
             self.$set('marginLeft', self.$get('marginLeft') - self.$get('winWidth'));
           }
         });
-        console.log('slide next');
+        // console.log('slide next');
       },
 
       scroll: function(itemCount){
@@ -377,6 +390,27 @@
             self.$set('toastMsg', '');
           }
         });
+      },
+
+      // 描画領域内のアイテムだけ表示
+      itemShow: function(callback){
+        var className = 'dashboard__listItem--show';
+        var itemCount = this.$get('itemCount');
+
+        // remove class = 全部非表示
+        $(this.$els.list).children().removeClass(className);
+
+        if(itemCount == 0){
+          // itemCountと、その後1つは表示
+          $(this.$els.list).children().slice(0, 2).addClass(className);
+          // $(this.$els.list).children().eq(0).addClass(className);
+          // $(this.$els.list).children().eq(1).addClass(className);
+        } else {
+          // itemCountと、その前後1ずつは表示
+          $(this.$els.list).children().slice(itemCount - 1, itemCount + 2).addClass(className);
+        }
+
+        if(callback) return callback(null);
       }
     }
   };
