@@ -149,6 +149,8 @@
               self.toastHide('ダッシュボードの読み込みが完了しました。');
               // 範囲内のアイテムだけ表示
               self.itemShow(callback);
+              // lock解除
+              self.$set('moveLock', false);
             }
           ]);
 
@@ -200,11 +202,8 @@
         // lock済みだったら以下スキップ
         if(this.$get('loadLock')) return;
 
-        // itemCountを1つ増やす
-        var count = this.$get('itemCount') +1;
-
-        // 最後の方まで来たらダッシュボードを更新
-        if(count > this.$get('dataLength')-5){
+        // 最後まで来たらダッシュボードを更新
+        if(this.$get('itemCount') > this.$get('dataLength') -3){
           var self = this;
 
           // async.seriesで順番に実行
@@ -225,7 +224,8 @@
           ]);
         }
 
-        this.$set('itemCount', count);
+        // itemCountを1つ増やす
+        this.$set('itemCount', this.$get('itemCount') +1);
         // console.log('itemCount: ', this.$get('itemCount'));
 
         // 範囲内のアイテムだけ表示
