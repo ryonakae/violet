@@ -32,20 +32,18 @@
 <script>
   var socketIO = require('../dependencies/socket.io.js');
   var io = require('../dependencies/sails.io.js')(socketIO);
+
   require('jquery');
   require('jquery-easing');
   require('velocity');
   var async = require('async');
 
-  var entry = require('../components/entry.vue');
-  var controller = require('../components/controller.vue');
-  var toast = require('../components/toast.vue');
 
   module.exports = {
     components: {
-      'component-entry': entry,
-      'component-controller': controller,
-      'component-toast': toast
+      'component-entry': require('../components/entry.vue'),
+      'component-controller': require('../components/controller.vue'),
+      'component-toast': require('../components/toast.vue')
     },
 
 
@@ -60,7 +58,8 @@
         toastMsg: '',
         loadLock: false,
         likeLock: false,
-        reblogLock: false
+        reblogLock: false,
+        moveLock: false
       }
     },
 
@@ -139,7 +138,8 @@
           async.series([
             function(callback){
               self.$set('data', body);
-              self.$set('dataLength', self.$get('data').length); //取得した配列のlengthをdataLengthに入れる
+              //取得した配列のlengthをdataLengthに入れる
+              self.$set('dataLength', self.$get('data').length);
               // console.log(self.$get('data'));
               // console.log('dataLength: ', self.$get('dataLength'));
               callback(null);
@@ -158,15 +158,18 @@
 
       // 前のitemに移動
       goPrev: function(){
+        // lock済みだったら以下スキップ
+        if(this.$get('moveLock')) return;
+        // lockする
+        this.$set('moveLock', true);
+
         // console.log('前のitemに移動');
 
         // itemCountを1つ減らす
         var count = this.$get('itemCount') -1;
 
-        if(count < 0){
-          // console.log('itemCountが0以下なので何もしないよ');
-          return;
-        }
+        // itemCountが0以下なら何もしない
+        if(count < 0) return;
 
         this.$set('itemCount', count);
         // console.log('itemCount: ', this.$get('itemCount'));
@@ -180,14 +183,18 @@
 
       // 次のitemに移動
       goNext: function(){
+        // lock済みだったら以下スキップ
+        if(this.$get('moveLock')) return;
+        // lockする
+        this.$set('moveLock', true);
+
         // console.log('次のitemに移動');
 
         // 投稿数(dataLength)が250以上、かつitemCountが250になったら
         // toast出してダッシュボードこれ以上読み込まない
         if( this.$get('dataLength') >= 250 && this.$get('itemCount') === 250 ){
           this.toastShow('これ以上読み込めません。');
-          this.toastHide('これ以上読み込めません。');
-          return;
+          return this.toastHide('これ以上読み込めません。');
         }
 
         // lock済みだったら以下スキップ
@@ -234,6 +241,7 @@
         if(this.$get('likeLock')) return;
         // lockする
         this.$set('likeLock', true);
+        this.$set('moveLock', true);
 
         var self = this;
 
@@ -242,6 +250,7 @@
           reblogKey: this.$get('data')[n].reblog_key,
           liked: this.$get('data')[n].liked
         }
+
         // Like済みだったら以下スキップ
         if(sendData.liked) return;
 
@@ -257,7 +266,8 @@
 
           // lock解除
           self.$set('likeLock', false);
-        })
+          self.$set('moveLock', false);
+        });
       },
 
       // Unlike
@@ -266,6 +276,7 @@
         if(this.$get('likeLock')) return;
         // lockする
         this.$set('likeLock', true);
+        this.$set('moveLock', true);
 
         var self = this;
 
@@ -274,6 +285,7 @@
           reblogKey: this.$get('data')[n].reblog_key,
           liked: this.$get('data')[n].liked
         }
+
         // unike済みだったらスキップ
         if(!sendData.liked) return;
 
@@ -289,7 +301,8 @@
 
           // lock解除
           self.$set('likeLock', false);
-        })
+          self.$set('moveLock', false);
+        });
       },
 
       // Reblog
@@ -298,6 +311,7 @@
         if(this.$get('reblogLock')) return;
         // lockする
         this.$set('reblogLock', true);
+        this.$set('moveLock', true);
 
         var self = this;
 
@@ -317,9 +331,11 @@
 
           // lock解除
           self.$set('reblogLock', false);
+          self.$set('moveLock', false);
         })
       },
 
+      // スライドアニメーション Prev
       sldePrev: function(){
         var self = this;
 
@@ -330,11 +346,16 @@
           easing: 'easeOutQuart',
           complete: function(){
             self.$set('marginLeft', self.$get('marginLeft') + self.$get('winWidth'));
+            // lock解除
+            self.$set('likeLock', false);
+            self.$set('reblogLock', false);
+            self.$set('moveLock', false);
           }
         });
         // console.log('slide prev');
       },
 
+      // スライドアニメーション Next
       sldeNext: function(){
         var self = this;
 
@@ -345,11 +366,16 @@
           easing: 'easeOutQuart',
           complete: function(){
             self.$set('marginLeft', self.$get('marginLeft') - self.$get('winWidth'));
+            // lock解除
+            self.$set('likeLock', false);
+            self.$set('reblogLock', false);
+            self.$set('moveLock', false);
           }
         });
         // console.log('slide next');
       },
 
+      // スクロールアニメーション
       scroll: function(itemCount){
         var element = $(this.$els.list).children().eq(itemCount);
 
