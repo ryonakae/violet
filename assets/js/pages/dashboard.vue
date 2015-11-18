@@ -58,7 +58,8 @@
         toastMsg: '',
         loadLock: false,
         likeLock: false,
-        reblogLock: false
+        reblogLock: false,
+        moveLock: false
       }
     },
 
@@ -157,6 +158,11 @@
 
       // 前のitemに移動
       goPrev: function(){
+        // lock済みだったら以下スキップ
+        if(this.$get('moveLock')) return;
+        // lockする
+        this.$set('moveLock', true);
+
         // console.log('前のitemに移動');
 
         // itemCountを1つ減らす
@@ -177,6 +183,11 @@
 
       // 次のitemに移動
       goNext: function(){
+        // lock済みだったら以下スキップ
+        if(this.$get('moveLock')) return;
+        // lockする
+        this.$set('moveLock', true);
+
         // console.log('次のitemに移動');
 
         // 投稿数(dataLength)が250以上、かつitemCountが250になったら
@@ -230,6 +241,7 @@
         if(this.$get('likeLock')) return;
         // lockする
         this.$set('likeLock', true);
+        this.$set('moveLock', true);
 
         var self = this;
 
@@ -254,6 +266,7 @@
 
           // lock解除
           self.$set('likeLock', false);
+          self.$set('moveLock', false);
         });
       },
 
@@ -263,6 +276,7 @@
         if(this.$get('likeLock')) return;
         // lockする
         this.$set('likeLock', true);
+        this.$set('moveLock', true);
 
         var self = this;
 
@@ -287,6 +301,7 @@
 
           // lock解除
           self.$set('likeLock', false);
+          self.$set('moveLock', false);
         });
       },
 
@@ -296,6 +311,7 @@
         if(this.$get('reblogLock')) return;
         // lockする
         this.$set('reblogLock', true);
+        this.$set('moveLock', true);
 
         var self = this;
 
@@ -315,6 +331,7 @@
 
           // lock解除
           self.$set('reblogLock', false);
+          self.$set('moveLock', false);
         })
       },
 
@@ -332,6 +349,7 @@
             // lock解除
             self.$set('likeLock', false);
             self.$set('reblogLock', false);
+            self.$set('moveLock', false);
           }
         });
         // console.log('slide prev');
@@ -351,6 +369,7 @@
             // lock解除
             self.$set('likeLock', false);
             self.$set('reblogLock', false);
+            self.$set('moveLock', false);
           }
         });
         // console.log('slide next');
