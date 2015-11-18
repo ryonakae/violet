@@ -193,7 +193,10 @@
         var count = this.$get('itemCount') -1;
 
         // itemCountが0以下なら何もしない
-        if(count < 0) return;
+        if(count < 0) {
+          // moveLockは解除
+          return this.$set('moveLock', false);
+        }
 
         this.$set('itemCount', count);
         // console.log('itemCount: ', this.$get('itemCount'));
