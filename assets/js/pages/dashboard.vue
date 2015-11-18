@@ -26,6 +26,11 @@
     </component-controller>
 
     <component-toast v-el:toast :toast-msg="toastMsg"></component-toast>
+
+    <div class="counter">
+      <span class="counter__now">{{itemCount + 1}}</span>
+      <span class="counter__total">{{dataLength}}</span>
+    </div>
   </div>
 </template>
 
