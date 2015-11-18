@@ -32,20 +32,18 @@
 <script>
   var socketIO = require('../dependencies/socket.io.js');
   var io = require('../dependencies/sails.io.js')(socketIO);
+
   require('jquery');
   require('jquery-easing');
   require('velocity');
   var async = require('async');
 
-  var entry = require('../components/entry.vue');
-  var controller = require('../components/controller.vue');
-  var toast = require('../components/toast.vue');
 
   module.exports = {
     components: {
-      'component-entry': entry,
-      'component-controller': controller,
-      'component-toast': toast
+      'component-entry': require('../components/entry.vue'),
+      'component-controller': require('../components/controller.vue'),
+      'component-toast': require('../components/toast.vue')
     },
 
 
@@ -81,7 +79,7 @@
       io.socket.on('connect', self.loadDb);
 
       // socket.io切断時の処理
-      io.socket.on('disconnect', io.socket.disconnect);
+      // io.socket.on('disconnect', io.socket.disconnect);
 
       $(window).on('load resize', function(){
         self.$set('winWidth', $(self.$parent.$els.app).width());
@@ -139,7 +137,8 @@
           async.series([
             function(callback){
               self.$set('data', body);
-              self.$set('dataLength', self.$get('data').length); //取得した配列のlengthをdataLengthに入れる
+              //取得した配列のlengthをdataLengthに入れる
+              self.$set('dataLength', self.$get('data').length);
               // console.log(self.$get('data'));
               // console.log('dataLength: ', self.$get('dataLength'));
               callback(null);
@@ -163,10 +162,8 @@
         // itemCountを1つ減らす
         var count = this.$get('itemCount') -1;
 
-        if(count < 0){
-          // console.log('itemCountが0以下なので何もしないよ');
-          return;
-        }
+        // itemCountが0以下なら何もしない
+        if(count < 0) return;
 
         this.$set('itemCount', count);
         // console.log('itemCount: ', this.$get('itemCount'));
@@ -186,8 +183,7 @@
         // toast出してダッシュボードこれ以上読み込まない
         if( this.$get('dataLength') >= 250 && this.$get('itemCount') === 250 ){
           this.toastShow('これ以上読み込めません。');
-          this.toastHide('これ以上読み込めません。');
-          return;
+          return this.toastHide('これ以上読み込めません。');
         }
 
         // lock済みだったら以下スキップ
@@ -320,6 +316,7 @@
         })
       },
 
+      // スライドアニメーション Prev
       sldePrev: function(){
         var self = this;
 
@@ -335,6 +332,7 @@
         // console.log('slide prev');
       },
 
+      // スライドアニメーション Next
       sldeNext: function(){
         var self = this;
 
@@ -350,6 +348,7 @@
         // console.log('slide next');
       },
 
+      // スクロールアニメーション
       scroll: function(itemCount){
         var element = $(this.$els.list).children().eq(itemCount);
 
