@@ -162,7 +162,7 @@
               self.$set('data', filteredData);
               //取得した配列のlengthをdataLengthに入れる
               self.$set('dataLength', self.$get('data').length);
-              console.log(self.$get('data'));
+              // console.log(self.$get('data'));
               // console.log('dataLength: ', self.$get('dataLength'));
               callback(null);
             },
