@@ -238,6 +238,7 @@
           reblogKey: this.$get('data')[n].reblog_key,
           liked: this.$get('data')[n].liked
         }
+
         // Like済みだったら以下スキップ
         if(sendData.liked) return;
 
@@ -253,7 +254,7 @@
 
           // lock解除
           self.$set('likeLock', false);
-        })
+        });
       },
 
       // Unlike
@@ -270,6 +271,7 @@
           reblogKey: this.$get('data')[n].reblog_key,
           liked: this.$get('data')[n].liked
         }
+
         // unike済みだったらスキップ
         if(!sendData.liked) return;
 
@@ -285,7 +287,7 @@
 
           // lock解除
           self.$set('likeLock', false);
-        })
+        });
       },
 
       // Reblog
@@ -327,6 +329,9 @@
           easing: 'easeOutQuart',
           complete: function(){
             self.$set('marginLeft', self.$get('marginLeft') + self.$get('winWidth'));
+            // lock解除
+            self.$set('likeLock', false);
+            self.$set('reblogLock', false);
           }
         });
         // console.log('slide prev');
@@ -343,6 +348,9 @@
           easing: 'easeOutQuart',
           complete: function(){
             self.$set('marginLeft', self.$get('marginLeft') - self.$get('winWidth'));
+            // lock解除
+            self.$set('likeLock', false);
+            self.$set('reblogLock', false);
           }
         });
         // console.log('slide next');
