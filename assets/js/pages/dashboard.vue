@@ -4,6 +4,7 @@
       <ul class="dashboard__list" v-el:list v-bind:style="{ width: listWidth }">
         <component-entry
           v-for="item in data"
+          track-by="id"
           :item="item"
           :item-count="itemCount"
           :win-width="winWidth"
@@ -26,6 +27,11 @@
     </component-controller>
 
     <component-toast v-el:toast :toast-msg="toastMsg"></component-toast>
+
+    <div class="counter">
+      <span class="counter__now">{{itemCount + 1}}</span>
+      <span class="counter__total">{{dataLength}}</span>
+    </div>
   </div>
 </template>
 
@@ -59,7 +65,8 @@
         loadLock: false,
         likeLock: false,
         reblogLock: false,
-        moveLock: false
+        moveLock: false,
+        username: ''
       }
     },
 
@@ -77,7 +84,14 @@
       // console.log('dashboard表示');
 
       // socket.io接続時の処理
-      io.socket.on('connect', self.loadDb);
+      io.socket.on('connect', function(){
+        self.loadDb();
+
+        // ユーザー名取得
+        io.socket.get('/dashboard/username', function serverRespondedWith (body, jwr){
+          return self.$set('username', body.username);
+        });
+      });
 
       // socket.io切断時の処理
       io.socket.on('disconnect', io.socket.disconnect);
@@ -137,7 +151,15 @@
           // async.seriesで順番に実行
           async.series([
             function(callback){
-              self.$set('data', body);
+              // 取得した配列をフィルタリング(自分がReblogしたやつは弾く)
+              // reblogged_from_nameと自分のusernameを比べる
+              var allData = body;
+              var filteredData = $.grep(allData, function(data){
+                return data.reblogged_from_name !== self.$get('username');
+              });
+
+              // dataに取得・フィルタリングした配列をセット
+              self.$set('data', filteredData);
               //取得した配列のlengthをdataLengthに入れる
               self.$set('dataLength', self.$get('data').length);
               // console.log(self.$get('data'));
@@ -149,6 +171,8 @@
               self.toastHide('ダッシュボードの読み込みが完了しました。');
               // 範囲内のアイテムだけ表示
               self.itemShow(callback);
+              // lock解除
+              self.$set('moveLock', false);
             }
           ]);
 
@@ -169,7 +193,10 @@
         var count = this.$get('itemCount') -1;
 
         // itemCountが0以下なら何もしない
-        if(count < 0) return;
+        if(count < 0) {
+          // moveLockは解除
+          return this.$set('moveLock', false);
+        }
 
         this.$set('itemCount', count);
         // console.log('itemCount: ', this.$get('itemCount'));
@@ -200,11 +227,8 @@
         // lock済みだったら以下スキップ
         if(this.$get('loadLock')) return;
 
-        // itemCountを1つ増やす
-        var count = this.$get('itemCount') +1;
-
-        // 最後の方まで来たらダッシュボードを更新
-        if(count > this.$get('dataLength')-5){
+        // 最後まで来たらダッシュボードを更新
+        if(this.$get('itemCount') > this.$get('dataLength') -3){
           var self = this;
 
           // async.seriesで順番に実行
@@ -225,7 +249,8 @@
           ]);
         }
 
-        this.$set('itemCount', count);
+        // itemCountを1つ増やす
+        this.$set('itemCount', this.$get('itemCount') +1);
         // console.log('itemCount: ', this.$get('itemCount'));
 
         // 範囲内のアイテムだけ表示

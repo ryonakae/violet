@@ -47,10 +47,7 @@ module.exports = {
   // dashboard get request from client
   get: function(req, res){
     // tokenがなかったら処理を中止
-    if(!this.state.token) {
-      // console.log('token or tokenSecretがないので処理中止したよ');
-      return;
-    }
+    if(!this.state.token) return;
 
     // async.waterfallで順番に処理を実行
     var self = this;
@@ -80,10 +77,7 @@ module.exports = {
     };
 
     // すでにlikeされてたらスキップ
-    if(option.liked){
-      // console.log('Like済みなのでスキップ');
-      return;
-    }
+    if(option.liked) return;
 
     // インスタンス作成
     var client = new tumblr.Client({
@@ -111,10 +105,7 @@ module.exports = {
     };
 
     // すでにlikeされてたらスキップ
-    if(!option.liked){
-      // console.log('Like済みなのでスキップ');
-      return;
-    }
+    if(!option.liked) return;
 
     // インスタンス作成
     var client = new tumblr.Client({
@@ -154,6 +145,12 @@ module.exports = {
       // console.log('Reblogした');
       res.json({ successReblog:true });
     });
+  },
+
+
+  // get user name
+  username: function(req, res){
+    res.json({ username: this.state.username });
   },
 
 
