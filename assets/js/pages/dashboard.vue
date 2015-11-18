@@ -79,7 +79,7 @@
       io.socket.on('connect', self.loadDb);
 
       // socket.io切断時の処理
-      // io.socket.on('disconnect', io.socket.disconnect);
+      io.socket.on('disconnect', io.socket.disconnect);
 
       $(window).on('load resize', function(){
         self.$set('winWidth', $(self.$parent.$els.app).width());

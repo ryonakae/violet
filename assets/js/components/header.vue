@@ -60,7 +60,7 @@
       });
 
       // socket.io切断時の処理
-      // io.socket.on('disconnect', io.socket.disconnect);
+      io.socket.on('disconnect', io.socket.disconnect);
     },
 
     methods: {
