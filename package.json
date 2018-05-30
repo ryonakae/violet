@@ -6,5 +6,11 @@
   "engines": {
     "node": "8.9.3",
     "yarn": "1.6.x"
+  },
+  "scripts": {
+    "dev": "nuxt"
+  },
+  "dependencies": {
+    "nuxt": "^1.4.0"
   }
 }
