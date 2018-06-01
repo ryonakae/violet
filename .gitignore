@@ -63,3 +63,4 @@ typings/
 # My config
 .DS_Store
 .nuxt
+server/config.js
