@@ -1,15 +1,21 @@
+const { Nuxt, Builder } = require('nuxt')
 const passport = require('passport')
 const TumblrStrategy = require('passport-tumblr').Strategy
+const bodyParser = require('body-parser')
 const session = require('express-session')
 const app = require('express')()
 const config = require('./config')
 
+const host = process.env.HOST || '127.0.0.1'
+const port = process.env.PORT || 3000
+
 passport.serializeUser((user, done) => {
   done(null, user)
 })
-passport.deserializeUser((obj, done) => {
-  done(null, obj)
+passport.deserializeUser((user, done) => {
+  done(null, user)
 })
+
 passport.use(
   new TumblrStrategy(
     {
@@ -17,18 +23,19 @@ passport.use(
       consumerSecret: config.TUMBLR_SECRET_KEY,
       callbackURL: 'http://127.0.0.1:3000/auth/callback'
     },
-    function (token, tokenSecret, profile, done) {
+    (token, tokenSecret, profile, done) => {
       console.log(token)
       console.log(tokenSecret)
       console.log(profile)
-      console.log(done)
-      process.nextTick(function () {
+
+      process.nextTick(() => {
         return done(null, profile)
       })
     }
   )
 )
 
+app.use(bodyParser.json())
 app.use(
   session({
     secret: 'super-secret-key',
@@ -45,12 +52,26 @@ app.get('/auth', passport.authenticate('tumblr'))
 app.get(
   '/auth/callback',
   passport.authenticate('tumblr', { failureRedirect: '/' }),
-  function (req, res) {
-    console.log(req.user)
+  (req, res) => {
     // Successful authentication, redirect home.
     res.redirect('/')
   }
 )
 
-app.listen(3000)
-console.log('Server is listening on http://127.0.0.1:3000')
+// Nuxt.js をオプションとともにインスタンス化する
+let nuxtConfig = require('../nuxt.config.js')
+nuxtConfig.dev = !(process.env.NODE_ENV === 'production')
+
+const nuxt = new Nuxt(nuxtConfig)
+
+// ホットリローディングする開発モードのときのみビルドする
+if (nuxtConfig.dev) {
+  const builder = new Builder(nuxt)
+  builder.build()
+}
+
+// すべてのルートを Nuxt.js でレンダリングする
+app.use(nuxt.render)
+
+app.listen(port, host)
+console.log('Server listening on localhost:' + port)
