@@ -4,16 +4,16 @@ const TumblrStrategy = require('passport-tumblr').Strategy
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const app = require('express')()
-const config = require('./config')
 
+const config = require('./config')
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 3000
 
 passport.serializeUser((user, done) => {
   done(null, user)
 })
-passport.deserializeUser((user, done) => {
-  done(null, user)
+passport.deserializeUser((obj, done) => {
+  done(null, obj)
 })
 
 passport.use(
@@ -24,12 +24,14 @@ passport.use(
       callbackURL: 'http://127.0.0.1:3000/auth/callback'
     },
     (token, tokenSecret, profile, done) => {
-      console.log(token)
-      console.log(tokenSecret)
-      console.log(profile)
+      const userInfo = {
+        token: token,
+        tokenSecret: tokenSecret,
+        profile: profile
+      }
 
       process.nextTick(() => {
-        return done(null, profile)
+        return done(null, userInfo)
       })
     }
   )
@@ -53,7 +55,7 @@ app.get(
   '/auth/callback',
   passport.authenticate('tumblr', { failureRedirect: '/' }),
   (req, res) => {
-    // Successful authentication, redirect home.
+    // console.log(req.session.passport.user)
     res.redirect('/')
   }
 )

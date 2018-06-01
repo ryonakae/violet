@@ -1,3 +1,1 @@
-module.exports = {
-  mode: 'spa'
-}
+module.exports = {}
