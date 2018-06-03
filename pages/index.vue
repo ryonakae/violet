@@ -3,6 +3,8 @@
     <p>Violet for Tumblr</p>
     <a href="/auth">Sign In with Tumblr</a>
 
+    <p>isAuthed: {{isAuthed}}</p>
+
     <ul v-if="user">
       <li>
         <span>token: </span>
@@ -10,28 +12,27 @@
       </li>
       <li>
         <span>tokenSecret: </span>
-        <span>{{user.token}}</span>
-      </li>
-      <li>
-        <span>username: </span>
-        <span>{{user.profile.username}}</span>
+        <span>{{user.tokenSecret}}</span>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import createPersistedState from 'vuex-persistedstate'
-
 export default {
   computed: {
     user() {
       return this.$store.state.user
+    },
+    isAuthed() {
+      return this.$store.state.isAuthed
     }
   },
 
   mounted() {
-    createPersistedState()(this.$store)
+    setTimeout(() => {
+      this.$store.commit('SET_TIMESTAMP')
+    }, 10)
   }
 }
 </script>
