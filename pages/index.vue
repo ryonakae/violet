@@ -21,11 +21,17 @@
 </template>
 
 <script>
+import createPersistedState from 'vuex-persistedstate'
+
 export default {
   computed: {
     user() {
       return this.$store.state.user
     }
+  },
+
+  mounted() {
+    createPersistedState()(this.$store)
   }
 }
 </script>
