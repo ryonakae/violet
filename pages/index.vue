@@ -29,10 +29,6 @@ export default {
     }
   },
 
-  mounted() {
-    setTimeout(() => {
-      this.$store.commit('SET_TIMESTAMP')
-    }, 10)
-  }
+  mounted() {}
 }
 </script>

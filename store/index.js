@@ -28,7 +28,6 @@ export const actions = {
   nuxtServerInit ({ commit }, { req }) {
     if (req.session.passport) {
       console.log('[nuxtServerInit] セッションがある')
-      commit('SET_USER', null)
       commit('SET_USER', req.session.passport.user)
       req.session.destroy()
     } else {
