@@ -1,6 +1,6 @@
 export const state = () => ({
   timestamp: 0,
-  user: null,
+  user: 'aaa',
   isAuthed: false
 })
 
@@ -8,7 +8,7 @@ export const mutations = {
   SET_USER (state, user) {
     state.user = user
     console.log('[SET_USER] ユーザー情報をセット')
-    console.log(user)
+    console.log(state.user)
   },
 
   SET_TIMESTAMP (state) {
@@ -25,13 +25,16 @@ export const mutations = {
 
 export const actions = {
   // サーバーにアクセスした時にサーバー上で実行されるアクション
-  nuxtServerInit ({ commit }, { req }) {
-    if (req.session.passport) {
-      console.log('[nuxtServerInit] セッションがある')
-      commit('SET_USER', req.session.passport.user)
-      req.session.destroy()
-    } else {
-      console.log('[nuxtServerInit] セッションがない')
-    }
+  // nuxtServerInit ({ commit }, { req }) {
+  //   if (req.session.passport) {
+  //     console.log('[nuxtServerInit] セッションがある')
+  //     commit('SET_USER', req.session.passport.user)
+  //     req.session.destroy()
+  //   } else {
+  //     console.log('[nuxtServerInit] セッションがない')
+  //   }
+  // }
+  nuxtServerInit (ctx) {
+    console.log(ctx)
   }
 }

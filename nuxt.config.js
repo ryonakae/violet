@@ -1,3 +1,6 @@
 module.exports = {
-  plugins: [{ src: '~/plugins/persisted-state.js', ssr: false }]
+  plugins: [{ src: '~/plugins/persisted-state.js', ssr: false }],
+  router: {
+    middleware: 'auth'
+  }
 }

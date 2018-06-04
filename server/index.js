@@ -60,7 +60,9 @@ app.get(
   '/auth/callback',
   passport.authenticate('tumblr', { failureRedirect: '/' }),
   (req, res) => {
-    res.redirect('/')
+    setTimeout(() => {
+      res.redirect('/')
+    }, 2000)
   }
 )
 
@@ -77,4 +79,4 @@ if (nuxtConfig.dev) {
 app.use(nuxt.render)
 
 app.listen(port, host)
-console.log('Server listening on localhost:' + port)
+console.log('Server listening on http://' + host + ':' + port)

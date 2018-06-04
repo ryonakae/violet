@@ -17,6 +17,7 @@
     "nuxt": "^1.4.0",
     "passport": "^0.4.0",
     "passport-tumblr": "github:trueter/passport-tumblr#master",
+    "vuex-persist": "^1.4.0",
     "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {

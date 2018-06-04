@@ -6,4 +6,6 @@ export default ctx => {
   createPersistedState({
     key: 'violet-for-tumblr'
   })(ctx.store)
+
+  console.log('[persistedstate] fired')
 }
