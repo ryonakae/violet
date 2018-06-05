@@ -58,12 +58,11 @@ app.get('/auth', passport.authenticate('tumblr'))
 
 app.get(
   '/auth/callback',
-  passport.authenticate('tumblr', { failureRedirect: '/' }),
-  (req, res) => {
-    setTimeout(() => {
-      res.redirect('/')
-    }, 2000)
-  }
+  passport.authenticate('tumblr', {
+    successRedirect: '/',
+    failureRedirect: '/auth',
+    failureFlash: true
+  })
 )
 
 // Create Nuxt.js instance

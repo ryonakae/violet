@@ -1,20 +1,12 @@
 export const state = () => ({
-  timestamp: 0,
-  user: 'aaa',
+  user: null,
   isAuthed: false
 })
 
 export const mutations = {
   SET_USER (state, user) {
     state.user = user
-    console.log('[SET_USER] ユーザー情報をセット')
-    console.log(state.user)
-  },
-
-  SET_TIMESTAMP (state) {
-    const date = new Date()
-    state.timestamp = Math.floor(date.getTime() / 1000)
-    console.log('[SET_TIMESTAMP]', state.timestamp)
+    console.log('[SET_USER]', state.user)
   },
 
   IS_AUTHED (state, boolean) {
@@ -25,16 +17,17 @@ export const mutations = {
 
 export const actions = {
   // サーバーにアクセスした時にサーバー上で実行されるアクション
-  // nuxtServerInit ({ commit }, { req }) {
-  //   if (req.session.passport) {
-  //     console.log('[nuxtServerInit] セッションがある')
-  //     commit('SET_USER', req.session.passport.user)
-  //     req.session.destroy()
-  //   } else {
-  //     console.log('[nuxtServerInit] セッションがない')
-  //   }
-  // }
-  nuxtServerInit (ctx) {
-    console.log(ctx)
+  nuxtServerInit ({ commit }, { req }) {
+    if (req.session.passport) {
+      console.log('[nuxtServerInit] セッションがある')
+
+      // セッションからユーザー情報をVuex Storeにセット
+      commit('SET_USER', req.session.passport.user)
+
+      // セッションを破棄する（サーバでユーザー情報を保持しない）
+      req.session.destroy()
+    } else {
+      console.log('[nuxtServerInit] セッションがない')
+    }
   }
 }
