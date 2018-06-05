@@ -29,5 +29,10 @@ export const actions = {
     } else {
       console.log('[nuxtServerInit] セッションがない')
     }
+  },
+
+  logout ({ commit }) {
+    commit('SET_USER', null)
+    commit('IS_AUTHED', false)
   }
 }
