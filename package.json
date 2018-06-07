@@ -5,16 +5,18 @@
   "license": "Apache-2.0",
   "engines": {
     "node": "8.9.3",
-    "yarn": "1.6.x"
+    "yarn": "1.7.x"
   },
   "scripts": {
-    "dev": "nuxt"
+    "dev": "node server",
+    "build": "nuxt build",
+    "start": "NODE_ENV=production node server"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "nuxt": "^1.4.0",
+    "nuxt": "^1.4.1",
     "passport": "^0.4.0",
     "passport-tumblr": "github:trueter/passport-tumblr#master",
     "vuex-persistedstate": "^2.5.4"

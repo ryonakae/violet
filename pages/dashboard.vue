@@ -35,11 +35,25 @@ export default {
     }
   },
 
+  fetch() {
+    console.log('[dashboard fetch]', this.isAuthed)
+  },
+
+  beforeCreate() {
+    console.log('[dashboard beforeCreate]', this.isAuthed)
+  },
+
   created() {
+    console.log('[dashboard created]', this.isAuthed)
+
     // 認証されていない場合はindexにリダイレクト
     if (!this.isAuthed) {
       this.$router.replace('/')
     }
+  },
+
+  mounted() {
+    console.log('[dashboard mounted]', this.isAuthed)
   }
 }
 </script>

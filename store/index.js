@@ -18,17 +18,19 @@ export const mutations = {
 export const actions = {
   // サーバーにアクセスした時にサーバー上で実行されるアクション
   nuxtServerInit ({ commit }, { req }) {
+    console.log('[nuxtServerInit]')
+
     if (req.session.passport) {
-      console.log('[nuxtServerInit] セッションがある')
+      console.log('[persisted-state plugin: server] セッションがある')
 
       // セッションからユーザー情報をVuex Storeにセット
       commit('SET_USER', req.session.passport.user)
-
-      // セッションを破棄する（サーバでユーザー情報を保持しない）
-      req.session.destroy()
     } else {
-      console.log('[nuxtServerInit] セッションがない')
+      console.log('[persisted-state plugin: server] セッションがない')
     }
+
+    // セッションを破棄する（サーバでユーザー情報を保持しない）
+    req.session.destroy()
   },
 
   logout ({ commit }) {
