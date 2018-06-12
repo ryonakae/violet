@@ -13,12 +13,14 @@
     "start": "NODE_ENV=production node server"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.3.1",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "nuxt": "^1.4.1",
     "passport": "^0.4.0",
     "passport-tumblr": "github:trueter/passport-tumblr#master",
+    "tumblr.js": "^1.1.1",
     "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {
@@ -28,7 +30,7 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
-    "prettier": "^1.13.4",
+    "prettier": "^1.13.5",
     "prettier-eslint-cli": "^4.7.1"
   }
 }
