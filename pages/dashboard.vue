@@ -20,6 +20,12 @@ import tumblr from 'tumblr.js'
 import config from '~/server/config'
 
 export default {
+  data() {
+    return {
+      data: {}
+    }
+  },
+
   computed: {
     isAuthed() {
       return this.$store.state.isAuthed
@@ -54,9 +60,10 @@ export default {
         returnPromises: true
       })
 
-      const data = await client.userDashboard()
+      this.data = await client.userDashboard()
 
-      console.log('[getDashboard]', data)
+      console.log('[getDashboard]', client)
+      console.log('[getDashboard]', this.data)
     }
   },
 
