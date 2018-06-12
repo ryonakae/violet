@@ -1,8 +1,6 @@
 <template>
   <div>
-    <p>Violet for Tumblr</p>
     <p><a href="/auth">Sign In with Tumblr</a></p>
-    <p><nuxt-link to="/dashboard">Dashboard</nuxt-link></p>
   </div>
 </template>
 

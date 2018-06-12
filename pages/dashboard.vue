@@ -1,7 +1,6 @@
 <template>
   <div>
     <p>Dashboard</p>
-    <button @click="logout">Logout</button>
 
     <ul v-if="user">
       <li>
@@ -28,15 +27,13 @@ export default {
     }
   },
 
-  methods: {
-    logout() {
-      this.$store.dispatch('logout')
-      this.$router.replace('/')
-    }
-  },
-
-  fetch() {
+  fetch({ redirect }) {
     console.log('[dashboard fetch]', this.isAuthed)
+
+    // サーバーではダッシュボードにアクセスしたらトップにリダイレクトする
+    if (process.server) {
+      return redirect('/')
+    }
   },
 
   beforeCreate() {
