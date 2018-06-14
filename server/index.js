@@ -1,4 +1,3 @@
-const { Nuxt, Builder } = require('nuxt')
 const app = require('express')()
 const passport = require('passport')
 const TumblrStrategy = require('passport-tumblr').Strategy
@@ -9,8 +8,9 @@ const config = require('./config')
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 3000
 
+const { Nuxt, Builder } = require('nuxt')
 const nuxtConfig = require('../nuxt.config.js')
-nuxtConfig.dev = !(process.env.NODE_ENV === 'production')
+const nuxt = new Nuxt(nuxtConfig)
 
 // passport settings
 passport.serializeUser((user, done) => {
@@ -24,7 +24,7 @@ passport.use(
     {
       consumerKey: config.TUMBLR_CONSUMER_KEY,
       consumerSecret: config.TUMBLR_SECRET_KEY,
-      callbackURL: 'http://127.0.0.1:3000/auth/callback'
+      callbackURL: 'http://' + host + ':' + port + '/auth/callback'
     },
     (token, tokenSecret, profile, done) => {
       const userInfo = {
@@ -44,7 +44,7 @@ passport.use(
 app.use(bodyParser.json())
 app.use(
   session({
-    secret: 'super-secret-key',
+    secret: 'violet-for-tumblr',
     resave: false,
     saveUninitialized: false,
     unset: 'destroy'
@@ -53,7 +53,6 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
-// app routing
 app.get('/auth', passport.authenticate('tumblr'))
 
 app.get(
@@ -65,14 +64,8 @@ app.get(
   })
 )
 
-// Create Nuxt.js instance
-const nuxt = new Nuxt(nuxtConfig)
-
 // ホットリローディングする開発モードのときのみビルドする
-if (nuxtConfig.dev) {
-  const builder = new Builder(nuxt)
-  builder.build()
-}
+if (nuxt.options.dev) new Builder(nuxt).build()
 
 // すべてのルートを Nuxt.js でレンダリングする
 app.use(nuxt.render)

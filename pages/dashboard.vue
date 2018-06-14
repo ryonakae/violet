@@ -36,36 +36,7 @@ export default {
     }
   },
 
-  methods: {
-    async getDashboard() {
-      // const data = await this.$axios.$get(
-      //   'https://api.tumblr.com/v2/user/dashboard',
-      //   {
-      //     params: {
-      //       consumer_key: config.TUMBLR_CONSUMER_KEY,
-      //       consumer_secret: config.TUMBLR_SECRET_KEY,
-      //       token: this.user.token,
-      //       token_secret: this.user.tokenSecret
-      //     }
-      //   }
-      // )
-
-      const client = tumblr.createClient({
-        credentials: {
-          consumer_key: config.TUMBLR_CONSUMER_KEY,
-          consumer_secret: config.TUMBLR_SECRET_KEY,
-          token: this.user.token,
-          token_secret: this.user.tokenSecret
-        },
-        returnPromises: true
-      })
-
-      this.data = await client.userDashboard()
-
-      console.log('[getDashboard]', client)
-      console.log('[getDashboard]', this.data)
-    }
-  },
+  methods: {},
 
   fetch({ redirect }) {
     console.log('[dashboard fetch]', this.isAuthed)
@@ -91,7 +62,7 @@ export default {
 
   mounted() {
     console.log('[dashboard mounted]', this.isAuthed)
-    this.getDashboard()
+    this.$store.dispatch('getDashboard')
   }
 }
 </script>

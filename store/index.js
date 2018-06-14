@@ -1,6 +1,11 @@
+import tumblr from 'tumblr.js'
+import config from '~/server/config'
+
 export const state = () => ({
   user: null,
-  isAuthed: false
+  isAuthed: false,
+  client: null,
+  posts: {}
 })
 
 export const mutations = {
@@ -12,6 +17,22 @@ export const mutations = {
   IS_AUTHED (state, boolean) {
     state.isAuthed = boolean
     console.log('[IS_AUTHED]', state.isAuthed)
+  },
+
+  CREATE_CLIENT (state) {
+    state.client = tumblr.createClient({
+      credentials: {
+        consumer_key: config.TUMBLR_CONSUMER_KEY,
+        consumer_secret: config.TUMBLR_SECRET_KEY,
+        token: state.user.token,
+        token_secret: state.user.tokenSecret
+      },
+      returnPromises: true
+    })
+  },
+
+  SET_POSTS (state, data) {
+    state.posts = data
   }
 }
 
@@ -36,5 +57,17 @@ export const actions = {
   logout ({ commit }) {
     commit('SET_USER', null)
     commit('IS_AUTHED', false)
+  },
+
+  async getDashboard ({ state, commit }, params) {
+    try {
+      if (!state.client) commit('CREATE_CLIENT')
+      console.log(state.client.userDashboard)
+      const data = await state.client.userDashboard()
+      commit('SET_POSTS', data)
+      console.log('[getDashboard]', state.posts)
+    } catch (err) {
+      console.error('[getDashboard]', err)
+    }
   }
 }
